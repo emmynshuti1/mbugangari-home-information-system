@@ -30,7 +30,7 @@ require("./config/db");
 
 app.use(cors({
     origin: [
-        "https://mbugangri-home-information-system.netlify.app/"
+        "https://mbugangari-home-api.onrender.com/"
     ]
 }));
 
