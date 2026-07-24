@@ -28,7 +28,11 @@ require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 
 require("./config/db");
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "https://mbugangri-home-information-system.netlify.app/"
+    ]
+}));
 
 app.use(express.json());
 
