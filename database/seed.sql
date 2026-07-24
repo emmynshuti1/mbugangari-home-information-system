@@ -72,4 +72,4 @@ VALUES
 INSERT INTO administrators
 (full_name,email,password_hash)
 
-VALUES('Emmanuel Nshuti','emmanuel@example.com','$2b$10$o5f8dJSpK6BJAsgpHrr2kubevLS6cxnvspchjKJzY8QgySDl8zGj2');
+VALUES('Administrator','admin@mbugangarihome.com','$2b$10$o5f8dJSpK6BJAsgpHrr2kubevLS6cxnvspchjKJzY8QgySDl8zGj2');
