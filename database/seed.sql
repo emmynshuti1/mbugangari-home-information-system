@@ -25,12 +25,12 @@ INSERT INTO gallery
 (house_id,image_url,caption)
 
 VALUES
-(1,'front-view.jpg','Front View of the House'),
-(1,'back-yard.jpg','Backyard'),
-(1,'garden.jpg','Garden'),
-(1,'garage.jpg','Garage'),
-(1,'living-room.jpg','Living Room'),
-(1,'kitchen.jpg','Kitchen');
+(1,'images/front-view.jpg','Front View of the House'),
+(1,'images/back-yard.jpg','Backyard'),
+(1,'images/garden.jpg','Garden'),
+(1,'images/garage.jpg','Garage'),
+(1,'images/living-room.jpg','Living Room'),
+(1,'images/kitchen.jpg','Kitchen');
 
 -- MATERIALS
 
