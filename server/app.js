@@ -28,11 +28,7 @@ require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 
 require("./config/db");
 
-app.use(cors({
-    origin: [
-        "https://mbugangari-home-api.onrender.com/"
-    ]
-}));
+app.use(cors());
 
 app.use(express.json());
 
