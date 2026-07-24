@@ -12,12 +12,12 @@ INSERT INTO rooms
 (house_id,name,floor,length,width,description,image_url)
 
 VALUES
-(1,'Living Room','Ground Floor',7.00,6.00,'Large family sitting room with television and visitors area.','images/living-room.jpg'),
-(1,'Kitchen','Ground Floor',5.00,4.50,'Modern kitchen with cabinets and storage.','images/kitchen.jpg'),
-(1,'Dining Room','Ground Floor',4.00,4.00,'Room used for family meals.','images/dining-room.jpg'),
-(1,'Master Bedroom','First Floor',6.00,5.00,'Main bedroom with private bathroom.','images/master-bedroom.jpg'),
-(1,'Bedroom 2','First Floor',5.00,4.00,'Bedroom for family members.','images/bedroom2.jpg'),
-(1,'Bathroom','Ground Floor',3.00,2.50,'Bathroom with shower and toilet.','images/bathroom.jpg');
+(1,'Living Room','Ground Floor',7.00,6.00,'Large family sitting room with television and visitors area.','living-room.jpg'),
+(1,'Kitchen','Ground Floor',5.00,4.50,'Modern kitchen with cabinets and storage.','kitchen.jpg'),
+(1,'Dining Room','Ground Floor',4.00,4.00,'Room used for family meals.','dining-room.jpg'),
+(1,'Master Bedroom','First Floor',6.00,5.00,'Main bedroom with private bathroom.','master-bedroom.jpg'),
+(1,'Bedroom 2','First Floor',5.00,4.00,'Bedroom for family members.','bedroom2.jpg'),
+(1,'Bathroom','Ground Floor',3.00,2.50,'Bathroom with shower and toilet.','bathroom.jpg');
 
 -- GALLERY
 
@@ -25,12 +25,12 @@ INSERT INTO gallery
 (house_id,image_url,caption)
 
 VALUES
-(1,'images/front-view.jpg','Front View of the House'),
-(1,'images/back-yard.jpg','Backyard'),
-(1,'images/garden.jpg','Garden'),
-(1,'images/garage.jpg','Garage'),
-(1,'images/living-room.jpg','Living Room'),
-(1,'images/kitchen.jpg','Kitchen');
+(1,'front-view.jpg','Front View of the House'),
+(1,'back-yard.jpg','Backyard'),
+(1,'garden.jpg','Garden'),
+(1,'garage.jpg','Garage'),
+(1,'living-room.jpg','Living Room'),
+(1,'kitchen.jpg','Kitchen');
 
 -- MATERIALS
 
