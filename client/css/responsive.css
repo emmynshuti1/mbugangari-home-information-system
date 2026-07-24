@@ -1,0 +1,73 @@
+﻿@media (max-width: 1024px) {
+    .navbar {
+        padding: 16px 24px;
+    }
+
+    .nav-links {
+        gap: 0.6rem;
+    }
+}
+
+@media (max-width: 860px) {
+    .navbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .nav-links li a {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-content,
+    .page-banner {
+        padding: 32px 22px;
+    }
+
+    .hero h1,
+    .section-title {
+        font-size: clamp(2rem, 6vw, 2.8rem);
+    }
+
+    .stats,
+    .room-grid,
+    .materials-grid,
+    .places-grid {
+        grid-template-columns: 1fr;
+    }
+
+    section {
+        padding: 50px 0;
+    }
+
+    .navbar {
+        padding: 16px 20px;
+    }
+
+    .page-banner {
+        height: 260px;
+    }
+}
+
+@media (max-width: 520px) {
+    .navbar {
+        padding: 14px 16px;
+    }
+
+    .hero-content {
+        padding: 26px 20px;
+    }
+
+    .nav-links li a {
+        padding: 0.85rem 0.9rem;
+    }
+}

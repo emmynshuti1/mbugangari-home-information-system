@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About the Home | Mbugangari Home Information System</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/about.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            <a href="../index.html">Mbugangari Home</a>
+        </div>
+
+        <ul class="nav-links">
+
+            <li><a href="../index.html">Home</a></li>
+
+            <li><a href="about.html" class="active">About</a></li>
+
+            <li><a href="rooms.html">Rooms</a></li>
+
+            <li><a href="gallery.html">Gallery</a></li>
+
+            <li><a href="materials.html">Materials</a></li>
+
+            <li><a href="history.html">History</a></li>
+
+            <li><a href="location.html">Nearby Places</a></li>
+
+            <li><a href='../admin/login.html'>Admin</a></li>
+            <li><button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+        </ul>
+
+    </nav>
+
+    <!-- Banner -->
+
+    <section class="page-banner">
+
+        <div class="banner-content">
+
+            <h1>About Our Home</h1>
+
+            <p>
+                Learn more about our home located near
+                Mbugangari Market in Rubavu District.
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Loading -->
+
+    <section class="container">
+
+        <div id="loadingMessage">
+
+            Loading house information...
+
+        </div>
+
+    </section>
+
+    <!-- About Container -->
+
+    <section class="container about-container" id="aboutContainer" style="display:none;">
+
+        <!-- Basic Information -->
+
+        <div class="info-card">
+
+            <h2>General Information</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>House Name</th>
+
+                    <td id="houseName"></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Owner</th>
+
+                    <td id="houseOwner"></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Year Built</th>
+
+                    <td id="houseYear"></td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+        <!-- Description -->
+
+        <div class="info-card">
+
+            <h2>Description</h2>
+
+            <p id="houseDescription"></p>
+
+        </div>
+
+        <!-- Location -->
+
+        <div class="info-card">
+
+            <h2>Location Information</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Village</th>
+
+                    <td id="houseVillage"></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Sector</th>
+
+                    <td id="houseSector"></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>District</th>
+
+                    <td id="houseDistrict"></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Province</th>
+
+                    <td id="houseProvince"></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Country</th>
+
+                    <td id="houseCountry"></td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+        <!-- Coordinates -->
+
+        <div class="info-card">
+
+            <h2>Coordinates</h2>
+
+            <table>
+
+                <tr>
+
+                    <th>Latitude</th>
+
+                    <td id="houseLatitude"></td>
+
+                </tr>
+
+                <tr>
+
+                    <th>Longitude</th>
+
+                    <td id="houseLongitude"></td>
+
+                </tr>
+
+            </table>
+
+        </div>
+
+    </section>
+
+    <footer class="footer">
+
+        <p>
+
+            Made with ❤️ by NSHUTI Emmanuel &copy; 2026 Mbugangari Home Information System
+
+        </p>
+
+    </footer>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/about.js"></script>
+
+    <script src="../js/theme.js"></script>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+

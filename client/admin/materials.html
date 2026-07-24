@@ -1,0 +1,79 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materials Management</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+<div class="dashboard">
+    <aside class="sidebar">
+        <h2>Mbugangari Home</h2>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="houses.html">House</a></li>
+            <li><a href="rooms.html">Rooms</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="materials.html" class="active">Materials</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="places.html">Nearby Places</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <h1>Materials Management</h1>
+                        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+            <button id="logoutBtn">Logout</button>
+        </header>
+
+        <section class="welcome-card">
+            <h2>Add Material</h2>
+            <form id="materialForm">
+                <label for="component">Component</label>
+                <input type="text" id="component" required>
+
+                <label for="material_name">Material Name</label>
+                <input type="text" id="material_name" required>
+
+                <label for="house_id">House</label>
+                <select id="house_id" required>
+                    <option value="">Select a house</option>
+                </select>
+                <p class="field-note">Choose the house this material belongs to.</p>
+
+                <label for="description">Description</label>
+                <textarea id="description" rows="3"></textarea>
+
+                <button type="submit">Add Material</button>
+            </form>
+        </section>
+
+        <section class="table-card">
+            <div class="section-header">
+                <h2>Materials</h2>
+                <input id="searchMaterial" type="search" placeholder="Search materials...">
+            </div>
+            <div id="materialsTable" class="admin-table"></div>
+        </section>
+    </main>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/adminHouseHelpers.js"></script>
+<script src="../js/adminMaterials.js"></script>
+
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>
+
+

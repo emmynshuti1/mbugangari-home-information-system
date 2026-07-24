@@ -1,0 +1,179 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>House Management</title>
+
+    <link rel="stylesheet" href="../css/admin.css">
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <h2>Mbugangari Home</h2>
+
+        <ul>
+
+            <li><a href="dashboard.html">Dashboard</a></li>
+
+            <li><a href="houses.html" class="active">House</a></li>
+
+            <li><a href="rooms.html">Rooms</a></li>
+
+            <li><a href="gallery.html">Gallery</a></li>
+
+            <li><a href="materials.html">Materials</a></li>
+
+            <li><a href="history.html">History</a></li>
+
+            <li><a href="places.html">Nearby Places</a></li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <h1>House Management</h1>
+
+                        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+            <button id="logoutBtn">
+
+                Logout
+
+            </button>
+
+        </header>
+
+        <div class="welcome-card">
+
+            <form id="houseForm">
+
+                <label>House Name</label>
+
+                <input
+                    type="text"
+                    id="name"
+                    required
+                >
+
+                <label>Owner</label>
+
+                <input
+                    type="text"
+                    id="owner"
+                    required
+                >
+
+                <label>Description</label>
+
+                <textarea
+                    id="description"
+                    rows="5"
+                    required
+                ></textarea>
+
+                <label>Year Built</label>
+
+                <input
+                    type="number"
+                    id="year_built"
+                >
+
+                <label>Village</label>
+
+                <input
+                    type="text"
+                    id="village"
+                >
+
+                <label>Sector</label>
+
+                <input
+                    type="text"
+                    id="sector"
+                >
+
+                <label>District</label>
+
+                <input
+                    type="text"
+                    id="district"
+                >
+
+                <label>Province</label>
+
+                <input
+                    type="text"
+                    id="province"
+                >
+
+                <label>Country</label>
+
+                <input
+                    type="text"
+                    id="country"
+                >
+
+                <label>Latitude</label>
+
+                <input
+                    type="number"
+                    step="0.0000001"
+                    id="latitude"
+                >
+
+                <label>Longitude</label>
+
+                <input
+                    type="number"
+                    step="0.0000001"
+                    id="longitude"
+                >
+
+                <br><br>
+
+                <button
+                    type="submit"
+                    id="saveHouse">
+
+                    Save House Information
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/adminHouse.js"></script>
+
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>
+

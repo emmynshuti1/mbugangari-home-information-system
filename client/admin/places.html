@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nearby Places Management</title>
+    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+<div class="dashboard">
+    <aside class="sidebar">
+        <h2>Mbugangari Home</h2>
+        <ul>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="houses.html">House</a></li>
+            <li><a href="rooms.html">Rooms</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="materials.html">Materials</a></li>
+            <li><a href="history.html">History</a></li>
+            <li><a href="places.html" class="active">Nearby Places</a></li>
+        </ul>
+    </aside>
+
+    <main class="main-content">
+        <header class="topbar">
+            <h1>Nearby Places Management</h1>
+                        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+            <button id="logoutBtn">Logout</button>
+        </header>
+
+        <section class="welcome-card">
+            <h2>Add Nearby Place</h2>
+            <form id="placeForm">
+                <label for="name">Name</label>
+                <input type="text" id="name" required>
+
+                <label for="category">Category</label>
+                <input type="text" id="category" placeholder="e.g. Market, School">
+
+                <label for="description">Description</label>
+                <textarea id="description" rows="4"></textarea>
+
+                <label for="house_id">House</label>
+                <select id="house_id" required>
+                    <option value="">Select a house</option>
+                </select>
+                <p class="field-note">Choose the house this place is near.</p>
+
+                <label for="distance_meters">Distance (meters)</label>
+                <input type="number" id="distance_meters" min="0" placeholder="e.g. 500">
+
+                <button type="submit">Add Place</button>
+            </form>
+        </section>
+
+        <section class="table-card">
+            <div class="section-header">
+                <h2>Nearby Places</h2>
+                <input id="searchPlace" type="search" placeholder="Search places...">
+            </div>
+            <div id="placesTable" class="admin-table"></div>
+        </section>
+    </main>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/adminHouseHelpers.js"></script>
+<script src="../js/adminPlaces.js"></script>
+
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>
+
+

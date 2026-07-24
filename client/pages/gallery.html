@@ -1,0 +1,126 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Gallery | Mbugangari Home Information System</title>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/gallery.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">
+
+        <a href="../index.html">
+            Mbugangari Home
+        </a>
+
+    </div>
+
+    <ul class="nav-links">
+
+        <li><a href="../index.html">Home</a></li>
+
+        <li><a href="about.html">About</a></li>
+
+        <li><a href="rooms.html">Rooms</a></li>
+
+        <li><a href="gallery.html" class="active">Gallery</a></li>
+
+        <li><a href="materials.html">Materials</a></li>
+
+        <li><a href="history.html">History</a></li>
+
+        <li><a href="location.html">Nearby Places</a></li>
+
+            <li><a href='../admin/login.html'>Admin</a></li>
+            <li><button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+</ul>
+
+</nav>
+
+<section class="page-banner">
+
+    <div class="banner-content">
+
+        <h1>Home Gallery</h1>
+
+        <p>
+
+            Explore photographs of the home and its different areas.
+
+        </p>
+
+    </div>
+
+</section>
+
+<section class="container">
+
+    <div id="loading">
+
+        Loading gallery...
+
+    </div>
+
+    <div id="galleryContainer"
+         class="gallery-grid">
+
+    </div>
+
+</section>
+
+<!-- Image Modal -->
+
+<div id="imageModal" class="modal">
+
+    <span class="close">&times;</span>
+
+    <img id="modalImage">
+
+    <div id="modalCaption"></div>
+
+</div>
+
+<footer class="footer">
+
+    <p>
+
+        Made with ❤️ by NSHUTI Emmanuel &copy; 2026 Mbugangari Home Information System
+
+    </p>
+
+</footer>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/gallery.js"></script>
+
+    <script src="../js/theme.js"></script>
+
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+

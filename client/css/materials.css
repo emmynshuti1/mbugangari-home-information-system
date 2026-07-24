@@ -1,0 +1,214 @@
+/* ===========================
+   PAGE BANNER
+=========================== */
+
+.page-banner{
+
+    width:100%;
+    height:280px;
+
+    background:linear-gradient(
+        rgba(46,125,50,.75),
+        rgba(46,125,50,.75)
+    ),
+    url("../images/hero.jpg");
+
+    background-size:cover;
+    background-position:center;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    color:white;
+    text-align:center;
+
+}
+
+.banner-content h1{
+
+    font-size:42px;
+    margin-bottom:10px;
+
+}
+
+.banner-content p{
+
+    font-size:18px;
+
+}
+
+/* ===========================
+   SEARCH BOX
+=========================== */
+
+#searchMaterial{
+
+    width:100%;
+    max-width:450px;
+
+    margin:40px auto;
+
+    display:block;
+
+    padding:14px;
+
+    font-size:16px;
+
+    border:2px solid #2E7D32;
+
+    border-radius:8px;
+
+    outline:none;
+
+}
+
+#searchMaterial:focus{
+
+    box-shadow:0 0 8px rgba(46,125,50,.3);
+
+}
+
+/* ===========================
+   LOADING
+=========================== */
+
+#loading{
+
+    text-align:center;
+
+    font-size:22px;
+
+    color:#2E7D32;
+
+    margin-bottom:30px;
+
+}
+
+/* ===========================
+   MATERIAL GRID
+=========================== */
+
+.materials-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+
+    gap:25px;
+
+    margin-bottom:60px;
+
+}
+
+/* ===========================
+   MATERIAL CARD
+=========================== */
+
+.material-card{
+
+    background:white;
+
+    border-radius:12px;
+
+    padding:25px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+    border-left:6px solid #2E7D32;
+
+}
+
+.material-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 12px 25px rgba(0,0,0,.15);
+
+}
+
+/* ===========================
+   HEADINGS
+=========================== */
+
+.material-card h2{
+
+    color:#2E7D32;
+
+    margin-bottom:15px;
+
+}
+
+.material-name{
+
+    display:inline-block;
+
+    background:#FFC107;
+
+    color:#333;
+
+    padding:6px 14px;
+
+    border-radius:25px;
+
+    font-weight:bold;
+
+    margin-bottom:15px;
+
+}
+
+/* ===========================
+   TEXT
+=========================== */
+
+.material-card p{
+
+    line-height:1.7;
+
+    color:#444;
+
+}
+
+/* ===========================
+   EMPTY MESSAGE
+=========================== */
+
+.no-materials{
+
+    text-align:center;
+
+    font-size:22px;
+
+    color:#777;
+
+    margin:50px 0;
+
+}
+
+/* ===========================
+   RESPONSIVE
+=========================== */
+
+@media(max-width:768px){
+
+.page-banner{
+
+height:220px;
+
+}
+
+.banner-content h1{
+
+font-size:32px;
+
+}
+
+.materials-grid{
+
+grid-template-columns:1fr;
+
+}
+
+}

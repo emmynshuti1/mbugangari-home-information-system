@@ -1,0 +1,222 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>Administrator Dashboard</title>
+
+<link rel="stylesheet" href="../css/admin.css">
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+</head>
+
+<body>
+
+<div class="dashboard">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <h2>
+
+            Mbugangari Home
+
+        </h2>
+
+        <ul>
+
+            <li>
+                <a href="dashboard.html">Dashboard</a>
+            </li>
+
+            <li>
+                <a href="houses.html">House</a>
+            </li>
+
+            <li>
+                <a href="rooms.html">Rooms</a>
+            </li>
+
+            <li>
+                <a href="gallery.html">Gallery</a>
+            </li>
+
+            <li>
+                <a href="materials.html">Materials</a>
+            </li>
+
+            <li>
+                <a href="history.html">History</a>
+            </li>
+
+            <li>
+                <a href="places.html">Nearby Places</a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <header class="topbar">
+
+            <h1>
+
+                Dashboard
+
+            </h1>
+
+            <div>
+
+                <span id="adminName"></span>
+
+                            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+            <button
+                    id="logoutBtn">
+
+                    Logout
+
+                </button>
+
+            </div>
+
+        </header>
+
+        <!-- Statistics -->
+
+        <section class="cards">
+
+            <div class="card">
+
+                <h3>
+
+                    Rooms
+
+                </h3>
+
+                <h2 id="roomCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Gallery
+
+                </h3>
+
+                <h2 id="galleryCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Materials
+
+                </h3>
+
+                <h2 id="materialCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    History
+
+                </h3>
+
+                <h2 id="historyCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+            <div class="card">
+
+                <h3>
+
+                    Nearby Places
+
+                </h3>
+
+                <h2 id="placeCount">
+
+                    0
+
+                </h2>
+
+            </div>
+
+        </section>
+
+        <!-- Welcome Panel -->
+
+        <section class="welcome-card">
+
+            <h2>
+
+                Welcome to the Administrator Dashboard
+
+            </h2>
+
+            <p>
+
+                From here you can manage the entire
+                Mbugangari Home Information System.
+
+            </p>
+
+            <p>
+
+                Use the navigation menu on the left
+                to manage rooms, gallery images,
+                construction materials,
+                historical events and nearby places.
+
+            </p>
+
+        </section>
+
+    </main>
+
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/dashboard.js"></script>
+
+    <script src="../js/theme.js"></script>
+</body>
+
+</html>
+
