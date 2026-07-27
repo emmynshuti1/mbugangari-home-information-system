@@ -73,7 +73,7 @@ function displayRooms(rooms) {
         card.className = "room-card";
 
         const image = document.createElement("img");
-        image.src = normalizeImageUrl(room.image_url);
+        image.src = `../images/${room.image_url}`;
         image.alt = room.name || "Room";
 
         const body = document.createElement("div");
