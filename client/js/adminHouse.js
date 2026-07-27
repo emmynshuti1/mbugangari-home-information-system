@@ -1,10 +1,17 @@
 let houseId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
+
     setupAdminPage(() => {
+
         loadHouse();
-        document.getElementById("houseForm")?.addEventListener("submit", saveHouse);
+
+        document
+            .getElementById("houseForm")
+            ?.addEventListener("submit", saveHouse);
+
     });
+
 });
 
 async function loadHouse() {
@@ -13,9 +20,12 @@ async function loadHouse() {
 
         const response = await getHouse();
 
-        if (!response.success || response.data.length === 0) {
+        if (!response.success || !response.data.length) {
 
-            alert("No house information found.");
+            showToast(
+                "No house information found.",
+                "error"
+            );
 
             return;
 
@@ -43,55 +53,89 @@ async function loadHouse() {
 
         console.error(error);
 
-        alert("Unable to load house information.");
+        showToast(
+            "Unable to load house information.",
+            "error"
+        );
 
     }
 
 }
 
-async function saveHouse(e) {
+async function saveHouse(event) {
 
-    e.preventDefault();
+    event.preventDefault();
 
     if (!houseId) {
 
-        alert("House ID not found.");
+        showToast(
+            "House not found.",
+            "error"
+        );
 
         return;
 
     }
 
+    const submitBtn = event.target.querySelector("button[type='submit']");
+
+    submitBtn.disabled = true;
+
     const houseData = {
 
-        name: document.getElementById("name").value,
-        owner: document.getElementById("owner").value,
-        description: document.getElementById("description").value,
-        year_built: document.getElementById("year_built").value,
-        village: document.getElementById("village").value,
-        sector: document.getElementById("sector").value,
-        district: document.getElementById("district").value,
-        province: document.getElementById("province").value,
-        country: document.getElementById("country").value,
+        name: document.getElementById("name").value.trim(),
+
+        owner: document.getElementById("owner").value.trim(),
+
+        description: document.getElementById("description").value.trim(),
+
+        year_built: Number(document.getElementById("year_built").value),
+
+        village: document.getElementById("village").value.trim(),
+
+        sector: document.getElementById("sector").value.trim(),
+
+        district: document.getElementById("district").value.trim(),
+
+        province: document.getElementById("province").value.trim(),
+
+        country: document.getElementById("country").value.trim(),
+
         latitude: document.getElementById("latitude").value,
+
         longitude: document.getElementById("longitude").value
 
     };
 
     try {
 
-        const response = await updateHouse(houseId, houseData);
+        const response = await updateHouse(
 
-        if (response.success) {
+            houseId,
 
-            alert("House information updated successfully.");
+            houseData
+
+        );
+
+        if (!response.success) {
+
+            showToast(
+
+                response.message || "Unable to save changes.",
+
+                "error"
+
+            );
+
+            return;
 
         }
 
-        else {
+        showToast(
 
-            alert(response.message);
+            "House information updated successfully."
 
-        }
+        );
 
     }
 
@@ -99,7 +143,19 @@ async function saveHouse(e) {
 
         console.error(error);
 
-        alert("Unable to update house.");
+        showToast(
+
+            "Unable to update house.",
+
+            "error"
+
+        );
+
+    }
+
+    finally {
+
+        submitBtn.disabled = false;
 
     }
 

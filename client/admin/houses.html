@@ -5,21 +5,22 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>House Management</title>
 
     <link rel="stylesheet" href="../css/admin.css">
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
 </head>
 
 <body>
 
 <div class="dashboard">
-
-    <!-- Sidebar -->
 
     <aside class="sidebar">
 
@@ -28,24 +29,16 @@
         <ul>
 
             <li><a href="dashboard.html">Dashboard</a></li>
-
             <li><a href="houses.html" class="active">House</a></li>
-
             <li><a href="rooms.html">Rooms</a></li>
-
             <li><a href="gallery.html">Gallery</a></li>
-
             <li><a href="materials.html">Materials</a></li>
-
             <li><a href="history.html">History</a></li>
-
             <li><a href="places.html">Nearby Places</a></li>
 
         </ul>
 
     </aside>
-
-    <!-- Main -->
 
     <main class="main-content">
 
@@ -53,7 +46,15 @@
 
             <h1>House Management</h1>
 
-                        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+            <button
+                id="themeToggle"
+                class="theme-toggle"
+                aria-label="Toggle theme">
+
+                🌙
+
+            </button>
+
             <button id="logoutBtn">
 
                 Logout
@@ -62,101 +63,202 @@
 
         </header>
 
-        <div class="welcome-card">
+        <div class="form-card">
+
+            <h2>
+
+                Edit House Information
+
+            </h2>
 
             <form id="houseForm">
 
-                <label>House Name</label>
+                <div class="form-grid">
 
-                <input
-                    type="text"
-                    id="name"
-                    required
-                >
+                    <div class="form-group">
 
-                <label>Owner</label>
+                        <label for="name">
 
-                <input
-                    type="text"
-                    id="owner"
-                    required
-                >
+                            House Name
 
-                <label>Description</label>
+                        </label>
 
-                <textarea
-                    id="description"
-                    rows="5"
-                    required
-                ></textarea>
+                        <input
+                            type="text"
+                            id="name"
+                            required
+                        >
 
-                <label>Year Built</label>
+                    </div>
 
-                <input
-                    type="number"
-                    id="year_built"
-                >
+                    <div class="form-group">
 
-                <label>Village</label>
+                        <label for="owner">
 
-                <input
-                    type="text"
-                    id="village"
-                >
+                            Owner
 
-                <label>Sector</label>
+                        </label>
 
-                <input
-                    type="text"
-                    id="sector"
-                >
+                        <input
+                            type="text"
+                            id="owner"
+                            required
+                        >
 
-                <label>District</label>
+                    </div>
 
-                <input
-                    type="text"
-                    id="district"
-                >
+                    <div class="form-group">
 
-                <label>Province</label>
+                        <label for="year_built">
 
-                <input
-                    type="text"
-                    id="province"
-                >
+                            Year Built
 
-                <label>Country</label>
+                        </label>
 
-                <input
-                    type="text"
-                    id="country"
-                >
+                        <input
+                            type="number"
+                            id="year_built"
+                        >
 
-                <label>Latitude</label>
+                    </div>
 
-                <input
-                    type="number"
-                    step="0.0000001"
-                    id="latitude"
-                >
+                    <div class="form-group">
 
-                <label>Longitude</label>
+                        <label for="village">
 
-                <input
-                    type="number"
-                    step="0.0000001"
-                    id="longitude"
-                >
+                            Village
 
-                <br><br>
+                        </label>
 
-                <button
-                    type="submit"
-                    id="saveHouse">
+                        <input
+                            type="text"
+                            id="village"
+                        >
 
-                    Save House Information
+                    </div>
 
-                </button>
+                    <div class="form-group">
+
+                        <label for="sector">
+
+                            Sector
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="sector"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="district">
+
+                            District
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="district"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="province">
+
+                            Province
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="province"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="country">
+
+                            Country
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="country"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="latitude">
+
+                            Latitude
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.0000001"
+                            id="latitude"
+                        >
+
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="longitude">
+
+                            Longitude
+
+                        </label>
+
+                        <input
+                            type="number"
+                            step="0.0000001"
+                            id="longitude"
+                        >
+
+                    </div>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label for="description">
+
+                        Description
+
+                    </label>
+
+                    <textarea
+                        id="description"
+                        rows="6"
+                        required
+                    ></textarea>
+
+                </div>
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        id="saveHouse"
+                        class="saveBtn">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
 
             </form>
 
@@ -170,10 +272,16 @@
 
     <div class="modal-content">
 
-        <h3 id="confirmTitle">Confirm Action</h3>
+        <h3 id="confirmTitle">
+
+            Confirm Action
+
+        </h3>
 
         <p id="confirmMessage">
+
             Are you sure?
+
         </p>
 
         <div class="modal-buttons">
@@ -208,9 +316,8 @@
 <script src="../js/admin.js"></script>
 <script src="../js/ui.js"></script>
 <script src="../js/adminHouse.js"></script>
-
 <script src="../js/theme.js"></script>
+
 </body>
 
 </html>
-
