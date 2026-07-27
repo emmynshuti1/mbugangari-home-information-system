@@ -11,7 +11,7 @@ async function loadHouseInformation() {
 
         if (!response || !response.success) {
 
-            loading.innerHTML = "Unable to load house information.";
+            loading.textContent = "Unable to load house information.";
 
             return;
 
@@ -19,7 +19,7 @@ async function loadHouseInformation() {
 
         if (response.data.length === 0) {
 
-            loading.innerHTML = "No house information found.";
+            loading.textContent = "No house information found.";
 
             return;
 
@@ -67,11 +67,8 @@ async function loadHouseInformation() {
 
         console.error("Error:", error);
 
-        loading.innerHTML = `
-            <p style="color:red;">
-                Failed to connect to the server.
-            </p>
-        `;
+        loading.textContent = "Failed to connect to the server.";
+        loading.style.color = "red";
 
     }
 
