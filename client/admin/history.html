@@ -32,33 +32,118 @@
             <button id="logoutBtn">Logout</button>
         </header>
 
-        <section class="welcome-card">
-            <h2>Add History Entry</h2>
-            <form id="historyForm">
-                <label for="title">Title</label>
-                <input type="text" id="title" required>
+       <div id="historyFormCard" class="form-card hidden">
 
-                <label for="event_date">Event Date</label>
-                <input type="date" id="event_date">
+    <h2 id="historyFormTitle">
 
-                <label for="house_id">House</label>
+        Add History Entry
+
+    </h2>
+
+    <form id="historyForm">
+
+        <input
+            type="hidden"
+            id="historyId"
+        >
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>House</label>
+
                 <select id="house_id" required>
+
                     <option value="">Select a house</option>
+
                 </select>
-                <p class="field-note">Choose the house this entry belongs to.</p>
 
-                <label for="detail">Detail</label>
-                <textarea id="detail" rows="7"></textarea>
+            </div>
 
-                <button type="submit">Add Entry</button>
-            </form>
-        </section>
+            <div class="form-group">
+
+                <label>Title</label>
+
+                <input
+                    type="text"
+                    id="title"
+                    required
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Event Date</label>
+
+                <input
+                    type="date"
+                    id="event_date"
+                >
+
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Description</label>
+
+            <textarea
+                id="description"
+                rows="6"
+            ></textarea>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button
+                type="submit"
+                class="saveBtn">
+
+                Save History
+
+            </button>
+
+            <button
+                type="button"
+                id="cancelHistoryBtn"
+                class="secondaryBtn">
+
+                Cancel
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
 
         <section class="table-card">
-            <div class="section-header">
-                <h2>History Entries</h2>
-                <input id="searchHistory" type="search" placeholder="Search history...">
-            </div>
+           <div class="section-header">
+
+    <h2>History Entries</h2>
+
+    <div class="table-actions">
+
+        <input
+            id="searchHistory"
+            type="search"
+            placeholder="Search history..."
+        >
+
+        <button id="addHistoryBtn">
+
+            + Add History
+
+        </button>
+
+    </div>
+
+</div>
             <div id="historyTable" class="admin-table"></div>
         </section>
     </main>
@@ -112,5 +197,3 @@
 </body>
 
 </html>
-
-

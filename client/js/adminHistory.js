@@ -1,128 +1,289 @@
 ﻿let historyItems = [];
 
 document.addEventListener("DOMContentLoaded", () => {
+
     setupAdminPage(() => {
+
         loadHistory();
+
         loadHouseOptions("house_id", ".field-note");
-        document.getElementById("historyForm")?.addEventListener("submit", handleAddHistory);
-        document.getElementById("searchHistory")?.addEventListener("keyup", searchHistory);
+
+        document
+            .getElementById("historyForm")
+            ?.addEventListener("submit", saveHistory);
+
+        document
+            .getElementById("searchHistory")
+            ?.addEventListener("keyup", searchHistory);
+
+        document
+            .getElementById("addHistoryBtn")
+            ?.addEventListener("click", () => {
+
+                showHistoryForm();
+
+            });
+
+        document
+            .getElementById("cancelHistoryBtn")
+            ?.addEventListener("click", hideHistoryForm);
+
     });
+
 });
 
 async function loadHistory() {
-    const response = await getHistory();
-    if (!response.success) {
-        alert(response.message || "Unable to load history entries.");
-        return;
+
+    try {
+
+        const response = await getHistory();
+
+        if (!response.success) {
+
+            showToast(response.message, "error");
+
+            return;
+
+        }
+
+        historyItems = response.data || [];
+
+        renderHistory(historyItems);
+
     }
-    historyItems = response.data;
-    renderHistory(historyItems);
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast("Unable to load history.", "error");
+
+    }
+
+}
+
+function showHistoryForm(item = null) {
+
+    document
+        .getElementById("historyFormCard")
+        .classList
+        .remove("hidden");
+
+    if (item) {
+
+        document.getElementById("historyFormTitle").textContent = "Edit History";
+
+        document.getElementById("historyId").value = item.id;
+
+        document.getElementById("title").value = item.title;
+
+        document.getElementById("description").value = item.description || "";
+
+        document.getElementById("event_date").value = item.event_date
+            ? item.event_date.substring(0, 10)
+            : "";
+
+        document.getElementById("house_id").value = item.house_id;
+
+    }
+
+    else {
+
+        document.getElementById("historyFormTitle").textContent = "Add History";
+
+        document.getElementById("historyForm").reset();
+
+        document.getElementById("historyId").value = "";
+
+    }
+
+}
+
+function hideHistoryForm() {
+
+    document
+        .getElementById("historyFormCard")
+        .classList
+        .add("hidden");
+
 }
 
 function renderHistory(items) {
+
     const container = document.getElementById("historyTable");
+
     container.innerHTML = "";
+
     if (!items.length) {
-        container.innerHTML = `<div class="empty-state">No history entries available.</div>`;
+
+        container.textContent = "No history available.";
+
         return;
+
     }
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Title</th>
-                    <th>Event Date</th>
-                    <th>Detail</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${items.map(item => `
-                    <tr>
-                        <td>${item.id}</td>
-                        <td>${item.title}</td>
-                        <td>${item.event_date ? new Date(item.event_date).toLocaleDateString() : "—"}</td>
-                        <td>${item.detail}</td>
-                        <td>
-                            <button class="editBtn" onclick="editHistory(${item.id})">Edit</button>
-                            <button class="deleteBtn" onclick="deleteHistoryItem(${item.id})">Delete</button>
-                        </td>
-                    </tr>
-                `).join("")}
-            </tbody>
-        </table>`;
+
+    const table = document.createElement("table");
+
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    `;
+
+    const tbody = document.createElement("tbody");
+
+    items.forEach(item => {
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.title}</td>
+            <td>${item.event_date || ""}</td>
+        `;
+
+        const actions = document.createElement("td");
+
+        const edit = document.createElement("button");
+
+        edit.className = "editBtn";
+
+        edit.textContent = "Edit";
+
+        edit.onclick = () => showHistoryForm(item);
+
+        const del = document.createElement("button");
+
+        del.className = "deleteBtn";
+
+        del.textContent = "Delete";
+
+        del.onclick = () => deleteHistoryEntry(item.id);
+
+        actions.append(edit, del);
+
+        tr.appendChild(actions);
+
+        tbody.appendChild(tr);
+
+    });
+
+    table.appendChild(tbody);
+
+    container.appendChild(table);
+
 }
 
-async function handleAddHistory(event) {
-    event.preventDefault();
-    const title = document.getElementById("title").value.trim();
-    const event_date = document.getElementById("event_date").value || null;
-    const detail = document.getElementById("detail").value.trim();
+async function saveHistory(e) {
 
-    if (!title) {
-        alert("Entry title is required.");
+    e.preventDefault();
+
+    const id = document.getElementById("historyId").value;
+
+    const history = {
+
+        house_id: document.getElementById("house_id").value,
+
+        title: document.getElementById("title").value.trim(),
+
+        description: document.getElementById("description").value.trim(),
+
+        event_date: document.getElementById("event_date").value
+
+    };
+
+    if (!history.house_id) {
+
+        showToast("Select a house.", "error");
+
         return;
+
     }
 
-    const house_id = getSelectedHouseId("house_id");
-    if (!house_id) {
-        alert("Please select a house before adding history records.");
+    if (!history.title) {
+
+        showToast("Title is required.", "error");
+
         return;
+
     }
 
-    const response = await createHistory({ house_id, title, event_date, detail });
+    let response;
+
+    if (id) {
+
+        response = await updateHistory(id, history);
+
+    }
+
+    else {
+
+        response = await createHistory(history);
+
+    }
+
     if (!response.success) {
-        alert(response.message || "Unable to add history entry.");
+
+        showToast(response.message, "error");
+
         return;
+
     }
 
-    document.getElementById("historyForm").reset();
+    hideHistoryForm();
+
+    showToast("History saved.");
+
     loadHistory();
+
 }
 
 function searchHistory() {
-    const query = document.getElementById("searchHistory").value.toLowerCase();
-    const filtered = historyItems.filter(item =>
-        item.title.toLowerCase().includes(query) ||
-        (item.detail || "").toLowerCase().includes(query)
+
+    const keyword = document
+        .getElementById("searchHistory")
+        .value
+        .toLowerCase();
+
+    renderHistory(
+
+        historyItems.filter(item =>
+
+            item.title.toLowerCase().includes(keyword)
+
+        )
+
     );
-    renderHistory(filtered);
+
 }
 
-async function editHistory(id) {
-    const item = historyItems.find(entry => entry.id === id);
-    if (!item) return;
+async function deleteHistoryEntry(id) {
 
-    const title = prompt("Title", item.title);
-    if (title === null) return;
-    const event_date = prompt("Event Date", item.event_date ? item.event_date.split('T')[0] : "") || null;
-    const detail = prompt("Detail", item.detail);
+    const confirmed = await confirmAction(
 
-    const response = await updateHistory(id, {
-        house_id: item.house_id,
-        title,
-        event_date,
-        detail
-    });
-    if (!response.success) {
-        alert(response.message || "Unable to update history entry.");
-        return;
-    }
+        "Delete this history event?"
 
-    loadHistory();
-}
+    );
 
-async function deleteHistoryItem(id) {
-    if (!confirm("Delete this history entry?")) {
-        return;
-    }
+    if (!confirmed) return;
 
     const response = await deleteHistory(id);
+
     if (!response.success) {
-        alert(response.message || "Unable to delete history entry.");
+
+        showToast(response.message, "error");
+
         return;
+
     }
 
+    showToast("History deleted.");
+
     loadHistory();
+
 }
