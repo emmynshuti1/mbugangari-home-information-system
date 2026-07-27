@@ -1,129 +1,295 @@
 ﻿let placeItems = [];
 
 document.addEventListener("DOMContentLoaded", () => {
+
     setupAdminPage(() => {
+
         loadPlaces();
+
         loadHouseOptions("house_id", ".field-note");
-        document.getElementById("placeForm")?.addEventListener("submit", handleAddPlace);
-        document.getElementById("searchPlace")?.addEventListener("keyup", searchPlaces);
+
+        document
+            .getElementById("placeForm")
+            ?.addEventListener("submit", savePlace);
+
+        document
+            .getElementById("searchPlace")
+            ?.addEventListener("keyup", searchPlaces);
+
+        document
+            .getElementById("addPlaceBtn")
+            ?.addEventListener("click", () => {
+
+                showPlaceForm();
+
+            });
+
+        document
+            .getElementById("cancelPlaceBtn")
+            ?.addEventListener("click", hidePlaceForm);
+
     });
+
 });
 
 async function loadPlaces() {
-    const response = await getNearbyPlaces();
-    if (!response.success) {
-        alert(response.message || "Unable to load nearby places.");
-        return;
+
+    try {
+
+        const response = await getNearbyPlaces();
+
+        if (!response.success) {
+
+            showToast(response.message, "error");
+
+            return;
+
+        }
+
+        placeItems = response.data || [];
+
+        renderPlaces(placeItems);
+
     }
-    placeItems = response.data;
-    renderPlaces(placeItems);
+
+    catch (error) {
+
+        console.error(error);
+
+        showToast("Unable to load nearby places.", "error");
+
+    }
+
+}
+
+function showPlaceForm(place = null) {
+
+    document
+        .getElementById("placeFormCard")
+        .classList
+        .remove("hidden");
+
+    if (place) {
+
+        document.getElementById("placeFormTitle").textContent = "Edit Nearby Place";
+
+        document.getElementById("placeId").value = place.id;
+
+        document.getElementById("name").value = place.name;
+
+        document.getElementById("category").value = place.category || "";
+
+        document.getElementById("distance_meters").value = place.distance_meters || "";
+
+        document.getElementById("description").value = place.description || "";
+
+        document.getElementById("house_id").value = place.house_id;
+
+    }
+
+    else {
+
+        document.getElementById("placeFormTitle").textContent = "Add Nearby Place";
+
+        document.getElementById("placeForm").reset();
+
+        document.getElementById("placeId").value = "";
+
+    }
+
+}
+
+function hidePlaceForm() {
+
+    document
+        .getElementById("placeFormCard")
+        .classList
+        .add("hidden");
+
 }
 
 function renderPlaces(items) {
+
     const container = document.getElementById("placesTable");
+
     container.innerHTML = "";
+
     if (!items.length) {
-        container.innerHTML = `<div class="empty-state">No nearby places have been added yet.</div>`;
+
+        container.textContent = "No nearby places available.";
+
         return;
+
     }
-    container.innerHTML = `
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Description</th>
-                    <th>Distance (m)</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                ${items.map(item => `
-                    <tr>
-                        <td>${item.id}</td>
-                        <td>${item.name}</td>
-                        <td>${item.category || "—"}</td>
-                        <td>${item.description || "—"}</td>
-                        <td>${item.distance_meters !== null && item.distance_meters !== undefined ? item.distance_meters : "—"}</td>
-                        <td>
-                            <button class="editBtn" onclick="editPlace(${item.id})">Edit</button>
-                            <button class="deleteBtn" onclick="deletePlaceItem(${item.id})">Delete</button>
-                        </td>
-                    </tr>
-                `).join("")}
-            </tbody>
-        </table>`;
+
+    const table = document.createElement("table");
+
+    table.innerHTML = `
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Distance</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    `;
+
+    const tbody = document.createElement("tbody");
+
+    items.forEach(item => {
+
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${item.id}</td>
+            <td>${item.name}</td>
+            <td>${item.category || ""}</td>
+            <td>${item.distance_meters} m</td>
+        `;
+
+        const actions = document.createElement("td");
+
+        const edit = document.createElement("button");
+
+        edit.className = "editBtn";
+
+        edit.textContent = "Edit";
+
+        edit.onclick = () => showPlaceForm(item);
+
+        const del = document.createElement("button");
+
+        del.className = "deleteBtn";
+
+        del.textContent = "Delete";
+
+        del.onclick = () => deletePlaceEntry(item.id);
+
+        actions.append(edit, del);
+
+        tr.appendChild(actions);
+
+        tbody.appendChild(tr);
+
+    });
+
+    table.appendChild(tbody);
+
+    container.appendChild(table);
+
 }
 
-async function handleAddPlace(event) {
-    event.preventDefault();
-    const name = document.getElementById("name").value.trim();
-    const category = document.getElementById("category").value.trim();
-    const description = document.getElementById("description").value.trim();
-    const distance_meters = Number(document.getElementById("distance_meters").value);
+async function savePlace(e) {
 
-    if (!name) {
-        alert("Name is required.");
+    e.preventDefault();
+
+    const id = document.getElementById("placeId").value;
+
+    const place = {
+
+        house_id: document.getElementById("house_id").value,
+
+        name: document.getElementById("name").value.trim(),
+
+        category: document.getElementById("category").value.trim(),
+
+        distance_meters: document.getElementById("distance_meters").value,
+
+        description: document.getElementById("description").value.trim()
+
+    };
+
+    if (!place.house_id) {
+
+        showToast("Select a house.", "error");
+
         return;
+
     }
 
-    const house_id = getSelectedHouseId("house_id");
-    if (!house_id) {
-        alert("Please select a house before adding a nearby place.");
+    if (!place.name) {
+
+        showToast("Place name is required.", "error");
+
         return;
+
     }
 
-    const response = await createPlace({ house_id, name, category, description, distance_meters });
+    let response;
+
+    if (id) {
+
+        response = await updatePlace(id, place);
+
+    }
+
+    else {
+
+        response = await createPlace(place);
+
+    }
+
     if (!response.success) {
-        alert(response.message || "Unable to add place.");
+
+        showToast(response.message, "error");
+
         return;
+
     }
 
-    document.getElementById("placeForm").reset();
+    hidePlaceForm();
+
+    showToast("Nearby place saved.");
+
     loadPlaces();
+
 }
 
 function searchPlaces() {
-    const query = document.getElementById("searchPlace").value.toLowerCase();
-    const filtered = placeItems.filter(item =>
-        item.name.toLowerCase().includes(query) ||
-        item.category?.toLowerCase().includes(query) ||
-        item.description?.toLowerCase().includes(query) ||
-        String(item.distance_meters || "").toLowerCase().includes(query)
+
+    const keyword = document
+        .getElementById("searchPlace")
+        .value
+        .toLowerCase();
+
+    renderPlaces(
+
+        placeItems.filter(item =>
+
+            item.name.toLowerCase().includes(keyword) ||
+
+            (item.category || "").toLowerCase().includes(keyword)
+
+        )
+
     );
-    renderPlaces(filtered);
+
 }
 
-async function editPlace(id) {
-    const place = placeItems.find(item => item.id === id);
-    if (!place) return;
+async function deletePlaceEntry(id) {
 
-    const name = prompt("Name", place.name);
-    if (name === null) return;
-    const category = prompt("Category", place.category || "") || "";
-    const description = prompt("Description", place.description || "") || "";
-    const distance_meters = prompt("Distance (meters)", place.distance_meters || "") || "";
+    const confirmed = await confirmAction(
 
-    const response = await updatePlace(id, { house_id: place.house_id, name, category, distance_meters: Number(distance_meters), description });
-    if (!response.success) {
-        alert(response.message || "Unable to update place.");
-        return;
-    }
+        "Delete this nearby place?"
 
-    loadPlaces();
-}
+    );
 
-async function deletePlaceItem(id) {
-    if (!confirm("Delete this place?")) {
-        return;
-    }
+    if (!confirmed) return;
 
     const response = await deletePlace(id);
+
     if (!response.success) {
-        alert(response.message || "Unable to delete place.");
+
+        showToast(response.message, "error");
+
         return;
+
     }
 
+    showToast("Nearby place deleted.");
+
     loadPlaces();
+
 }
