@@ -109,7 +109,7 @@ function displayRooms(data) {
 
         const img = document.createElement("img");
 
-        img.src = normalizeImageUrl(room.image_url);
+        img.src = normalizeImageUrl(`images/${room.image_url}`);
 
         img.alt = room.name;
 
