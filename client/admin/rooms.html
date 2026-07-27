@@ -55,15 +55,114 @@
 
         </header>
 
+        <div id="roomFormCard" class="form-card hidden">
+
+    <h2 id="roomFormTitle">Add Room</h2>
+
+    <div id="roomMessage" class="form-message"></div>
+
+    <form id="roomForm">
+
+        <input type="hidden" id="roomId">
+
+        <div class="form-grid">
+
+            <div class="form-group">
+                <label>House</label>
+                <select id="room_house_id"></select>
+            </div>
+
+            <div class="form-group">
+                <label>Room Name</label>
+                <input
+                    type="text"
+                    id="roomName"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Floor</label>
+                <input
+                    type="text"
+                    id="roomFloor"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Length (m)</label>
+                <input
+                    type="number"
+                    id="roomLength"
+                    step="0.01"
+                    min="0"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Width (m)</label>
+                <input
+                    type="number"
+                    id="roomWidth"
+                    step="0.01"
+                    min="0"
+                >
+            </div>
+
+            <div class="form-group">
+                <label>Image</label>
+                <input
+                    type="text"
+                    id="roomImage"
+                    placeholder="bedroom.jpg"
+                >
+            </div>
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Description</label>
+
+            <textarea
+                id="roomDescription"
+                rows="5"
+            ></textarea>
+
+        </div>
+
+        <div class="form-actions">
+
+            <button type="submit" class="saveBtn">
+
+                Save Room
+
+            </button>
+
+            <button
+                type="button"
+                id="cancelRoomBtn"
+                class="secondaryBtn">
+
+                Cancel
+
+            </button>
+
+        </div>
+
+    </form>
+
+</div>
+
         <section class="table-card">
             <div class="section-header">
                 <h2>Rooms</h2>
                 <div class="table-actions">
                     <div class="select-group">
                         <label for="room_house_id">House</label>
-                        <select id="room_house_id" required>
-                            <option value="">Select a house</option>
-                        </select>
+                       <select id="roomHouseFilter">
+                           <option value="">Select a house</option>
+                       </select>
                     </div>
                     <input id="searchRoom" type="search" placeholder="Search rooms...">
                     <button id="addRoomBtn">+ Add Room</button>
