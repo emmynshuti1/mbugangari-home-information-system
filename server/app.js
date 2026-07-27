@@ -1,3 +1,5 @@
+const helmet = require("helmet");
+
 const errorHandler = require("./middleware/errorHandler");
 
 const notFound = require("./middleware/notFound");
@@ -28,7 +30,16 @@ require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 
 require("./config/db");
 
-app.use(cors());
+app.use(cors({
+    origin: [
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "https://mbugangri-home-information-system.netlify.app/"
+    ],
+    credentials: true
+}));
+
+app.use(helmet());
 
 app.use(express.json());
 
