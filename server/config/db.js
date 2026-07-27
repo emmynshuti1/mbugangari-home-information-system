@@ -18,45 +18,6 @@ pool.connect(async (err, client, release) => {
   }
 
   console.log("✅ PostgreSQL connected successfully!");
-
-  try {
-    const { rows } = await client.query(
-      "SELECT COUNT(*) AS count FROM administrators;"
-    );
-
-    const count = parseInt(rows[0].count, 10);
-
-    if (count === 0) {
-
-      const defaultPassword = "Admin1234!";
-
-      const passwordHash = bcrypt.hashSync(defaultPassword, 10);
-
-      await client.query(
-        `INSERT INTO administrators
-        (full_name, email, password_hash)
-        VALUES ($1,$2,$3)`,
-        [
-          "Administrator",
-          "admin@mbugangari.com",
-          passwordHash
-        ]
-      );
-
-      console.log("✅ Default administrator created.");
-
-    }
-
-  } catch (error) {
-
-    console.error(error.message);
-
-  } finally {
-
-    release();
-
-  }
-
 });
 
 module.exports = pool;
