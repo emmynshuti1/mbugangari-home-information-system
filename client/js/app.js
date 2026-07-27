@@ -37,61 +37,81 @@ async function loadFeaturedRooms() {
 
     const container = document.getElementById("featuredRooms");
 
+    container.innerHTML = "";
+
     if (!result || result.count === 0) {
 
-        container.innerHTML = "<p>No rooms available.</p>";
+        const message = document.createElement("p");
+        message.textContent = "No rooms available.";
+
+        container.appendChild(message);
 
         return;
 
     }
 
-    container.innerHTML = "";
+    result.data.slice(0, 3).forEach(room => {
 
-    result.data.slice(0,3).forEach(room=>{
+        const card = document.createElement("div");
+        card.className = "room-card";
 
-        container.innerHTML += `
+        const title = document.createElement("h3");
+        title.textContent = room.name;
 
-        <div class="room-card">
+        const floor = document.createElement("p");
 
-            <h3>${room.name}</h3>
+        const floorLabel = document.createElement("strong");
+        floorLabel.textContent = "Floor: ";
 
-            <p><strong>Floor:</strong> ${room.floor}</p>
+        floor.appendChild(floorLabel);
+        floor.append(room.floor || "N/A");
 
-            <p>${room.description}</p>
+        const description = document.createElement("p");
+        description.textContent = room.description || "";
 
-        </div>
+        card.appendChild(title);
+        card.appendChild(floor);
+        card.appendChild(description);
 
-        `;
+        container.appendChild(card);
 
     });
 
 }
 
-async function loadLatestHistory(){
+async function loadLatestHistory() {
 
     const result = await getHistory();
 
     const container = document.getElementById("latestHistory");
 
-    if(!result || result.count===0){
+    container.innerHTML = "";
 
-        container.innerHTML="<p>No history available.</p>";
+    if (!result || result.count === 0) {
+
+        const message = document.createElement("p");
+        message.textContent = "No history available.";
+
+        container.appendChild(message);
 
         return;
 
     }
 
-    const history=result.data[0];
+    const history = result.data[0];
 
-    container.innerHTML=`
+    const title = document.createElement("h3");
+    title.textContent = history.title;
 
-        <h3>${history.title}</h3>
+    const description = document.createElement("p");
+    description.textContent = history.description;
 
-        <p>${history.description}</p>
+    const date = document.createElement("small");
+    date.textContent = history.event_date;
 
-        <small>${history.event_date}</small>
-
-    `;
+    container.appendChild(title);
+    container.appendChild(description);
+    container.appendChild(date);
 
 }
 
