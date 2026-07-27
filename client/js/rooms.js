@@ -19,9 +19,9 @@ async function loadRooms() {
 
         const response = await getRooms();
 
-        if (!response || !response.success) {
+        if (!response || !response.success) { 
 
-            loading.innerHTML = "Unable to load rooms.";
+            loading.textContent = "Unable to load rooms.";
 
             return;
 
@@ -39,7 +39,7 @@ async function loadRooms() {
 
         console.error(error);
 
-        loading.innerHTML = "Server connection failed.";
+        loading.textContent = "Server connection failed.";
 
     }
 
@@ -53,11 +53,11 @@ function displayRooms(rooms) {
 
     if (rooms.length === 0) {
 
-        container.innerHTML = `
-            <div class="no-rooms">
-                No rooms found.
-            </div>
-        `;
+        const empty = document.createElement("div");
+        empty.className = "no-rooms";
+        empty.textContent = "No rooms found.";
+
+        container.appendChild(empty);
 
         return;
 
@@ -65,69 +65,60 @@ function displayRooms(rooms) {
 
     rooms.forEach(room => {
 
-        const image = room.image_url;
-
         const length = Number(room.length) || 0;
         const width = Number(room.width) || 0;
-
         const area = (length * width).toFixed(2);
 
-        container.innerHTML += `
+        const card = document.createElement("div");
+        card.className = "room-card";
 
-        <div class="room-card">
+        const image = document.createElement("img");
+        image.src = normalizeImageUrl(room.image_url);
+        image.alt = room.name || "Room";
 
-            <img
-                src="../images/${image}"
-                alt="${room.name}"
-            >
+        const body = document.createElement("div");
+        body.className = "room-body";
 
-            <div class="room-body">
+        const title = document.createElement("h2");
+        title.textContent = room.name || "Unnamed Room";
 
-                <h2>${room.name}</h2>
+        const floor = document.createElement("div");
+        floor.className = "floor";
+        floor.textContent = room.floor || "Unknown Floor";
 
-                <div class="floor">
+        const lengthP = document.createElement("p");
+        const lengthStrong = document.createElement("strong");
+        lengthStrong.textContent = "Length: ";
+        lengthP.append(lengthStrong, `${length} m`);
 
-                    ${room.floor || "Unknown Floor"}
+        const widthP = document.createElement("p");
+        const widthStrong = document.createElement("strong");
+        widthStrong.textContent = "Width: ";
+        widthP.append(widthStrong, `${width} m`);
 
-                </div>
+        const areaP = document.createElement("p");
+        areaP.className = "area";
+        areaP.textContent = `Area: ${area} m²`;
 
-                <p>
+        const description = document.createElement("p");
+        description.textContent =
+            room.description || "No description available.";
 
-                    <strong>Length:</strong>
-                    ${length} m
+        body.appendChild(title);
+        body.appendChild(floor);
+        body.appendChild(lengthP);
+        body.appendChild(widthP);
+        body.appendChild(areaP);
+        body.appendChild(description);
 
-                </p>
+        card.appendChild(image);
+        card.appendChild(body);
 
-                <p>
-
-                    <strong>Width:</strong>
-                    ${width} m
-
-                </p>
-
-                <p class="area">
-
-                    Area:
-                    ${area} m²
-
-                </p>
-
-                <p>
-
-                    ${room.description || "No description available."}
-
-                </p>
-
-            </div>
-
-        </div>
-
-        `;
+        container.appendChild(card);
 
     });
 
 }
-
 function searchRooms() {
 
     const keyword = document

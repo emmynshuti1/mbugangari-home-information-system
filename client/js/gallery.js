@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadGallery() {
 
     const loading = document.getElementById("loading");
-    const container = document.getElementById("galleryContainer");
 
     try {
 
@@ -32,7 +31,7 @@ async function loadGallery() {
 
         if (!response || !response.success) {
 
-            loading.innerHTML = "Unable to load gallery.";
+            loading.textContent = "Unable to load gallery.";
 
             return;
 
@@ -50,7 +49,7 @@ async function loadGallery() {
 
         console.error(error);
 
-        loading.innerHTML = "Server connection failed.";
+        loading.textContent = "Server connection failed.";
 
     }
 
@@ -64,11 +63,11 @@ function displayGallery(images) {
 
     if (images.length === 0) {
 
-        container.innerHTML = `
-            <h2 style="text-align:center;">
-                No gallery images available.
-            </h2>
-        `;
+        const message = document.createElement("h2");
+        message.style.textAlign = "center";
+        message.textContent = "No gallery images available.";
+
+        container.appendChild(message);
 
         return;
 
@@ -82,33 +81,39 @@ function displayGallery(images) {
             ? new Date(image.uploaded_at).toLocaleDateString()
             : "Unknown";
 
-        container.innerHTML += `
+        const card = document.createElement("div");
+        card.className = "gallery-card";
 
-        <div class="gallery-card">
+        const img = document.createElement("img");
 
-            <img
-                src="${imagePath}"
-                alt="${image.caption || "Gallery Image"}"
-                onclick="openModal('${imagePath}', '${image.caption || ""}')"
-                onerror="this.src='../images/no-image.jpg'"
-            >
+        img.src = imagePath;
+        img.alt = image.caption || "Gallery Image";
 
-            <div class="gallery-body">
+        img.onerror = function () {
+            this.src = "../images/no-image.jpg";
+        };
 
-                <h3>${image.caption || "Home Image"}</h3>
+        img.addEventListener("click", () => {
+            openModal(imagePath, image.caption || "");
+        });
 
-                <p class="gallery-date">
+        const body = document.createElement("div");
+        body.className = "gallery-body";
 
-                    Uploaded:
-                    ${uploadDate}
+        const title = document.createElement("h3");
+        title.textContent = image.caption || "Home Image";
 
-                </p>
+        const date = document.createElement("p");
+        date.className = "gallery-date";
+        date.textContent = `Uploaded: ${uploadDate}`;
 
-            </div>
+        body.appendChild(title);
+        body.appendChild(date);
 
-        </div>
+        card.appendChild(img);
+        card.appendChild(body);
 
-        `;
+        container.appendChild(card);
 
     });
 
