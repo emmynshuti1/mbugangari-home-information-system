@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadNearbyPlaces() {
 
     const loading = document.getElementById("loading");
-    const container = document.getElementById("placesContainer");
 
     try {
 
@@ -21,7 +20,7 @@ async function loadNearbyPlaces() {
 
         if (!response || !response.success) {
 
-            loading.innerHTML = "Unable to load nearby places.";
+            loading.textContent = "Unable to load nearby places.";
 
             return;
 
@@ -39,7 +38,7 @@ async function loadNearbyPlaces() {
 
         console.error(error);
 
-        loading.innerHTML = "Failed to connect to the server.";
+        loading.textContent = "Failed to connect to the server.";
 
     }
 
@@ -53,11 +52,11 @@ function displayPlaces(places) {
 
     if (places.length === 0) {
 
-        container.innerHTML = `
-            <div class="no-places">
-                No nearby places found.
-            </div>
-        `;
+        const empty = document.createElement("div");
+        empty.className = "no-places";
+        empty.textContent = "No nearby places found.";
+
+        container.appendChild(empty);
 
         return;
 
@@ -65,37 +64,35 @@ function displayPlaces(places) {
 
     places.forEach(place => {
 
-        container.innerHTML += `
+        const card = document.createElement("div");
+        card.className = "place-card";
 
-        <div class="place-card">
+        const title = document.createElement("h2");
+        title.textContent = place.name || "Unknown Place";
 
-            <h2>${place.name}</h2>
+        const badges = document.createElement("div");
+        badges.className = "badges";
 
-            <div class="badges">
+        const category = document.createElement("span");
+        category.className = "category";
+        category.textContent = place.category || "General";
 
-                <span class="category">
+        const distance = document.createElement("span");
+        distance.className = "distance";
+        distance.textContent = `${place.distance_meters || 0} meters`;
 
-                    ${place.category || "General"}
+        badges.appendChild(category);
+        badges.appendChild(distance);
 
-                </span>
+        const description = document.createElement("p");
+        description.textContent =
+            place.description || "No description available.";
 
-                <span class="distance">
+        card.appendChild(title);
+        card.appendChild(badges);
+        card.appendChild(description);
 
-                    ${place.distance_meters} meters
-
-                </span>
-
-            </div>
-
-            <p>
-
-                ${place.description || "No description available."}
-
-            </p>
-
-        </div>
-
-        `;
+        container.appendChild(card);
 
     });
 

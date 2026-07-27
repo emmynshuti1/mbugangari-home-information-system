@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", loadHistory);
 async function loadHistory() {
 
     const loading = document.getElementById("loading");
-    const container = document.getElementById("historyContainer");
 
     try {
 
@@ -11,13 +10,13 @@ async function loadHistory() {
 
         if (!response || !response.success) {
 
-            loading.innerHTML = "Unable to load home history.";
+            loading.textContent = "Unable to load home history.";
 
             return;
 
         }
 
-        let history = response.data;
+        const history = response.data;
 
         // Sort by event date (oldest to newest)
         history.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
@@ -32,7 +31,7 @@ async function loadHistory() {
 
         console.error(error);
 
-        loading.innerHTML = "Failed to connect to the server.";
+        loading.textContent = "Failed to connect to the server.";
 
     }
 
@@ -46,11 +45,11 @@ function displayHistory(history) {
 
     if (history.length === 0) {
 
-        container.innerHTML = `
-            <div class="no-history">
-                No history events available.
-            </div>
-        `;
+        const empty = document.createElement("div");
+        empty.className = "no-history";
+        empty.textContent = "No history events available.";
+
+        container.appendChild(empty);
 
         return;
 
@@ -62,37 +61,34 @@ function displayHistory(history) {
             ? new Date(event.event_date).toLocaleDateString()
             : "Unknown Date";
 
-        container.innerHTML += `
+        const item = document.createElement("div");
+        item.className = "timeline-item";
 
-        <div class="timeline-item">
+        const dot = document.createElement("div");
+        dot.className = "timeline-dot";
 
-            <div class="timeline-dot"></div>
+        const content = document.createElement("div");
+        content.className = "timeline-content";
 
-            <div class="timeline-content">
+        const dateDiv = document.createElement("div");
+        dateDiv.className = "timeline-date";
+        dateDiv.textContent = date;
 
-                <div class="timeline-date">
+        const title = document.createElement("h2");
+        title.textContent = event.title || "Untitled Event";
 
-                    ${date}
+        const description = document.createElement("p");
+        description.textContent =
+            event.description || "No description available.";
 
-                </div>
+        content.appendChild(dateDiv);
+        content.appendChild(title);
+        content.appendChild(description);
 
-                <h2>
+        item.appendChild(dot);
+        item.appendChild(content);
 
-                    ${event.title}
-
-                </h2>
-
-                <p>
-
-                    ${event.description || "No description available."}
-
-                </p>
-
-            </div>
-
-        </div>
-
-        `;
+        container.appendChild(item);
 
     });
 

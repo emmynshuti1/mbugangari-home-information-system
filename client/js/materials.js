@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadMaterials() {
 
     const loading = document.getElementById("loading");
-    const container = document.getElementById("materialsContainer");
 
     try {
 
@@ -21,7 +20,7 @@ async function loadMaterials() {
 
         if (!response || !response.success) {
 
-            loading.innerHTML = "Unable to load construction materials.";
+            loading.textContent = "Unable to load construction materials.";
 
             return;
 
@@ -39,11 +38,12 @@ async function loadMaterials() {
 
         console.error(error);
 
-        loading.innerHTML = "Failed to connect to the server.";
+        loading.textContent = "Failed to connect to the server.";
 
     }
 
 }
+
 
 function displayMaterials(materials) {
 
@@ -53,11 +53,11 @@ function displayMaterials(materials) {
 
     if (materials.length === 0) {
 
-        container.innerHTML = `
-            <div class="no-materials">
-                No construction materials found.
-            </div>
-        `;
+        const empty = document.createElement("div");
+        empty.className = "no-materials";
+        empty.textContent = "No construction materials found.";
+
+        container.appendChild(empty);
 
         return;
 
@@ -65,27 +65,26 @@ function displayMaterials(materials) {
 
     materials.forEach(material => {
 
-        container.innerHTML += `
+        const card = document.createElement("div");
+        card.className = "material-card";
 
-        <div class="material-card">
+        const title = document.createElement("h2");
+        title.textContent = material.component || "Unknown Component";
 
-            <h2>${material.component}</h2>
+        const materialName = document.createElement("div");
+        materialName.className = "material-name";
+        materialName.textContent =
+            material.material_name || "Unknown Material";
 
-            <div class="material-name">
+        const description = document.createElement("p");
+        description.textContent =
+            material.description || "No description available.";
 
-                ${material.material_name}
+        card.appendChild(title);
+        card.appendChild(materialName);
+        card.appendChild(description);
 
-            </div>
-
-            <p>
-
-                ${material.description || "No description available."}
-
-            </p>
-
-        </div>
-
-        `;
+        container.appendChild(card);
 
     });
 
