@@ -4,6 +4,8 @@ const router = express.Router();
 
 const authController = require("../controllers/authController");
 
-router.post("/login", authController.login);
+const { loginLimiter } = require("../middleware/rateLimiter");
+
+router.post("/login", loginLimiter, authController.login);
 
 module.exports = router;
