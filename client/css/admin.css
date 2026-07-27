@@ -662,3 +662,110 @@ BUTTONS
     color:#fff;
 
 }
+
+/* --------------------------
+   Toast
+---------------------------*/
+
+.toast{
+
+    position:fixed;
+
+    top:25px;
+
+    right:25px;
+
+    min-width:260px;
+
+    padding:15px 20px;
+
+    border-radius:10px;
+
+    color:#fff;
+
+    font-weight:600;
+
+    opacity:0;
+
+    pointer-events:none;
+
+    transition:.35s;
+
+    z-index:3000;
+
+}
+
+.toast.show{
+
+    opacity:1;
+
+}
+
+.toast.success{
+
+    background:#198754;
+
+}
+
+.toast.error{
+
+    background:#dc3545;
+
+}
+
+
+/* --------------------------
+   Confirmation Modal
+---------------------------*/
+
+.modal{
+
+    position:fixed;
+
+    inset:0;
+
+    background:rgba(0,0,0,.55);
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:5000;
+
+}
+
+.modal.hidden{
+
+    display:none;
+
+}
+
+.modal-content{
+
+    width:400px;
+
+    max-width:95%;
+
+    background:#fff;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    text-align:center;
+
+}
+
+.modal-buttons{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:15px;
+
+    margin-top:25px;
+
+}
