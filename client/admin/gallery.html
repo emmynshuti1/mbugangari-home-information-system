@@ -24,47 +24,143 @@
             <li><a href="places.html">Nearby Places</a></li>
         </ul>
     </aside>
+<main class="main-content">
 
-    <main class="main-content">
-        <header class="topbar">
-            <h1>Gallery Management</h1>
-                        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-            <button id="logoutBtn">Logout</button>
-        </header>
+    <header class="topbar">
 
-        <div id="galleryFormCard" class="form-card hidden"></div>
-        <h2 id="galleryFormTitle">Upload Image</h2>
+        <h1>Gallery Management</h1>
+
+        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+
+        <button id="logoutBtn">
+
+            Logout
+
+        </button>
+
+    </header>
+
+    <div id="galleryFormCard" class="form-card hidden">
+
+        <h2 id="galleryFormTitle">
+
+            Upload Image
+
+        </h2>
+
         <form id="galleryForm">
-                <label for="image">Image File</label>
-                <input type="file" id="image" accept="image/*" required>
 
-                <label for="caption">Caption</label>
-                <input type="text" id="caption" placeholder="Describe the image">
+            <label for="image">
 
-                <label for="house_id">House</label>
-                <select id="house_id" required>
-                    <option value="">Select a house</option>
-                </select>
-                <p class="field-note">Choose a house record before uploading the gallery image.</p>
+                Image File
 
-                <button type="submit">Upload Image</button>
-                <button  type="button"  id="cancelGalleryBtn"  class="secondaryBtn">
-                         Cancel
+            </label>
+
+            <input
+                type="file"
+                id="image"
+                accept="image/*"
+                required
+            >
+
+            <label for="caption">
+
+                Caption
+
+            </label>
+
+            <input
+                type="text"
+                id="caption"
+                placeholder="Describe the image"
+            >
+
+            <label for="house_id">
+
+                House
+
+            </label>
+
+            <select
+                id="house_id"
+                required
+            >
+
+                <option value="">
+
+                    Select a house
+
+                </option>
+
+            </select>
+
+            <p class="field-note">
+
+                Choose a house record before uploading the gallery image.
+
+            </p>
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="saveBtn">
+
+                    Upload Image
+
                 </button>
-            </form>
+
+                <button
+                    type="button"
+                    id="cancelGalleryBtn"
+                    class="secondaryBtn">
+
+                    Cancel
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+    <section class="table-card">
+
+        <div class="section-header">
+
+            <h2>
+
+                Gallery Images
+
+            </h2>
+
+            <div class="table-actions">
+
+                <input
+                    id="searchGallery"
+                    type="search"
+                    placeholder="Search captions..."
+                >
+
+                <button id="addGalleryBtn">
+
+                    + Upload Image
+
+                </button>
+
+            </div>
+
         </div>
 
-        <section class="table-card">
-           <div class="section-header">
-              <h2>Gallery Images</h2>
-              <div class="table-actions">
-          <input id="searchGallery" type="search" placeholder="Search captions...">
-            <button id="addGalleryBtn">  + Upload Image </button>
-          </div>
-           </div>
-            <div id="galleryTable" class="admin-table"></div>
-        </section>
-    </main>
+        <div
+            id="galleryTable"
+            class="admin-table"
+        ></div>
+
+    </section>
+
+</main>
 </div>
 
 <div id="confirmModal" class="modal hidden">
