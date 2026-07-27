@@ -16,6 +16,14 @@ document.addEventListener("DOMContentLoaded", () => {
             .getElementById("searchGallery")
             ?.addEventListener("keyup", searchGallery);
 
+        document
+           .getElementById("addGalleryBtn")
+           ?.addEventListener("click", showGalleryForm);
+
+        document
+           .getElementById("cancelGalleryBtn")
+           ?.addEventListener("click", hideGalleryForm);
+
     });
 
 });
@@ -53,6 +61,28 @@ async function loadGallery() {
         );
 
     }
+
+}
+
+function showGalleryForm() {
+
+    document
+        .getElementById("galleryFormCard")
+        .classList
+        .remove("hidden");
+
+}
+
+function hideGalleryForm() {
+
+    document
+        .getElementById("galleryFormCard")
+        .classList
+        .add("hidden");
+
+    document
+        .getElementById("galleryForm")
+        .reset();
 
 }
 
@@ -243,9 +273,9 @@ async function handleUpload(event) {
         .getElementById("galleryForm")
         .reset();
 
-    showToast(
-        "Image uploaded successfully."
-    );
+    hideGalleryForm();
+
+    showToast("Image uploaded successfully.");
 
     loadGallery();
 

@@ -32,9 +32,9 @@
             <button id="logoutBtn">Logout</button>
         </header>
 
-        <section class="welcome-card">
-            <h2>Upload New Image</h2>
-            <form id="galleryForm">
+        <div id="galleryFormCard" class="form-card hidden"></div>
+        <h2 id="galleryFormTitle">Upload Image</h2>
+        <form id="galleryForm">
                 <label for="image">Image File</label>
                 <input type="file" id="image" accept="image/*" required>
 
@@ -48,14 +48,20 @@
                 <p class="field-note">Choose a house record before uploading the gallery image.</p>
 
                 <button type="submit">Upload Image</button>
+                <button  type="button"  id="cancelGalleryBtn"  class="secondaryBtn">
+                         Cancel
+                </button>
             </form>
-        </section>
+        </div>
 
         <section class="table-card">
-            <div class="section-header">
-                <h2>Gallery Images</h2>
-                <input id="searchGallery" type="search" placeholder="Search captions...">
-            </div>
+           <div class="section-header">
+              <h2>Gallery Images</h2>
+              <div class="table-actions">
+          <input id="searchGallery" type="search" placeholder="Search captions...">
+            <button id="addGalleryBtn">  + Upload Image </button>
+          </div>
+           </div>
             <div id="galleryTable" class="admin-table"></div>
         </section>
     </main>
@@ -111,5 +117,3 @@
 </body>
 
 </html>
-
-
