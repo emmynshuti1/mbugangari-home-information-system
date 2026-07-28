@@ -1,16 +1,20 @@
-// middleware/errorHandler.js
+const ApiResponse = require("../utils/ApiResponse");
 
 const errorHandler = (err, req, res, next) => {
 
     console.error(err);
 
-    res.status(err.statusCode || 500).json({
+    return res.status(err.statusCode || 500).json(
 
-        success: false,
+        new ApiResponse(
 
-        message: err.message || "Internal Server Error"
+            false,
 
-    });
+            err.message || "Internal Server Error"
+
+        )
+
+    );
 
 };
 
