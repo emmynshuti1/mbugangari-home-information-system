@@ -8,11 +8,14 @@ const protect = require("../middleware/authMiddleware");
 
 const galleryController = require("../controllers/galleryController");
 
-// Public
+const validateGallery = require("../middleware/validateGallery");
+
 router.get("/", galleryController.getAllImages);
 
-// Protected
+router.post("/", authenticateToken, upload.single("image"), validateGallery, galleryController.uploadImage);
+
 router.post("/upload", protect, upload.single("image"), galleryController.uploadImage);
+
 router.delete("/:id", protect, galleryController.deleteImage);
 
 module.exports = router;
