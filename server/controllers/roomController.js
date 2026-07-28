@@ -2,8 +2,9 @@ const roomModel = require("../models/roomModel");
 const houseModel = require("../models/houseModel");
 
 // GET all rooms
-const getAllRooms = async (req, res) => {
+const getAllRooms = async (req, res, next) => {
     try {
+
         const rooms = await roomModel.getAllRooms();
 
         res.status(200).json({
@@ -13,15 +14,12 @@ const getAllRooms = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // GET room by ID
-const getRoomById = async (req, res) => {
+const getRoomById = async (req, res, next) => {
     try {
 
         const room = await roomModel.getRoomById(req.params.id);
@@ -39,21 +37,20 @@ const getRoomById = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // POST room
-const createRoom = async (req, res) => {
+const createRoom = async (req, res, next) => {
     try {
+
         const house = await houseModel.getHouseById(req.body.house_id);
+
         if (!house) {
             return res.status(400).json({
                 success: false,
-                message: "The selected house does not exist. Please create the house first or select an existing house.",
+                message: "The selected house does not exist. Please create the house first or select an existing house."
             });
         }
 
@@ -66,21 +63,20 @@ const createRoom = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // PUT room
-const updateRoom = async (req, res) => {
+const updateRoom = async (req, res, next) => {
     try {
+
         const house = await houseModel.getHouseById(req.body.house_id);
+
         if (!house) {
             return res.status(400).json({
                 success: false,
-                message: "The selected house does not exist. Please choose a valid house.",
+                message: "The selected house does not exist. Please choose a valid house."
             });
         }
 
@@ -100,15 +96,12 @@ const updateRoom = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        next(error);
     }
 };
 
 // DELETE room
-const deleteRoom = async (req, res) => {
+const deleteRoom = async (req, res, next) => {
     try {
 
         const room = await roomModel.deleteRoom(req.params.id);
@@ -126,10 +119,7 @@ const deleteRoom = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+        next(error);
     }
 };
 

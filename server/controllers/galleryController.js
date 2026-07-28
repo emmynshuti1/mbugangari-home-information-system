@@ -1,105 +1,187 @@
-// controllers/galleryController.js
-
 const galleryModel = require("../models/galleryModel");
 const houseModel = require("../models/houseModel");
+const ApiError = require("../utils/ApiError");
+const ApiResponse = require("../utils/ApiResponse");
 
 // GET all gallery images
-const getAllImages = async (req, res) => {
-  try {
-    const images = await galleryModel.getAllImages();
+const getAllImages = async (req, res, next) => {
 
-    res.status(200).json({
-      success: true,
-      count: images.length,
-      data: images,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+    try {
+
+        const images = await galleryModel.getAllImages();
+
+        return res.status(200).json({
+
+            ...new ApiResponse(
+
+                true,
+
+                "Gallery images retrieved successfully.",
+
+                images
+
+            ),
+
+            count: images.length
+
+        });
+
+    }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // POST upload image
-const uploadImage = async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: "Please upload an image.",
-      });
+const uploadImage = async (req, res, next) => {
+
+    try {
+
+        if (!req.file) {
+
+            throw new ApiError(
+
+                400,
+
+                "Please upload an image."
+
+            );
+
+        }
+
+        const requestedHouseId = req.body.house_id
+            ? Number(req.body.house_id)
+            : null;
+
+        let houseIdToUse = null;
+
+        if (requestedHouseId) {
+
+            const house = await houseModel.getHouseById(requestedHouseId);
+
+            if (!house) {
+
+                throw new ApiError(
+
+                    400,
+
+                    "The selected house ID does not exist. Please create house information first or select a valid house."
+
+                );
+
+            }
+
+            houseIdToUse = requestedHouseId;
+
+        }
+
+        else {
+
+            const houses = await houseModel.getAllHouses();
+
+            if (!houses.length) {
+
+                throw new ApiError(
+
+                    400,
+
+                    "No house records were found. Create a house before uploading gallery images."
+
+                );
+
+            }
+
+            houseIdToUse = houses[0].id;
+
+        }
+
+        const image = await galleryModel.createImage({
+
+            house_id: houseIdToUse,
+
+            image_url: `/uploads/${req.file.filename}`,
+
+            caption: req.body.caption
+
+        });
+
+        return res.status(201).json(
+
+            new ApiResponse(
+
+                true,
+
+                "Image uploaded successfully.",
+
+                image
+
+            )
+
+        );
+
     }
 
-    const requestedHouseId = req.body.house_id ? Number(req.body.house_id) : null;
-    let houseIdToUse = null;
+    catch (error) {
 
-    if (requestedHouseId) {
-      const house = await houseModel.getHouseById(requestedHouseId);
-      if (!house) {
-        return res.status(400).json({
-          success: false,
-          message:
-            "The selected house ID does not exist. Please create house information first or select a valid house.",
-        });
-      }
-      houseIdToUse = requestedHouseId;
-    } else {
-      const houses = await houseModel.getAllHouses();
-      if (!houses.length) {
-        return res.status(400).json({
-          success: false,
-          message: "No house records were found. Create a house before uploading gallery images.",
-        });
-      }
-      houseIdToUse = houses[0].id;
+        next(error);
+
     }
 
-    const image = await galleryModel.createImage({
-      house_id: houseIdToUse,
-      image_url: `/uploads/${req.file.filename}`,
-      caption: req.body.caption,
-    });
-
-    res.status(201).json({
-      success: true,
-      message: "Image uploaded successfully.",
-      data: image,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
 };
 
-const deleteImage = async (req, res) => {
-  try {
-    const image = await galleryModel.deleteImage(req.params.id);
+// DELETE image
+const deleteImage = async (req, res, next) => {
 
-    if (!image) {
-      return res.status(404).json({
-        success: false,
-        message: "Gallery image not found."
-      });
+    try {
+
+        const image = await galleryModel.deleteImage(req.params.id);
+
+        if (!image) {
+
+            throw new ApiError(
+
+                404,
+
+                "Gallery image not found."
+
+            );
+
+        }
+
+        return res.status(200).json(
+
+            new ApiResponse(
+
+                true,
+
+                "Image deleted successfully.",
+
+                image
+
+            )
+
+        );
+
     }
 
-    res.status(200).json({
-      success: true,
-      message: "Image deleted successfully.",
-      data: image
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message
-    });
-  }
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 module.exports = {
-  getAllImages,
-  uploadImage,
-  deleteImage
+
+    getAllImages,
+
+    uploadImage,
+
+    deleteImage
+
 };

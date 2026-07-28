@@ -1,142 +1,243 @@
 const historyModel = require("../models/historyModel");
 const houseModel = require("../models/houseModel");
+const ApiError = require("../utils/ApiError");
+const ApiResponse = require("../utils/ApiResponse");
 
 // Get all history
-const getAllHistory = async (req, res) => {
+const getAllHistory = async (req, res, next) => {
+
     try {
+
         const history = await historyModel.getAllHistory();
 
-        res.status(200).json({
-            success: true,
-            count: history.length,
-            data: history
+        return res.status(200).json({
+
+            ...new ApiResponse(
+
+                true,
+
+                "History retrieved successfully.",
+
+                history
+
+            ),
+
+            count: history.length
+
         });
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
     }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // Get history by ID
-const getHistoryById = async (req, res) => {
+const getHistoryById = async (req, res, next) => {
+
     try {
 
         const history = await historyModel.getHistoryById(req.params.id);
 
         if (!history) {
-            return res.status(404).json({
-                success: false,
-                message: "History record not found."
-            });
+
+            throw new ApiError(
+
+                404,
+
+                "History record not found."
+
+            );
+
         }
 
-        res.status(200).json({
-            success: true,
-            data: history
-        });
+        return res.status(200).json(
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+            new ApiResponse(
+
+                true,
+
+                "History retrieved successfully.",
+
+                history
+
+            )
+
+        );
+
     }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // Create history
-const createHistory = async (req, res) => {
+const createHistory = async (req, res, next) => {
+
     try {
+
         const house = await houseModel.getHouseById(req.body.house_id);
+
         if (!house) {
-            return res.status(400).json({
-                success: false,
-                message: "The selected house does not exist. Please create the house first or select an existing house.",
-            });
+
+            throw new ApiError(
+
+                400,
+
+                "The selected house does not exist. Please create the house first or select an existing house."
+
+            );
+
         }
 
         const history = await historyModel.createHistory(req.body);
 
-        res.status(201).json({
-            success: true,
-            message: "History record created successfully.",
-            data: history
-        });
+        return res.status(201).json(
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+            new ApiResponse(
+
+                true,
+
+                "History record created successfully.",
+
+                history
+
+            )
+
+        );
+
     }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // Update history
-const updateHistory = async (req, res) => {
+const updateHistory = async (req, res, next) => {
+
     try {
+
         const house = await houseModel.getHouseById(req.body.house_id);
+
         if (!house) {
-            return res.status(400).json({
-                success: false,
-                message: "The selected house does not exist. Please choose a valid house.",
-            });
+
+            throw new ApiError(
+
+                400,
+
+                "The selected house does not exist. Please choose a valid house."
+
+            );
+
         }
 
-        const history = await historyModel.updateHistory(req.params.id, req.body);
+        const history = await historyModel.updateHistory(
+
+            req.params.id,
+
+            req.body
+
+        );
 
         if (!history) {
-            return res.status(404).json({
-                success: false,
-                message: "History record not found."
-            });
+
+            throw new ApiError(
+
+                404,
+
+                "History record not found."
+
+            );
+
         }
 
-        res.status(200).json({
-            success: true,
-            message: "History updated successfully.",
-            data: history
-        });
+        return res.status(200).json(
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+            new ApiResponse(
+
+                true,
+
+                "History updated successfully.",
+
+                history
+
+            )
+
+        );
+
     }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // Delete history
-const deleteHistory = async (req, res) => {
+const deleteHistory = async (req, res, next) => {
+
     try {
 
         const history = await historyModel.deleteHistory(req.params.id);
 
         if (!history) {
-            return res.status(404).json({
-                success: false,
-                message: "History record not found."
-            });
+
+            throw new ApiError(
+
+                404,
+
+                "History record not found."
+
+            );
+
         }
 
-        res.status(200).json({
-            success: true,
-            message: "History deleted successfully."
-        });
+        return res.status(200).json(
 
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
+            new ApiResponse(
+
+                true,
+
+                "History deleted successfully."
+
+            )
+
+        );
+
     }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 module.exports = {
+
     getAllHistory,
+
     getHistoryById,
+
     createHistory,
+
     updateHistory,
+
     deleteHistory
+
 };

@@ -2,78 +2,100 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const authModel = require("../models/authModel");
+const ApiError = require("../utils/ApiError");
+const ApiResponse = require("../utils/ApiResponse");
 
-const login = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+const login = async (req, res, next) => {
 
-    // Check required fields
-    if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required.",
-      });
+    try {
+
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+
+            throw new ApiError(
+                400,
+                "Email and password are required."
+            );
+
+        }
+
+        const admin = await authModel.getAdminByEmail(email);
+
+        if (!admin) {
+
+            throw new ApiError(
+                401,
+                "Invalid email or password."
+            );
+
+        }
+
+        const passwordMatch = await bcrypt.compare(
+            password,
+            admin.password_hash
+        );
+
+        if (!passwordMatch) {
+
+            throw new ApiError(
+                401,
+                "Invalid email or password."
+            );
+
+        }
+
+        const token = jwt.sign(
+
+            {
+                id: admin.id,
+                email: admin.email
+            },
+
+            process.env.JWT_SECRET,
+
+            {
+                expiresIn: "24h"
+            }
+
+        );
+
+        const administrator = {
+
+            id: admin.id,
+            full_name: admin.full_name,
+            email: admin.email
+
+        };
+
+        return res.status(200).json({
+
+            ...new ApiResponse(
+
+                true,
+
+                "Login successful."
+
+            ),
+
+            token,
+
+            administrator,
+
+            admin: administrator
+
+        });
+
     }
 
-    // Find administrator
-    const admin = await authModel.getAdminByEmail(email);
+    catch (error) {
 
-    if (!admin) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password.",
-      });
+        next(error);
+
     }
 
-    // Compare password
-    const passwordMatch = await bcrypt.compare(
-      password,
-      admin.password_hash
-    );
-
-    if (!passwordMatch) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid email or password.",
-      });
-    }
-
-    // Generate JWT
-    const token = jwt.sign(
-      {
-        id: admin.id,
-        email: admin.email,
-      },
-      process.env.JWT_SECRET,
-      {
-        expiresIn: "24h",
-      }
-    );
-
-    const administrator = {
-      id: admin.id,
-      full_name: admin.full_name,
-      email: admin.email,
-    };
-
-    res.status(200).json({
-      success: true,
-      message: "Login successful.",
-      token,
-      administrator,
-      admin: administrator,
-    });
-
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      success: false,
-      message: "Internal server error."
-    });
-  }
 };
 
 module.exports = {
-  login,
+    login
 };

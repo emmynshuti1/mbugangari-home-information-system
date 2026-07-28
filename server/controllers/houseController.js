@@ -1,122 +1,177 @@
 const houseModel = require("../models/houseModel");
+const ApiError = require("../utils/ApiError");
+const ApiResponse = require("../utils/ApiResponse");
 
 // GET /api/houses
-const getAllHouses = async (req, res) => {
-  try {
-    const houses = await houseModel.getAllHouses();
+const getAllHouses = async (req, res, next) => {
 
-    res.status(200).json({
-      success: true,
-      count: houses.length,
-      data: houses,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+    try {
+
+        const houses = await houseModel.getAllHouses();
+
+        return res.status(200).json({
+
+            ...new ApiResponse(
+                true,
+                "Houses retrieved successfully",
+                houses
+            ),
+
+            count: houses.length
+
+        });
+
+    }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // GET /api/houses/:id
-const getHouseById = async (req, res) => {
-  try {
-    const house = await houseModel.getHouseById(req.params.id);
+const getHouseById = async (req, res, next) => {
 
-    if (!house) {
-      return res.status(404).json({
-        success: false,
-        message: "House not found",
-      });
+    try {
+
+        const house = await houseModel.getHouseById(req.params.id);
+
+        if (!house) {
+
+            throw new ApiError(
+                404,
+                "House not found"
+            );
+
+        }
+
+        return res.status(200).json(
+
+            new ApiResponse(
+                true,
+                "House retrieved successfully",
+                house
+            )
+
+        );
+
     }
 
-    res.status(200).json({
-      success: true,
-      data: house,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // POST /api/houses
-const createHouse = async (req, res) => {
-  try {
-    const newHouse = await houseModel.createHouse(req.body);
+const createHouse = async (req, res, next) => {
 
-    res.status(201).json({
-      success: true,
-      message: "House created successfully",
-      data: newHouse,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+    try {
+
+        const newHouse = await houseModel.createHouse(req.body);
+
+        return res.status(201).json(
+
+            new ApiResponse(
+                true,
+                "House created successfully",
+                newHouse
+            )
+
+        );
+
+    }
+
+    catch (error) {
+
+        next(error);
+
+    }
+
 };
 
 // PUT /api/houses/:id
-const updateHouse = async (req, res) => {
-  try {
-    const updatedHouse = await houseModel.updateHouse(
-      req.params.id,
-      req.body
-    );
+const updateHouse = async (req, res, next) => {
 
-    if (!updatedHouse) {
-      return res.status(404).json({
-        success: false,
-        message: "House not found",
-      });
+    try {
+
+        const updatedHouse = await houseModel.updateHouse(
+            req.params.id,
+            req.body
+        );
+
+        if (!updatedHouse) {
+
+            throw new ApiError(
+                404,
+                "House not found"
+            );
+
+        }
+
+        return res.status(200).json(
+
+            new ApiResponse(
+                true,
+                "House updated successfully",
+                updatedHouse
+            )
+
+        );
+
     }
 
-    res.status(200).json({
-      success: true,
-      message: "House updated successfully",
-      data: updatedHouse,
-    });
+    catch (error) {
 
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+        next(error);
+
+    }
+
 };
 
-const deleteHouse = async (req, res) => {
-  try {
-    const deletedHouse = await houseModel.deleteHouse(req.params.id);
+// DELETE /api/houses/:id
+const deleteHouse = async (req, res, next) => {
 
-    if (!deletedHouse) {
-      return res.status(404).json({
-        success: false,
-        message: "House not found",
-      });
+    try {
+
+        const deletedHouse = await houseModel.deleteHouse(req.params.id);
+
+        if (!deletedHouse) {
+
+            throw new ApiError(
+                404,
+                "House not found"
+            );
+
+        }
+
+        return res.status(200).json(
+
+            new ApiResponse(
+                true,
+                "House deleted successfully"
+            )
+
+        );
+
     }
 
-    res.status(200).json({
-      success: true,
-      message: "House deleted successfully",
-    });
+    catch (error) {
 
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+        next(error);
+
+    }
+
 };
 
 module.exports = {
-  getAllHouses,
-  getHouseById,
-  createHouse,
-  updateHouse,
-  deleteHouse,
+    getAllHouses,
+    getHouseById,
+    createHouse,
+    updateHouse,
+    deleteHouse
 };
