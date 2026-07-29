@@ -3,71 +3,99 @@
 
 <head>
 
-<meta charset="UTF-8">
+    <meta charset="UTF-8">
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Administrator Login</title>
+    <title>Administrator Login | Mbugangari Home Information System</title>
 
-<link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/login.css">
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
 </head>
 
 <body>
 
-<div class="login-container">
+    <div class="login-container">
 
-    <div class="login-card">
+        <div class="login-card">
 
-        <h1>
+            <div class="login-logo">
 
-            Administrator Login
+                🏡
 
-        </h1>
+            </div>
 
-        <p>
+            <h1>
 
-            Mbugangari Home Information System
+                Administrator Login
 
-        </p>
+            </h1>
 
-        <form id="loginForm">
+            <p>
 
-            <input
-                type="email"
-                id="email"
-                placeholder="Email"
-                required
-            >
+                Sign in to manage the Mbugangari Home Information System.
 
-            <input
-                type="password"
-                id="password"
-                placeholder="Password"
-                required
-            >
+            </p>
 
-            <button type="submit">
+            <form id="loginForm">
 
-                Login
+                <label for="email">
 
-            </button>
+                    Email Address
 
-        </form>
+                </label>
 
-        <div id="message"></div>
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Enter your email"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="password">
+
+                    Password
+
+                </label>
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your password"
+                    autocomplete="current-password"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    id="loginBtn"
+                >
+
+                    Login
+
+                </button>
+
+            </form>
+
+            <div id="message"></div>
+
+            <a href="../index.html" class="back-home">
+
+                ← Back to Home
+
+            </a>
+
+        </div>
 
     </div>
 
-</div>
-
-<script src="../js/config.js"></script>
-<script src="../js/login.js"></script>
-
+    <script src="../js/config.js"></script>
+    <script src="../js/login.js"></script>
     <script src="../js/theme.js"></script>
+
 </body>
 
 </html>
-
