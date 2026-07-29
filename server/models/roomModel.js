@@ -1,6 +1,20 @@
-// models/roomModel.js
-
 const pool = require("../config/db");
+
+// Check if room exists
+const exists = async (id) => {
+
+    const result = await pool.query(
+        `
+        SELECT id
+        FROM rooms
+        WHERE id = $1;
+        `,
+        [id]
+    );
+
+    return result.rowCount > 0;
+
+};
 
 // Get all rooms
 const getAllRooms = async () => {
@@ -30,7 +44,7 @@ const getRoomById = async (id) => {
         FROM rooms
         INNER JOIN houses
             ON rooms.house_id = houses.id
-        WHERE rooms.id = $1
+        WHERE rooms.id = $1;
         `,
         [id]
     );
@@ -145,6 +159,7 @@ const deleteRoom = async (id) => {
 };
 
 module.exports = {
+    exists,
     getAllRooms,
     getRoomById,
     createRoom,

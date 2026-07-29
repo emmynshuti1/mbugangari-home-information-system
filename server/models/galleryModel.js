@@ -1,10 +1,7 @@
-// models/galleryModel.js
-
 const pool = require("../config/db");
 
-// Get all images
+// Get all gallery images
 const getAllImages = async () => {
-
     const result = await pool.query(`
         SELECT *
         FROM gallery
@@ -12,10 +9,23 @@ const getAllImages = async () => {
     `);
 
     return result.rows;
-
 };
 
-// Create image
+// Get one gallery image
+const getImageById = async (id) => {
+    const result = await pool.query(
+        `
+        SELECT *
+        FROM gallery
+        WHERE id = $1;
+        `,
+        [id]
+    );
+
+    return result.rows[0];
+};
+
+// Create gallery image
 const createImage = async ({
     house_id,
     image_url,
@@ -48,7 +58,9 @@ const createImage = async ({
     return result.rows[0];
 };
 
+// Delete gallery image
 const deleteImage = async (id) => {
+
     const result = await pool.query(
         `
         DELETE FROM gallery
@@ -62,11 +74,8 @@ const deleteImage = async (id) => {
 };
 
 module.exports = {
-
     getAllImages,
-
+    getImageById,
     createImage,
-
     deleteImage
-
 };

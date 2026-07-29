@@ -1,5 +1,20 @@
 const pool = require("../config/db");
 
+// Check if nearby place exists
+const exists = async (id) => {
+
+    const result = await pool.query(
+        `
+        SELECT id
+        FROM nearby_places
+        WHERE id = $1;
+        `,
+        [id]
+    );
+
+    return result.rowCount > 0;
+};
+
 // Get all nearby places
 const getAllPlaces = async () => {
 
@@ -125,6 +140,7 @@ const deletePlace = async (id) => {
 };
 
 module.exports = {
+    exists,
     getAllPlaces,
     getPlaceById,
     createPlace,

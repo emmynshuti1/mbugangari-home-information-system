@@ -1,6 +1,18 @@
-// models/materialModel.js
-
 const pool = require("../config/db");
+
+// Check if material exists
+const exists = async (id) => {
+    const result = await pool.query(
+        `
+        SELECT id
+        FROM materials
+        WHERE id = $1;
+        `,
+        [id]
+    );
+
+    return result.rowCount > 0;
+};
 
 // Get all materials
 const getAllMaterials = async () => {
@@ -119,6 +131,7 @@ const deleteMaterial = async (id) => {
 };
 
 module.exports = {
+    exists,
     getAllMaterials,
     getMaterialById,
     createMaterial,

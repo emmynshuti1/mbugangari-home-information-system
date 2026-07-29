@@ -1,5 +1,3 @@
-// models/historyModel.js
-
 const pool = require("../config/db");
 
 // Get all history records
@@ -11,7 +9,7 @@ const getAllHistory = async () => {
         FROM history
         INNER JOIN houses
             ON history.house_id = houses.id
-        ORDER BY event_date DESC;
+        ORDER BY event_date DESC, history.id DESC;
     `);
 
     return result.rows;
@@ -35,6 +33,20 @@ const getHistoryById = async (id) => {
     return result.rows[0];
 };
 
+// Check whether a history record exists
+const historyExists = async (id) => {
+    const result = await pool.query(
+        `
+        SELECT id
+        FROM history
+        WHERE id = $1;
+        `,
+        [id]
+    );
+
+    return result.rows.length > 0;
+};
+
 // Create history record
 const createHistory = async ({
     house_id,
@@ -54,7 +66,7 @@ const createHistory = async ({
         )
         VALUES
         (
-            $1,$2,$3,$4
+            $1, $2, $3, $4
         )
         RETURNING *;
         `,
@@ -121,6 +133,7 @@ const deleteHistory = async (id) => {
 module.exports = {
     getAllHistory,
     getHistoryById,
+    historyExists,
     createHistory,
     updateHistory,
     deleteHistory
