@@ -1198,3 +1198,17 @@ html[data-theme='dark'] .skeleton-line{
     background-size:400% 100%;
 
 }
+
+.card h3 .skeleton-line{
+
+    display:inline-block;
+
+    width:60px;
+
+    height:32px;
+
+    margin:0;
+
+    vertical-align:middle;
+
+}
