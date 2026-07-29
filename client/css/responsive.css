@@ -1,73 +1,137 @@
-﻿@media (max-width: 1024px) {
-    .navbar {
-        padding: 16px 24px;
+﻿/* ===========================
+   Large tablets
+=========================== */
+
+@media (max-width:1024px){
+
+    .container{
+        width:94%;
     }
 
-    .nav-links {
-        gap: 0.6rem;
+    .navbar{
+        padding:16px 24px;
     }
+
+    .hero-content{
+        padding:42px 36px;
+    }
+
 }
 
-@media (max-width: 860px) {
-    .navbar {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 1rem;
+/* ===========================
+   Tablets
+=========================== */
+
+@media (max-width:768px){
+
+    .navbar{
+        padding:16px 20px;
+        flex-direction:column;
+        align-items:flex-start;
     }
 
-    .nav-links {
-        flex-direction: column;
-        align-items: stretch;
-        width: 100%;
+    .logo{
+        width:100%;
+        text-align:center;
+        margin-bottom:8px;
     }
 
-    .nav-links li a {
-        width: 100%;
-        text-align: center;
+    .nav-links{
+        width:100%;
+        display:flex;
+        flex-direction:row;
+        overflow-x:auto;
+        white-space:nowrap;
+        gap:10px;
+        padding-bottom:8px;
+        scrollbar-width:thin;
     }
-}
 
-@media (max-width: 768px) {
-    .hero-content,
-    .page-banner {
-        padding: 32px 22px;
+    .nav-links::-webkit-scrollbar{
+        height:6px;
+    }
+
+    .nav-links li{
+        flex:none;
+    }
+
+    .nav-links li a{
+        white-space:nowrap;
+        padding:10px 18px;
+    }
+
+    .hero{
+        min-height:65vh;
+    }
+
+    .hero-content{
+        padding:30px 24px;
     }
 
     .hero h1,
-    .section-title {
-        font-size: clamp(2rem, 6vw, 2.8rem);
+    .section-title{
+        font-size:2rem;
+    }
+
+    section{
+        padding:60px 0;
     }
 
     .stats,
     .room-grid,
     .materials-grid,
-    .places-grid {
-        grid-template-columns: 1fr;
+    .places-grid{
+        grid-template-columns:1fr;
     }
 
-    section {
-        padding: 50px 0;
+    table{
+        display:block;
+        overflow-x:auto;
     }
 
-    .navbar {
-        padding: 16px 20px;
-    }
-
-    .page-banner {
-        height: 260px;
-    }
 }
 
-@media (max-width: 520px) {
-    .navbar {
-        padding: 14px 16px;
+/* ===========================
+   Phones
+=========================== */
+
+@media (max-width:480px){
+
+    .container{
+        width:92%;
     }
 
-    .hero-content {
-        padding: 26px 20px;
+    .navbar{
+        padding:14px 16px;
     }
 
-    .nav-links li a {
-        padding: 0.85rem 0.9rem;
+    .hero{
+        min-height:55vh;
     }
+
+    .hero-content{
+        padding:24px 18px;
+    }
+
+    .hero h1{
+        font-size:1.8rem;
+    }
+
+    .section-title{
+        font-size:1.7rem;
+    }
+
+    .btn{
+        width:100%;
+    }
+
+    .card,
+    .room-card,
+    .material-card,
+    .place-card,
+    .timeline-content,
+    .info-card{
+        padding:22px;
+    }
+
 }
