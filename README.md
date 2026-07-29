@@ -56,7 +56,7 @@ The project was developed using modern web technologies including HTML, CSS, Jav
 
 ## Deployment
 
-- Netlify (Frontend)
+- Render (Frontend)
 - Render (Backend)
 - Neon (Database)
 
