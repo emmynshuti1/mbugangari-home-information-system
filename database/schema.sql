@@ -1,13 +1,3 @@
--- DROP TABLES (Allows recreating the database)
-
-DROP TABLE IF EXISTS nearby_places CASCADE;
-DROP TABLE IF EXISTS history CASCADE;
-DROP TABLE IF EXISTS materials CASCADE;
-DROP TABLE IF EXISTS gallery CASCADE;
-DROP TABLE IF EXISTS rooms CASCADE;
-DROP TABLE IF EXISTS administrators CASCADE;
-DROP TABLE IF EXISTS houses CASCADE;
-
 -- HOUSES TABLE
 
 CREATE TABLE houses (
@@ -20,7 +10,8 @@ CREATE TABLE houses (
 
     description TEXT NOT NULL,
 
-    year_built INTEGER CHECK (year_built >= 1900),
+    year_built INTEGER CHECK (year_built >= 1900
+    AND year_built <= EXTRACT(YEAR FROM CURRENT_DATE)),
 
     village VARCHAR(100) NOT NULL,
 
@@ -32,9 +23,9 @@ CREATE TABLE houses (
 
     country VARCHAR(100) NOT NULL DEFAULT 'Rwanda',
 
-    latitude DECIMAL(10,7),
+    latitude DECIMAL(10,7) CHECK (latitude BETWEEN -90 AND 90),
 
-    longitude DECIMAL(10,7),
+    longitude DECIMAL(10,7) CHECK (longitude BETWEEN -180 AND 180),
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
@@ -52,9 +43,9 @@ CREATE TABLE rooms (
 
     floor VARCHAR(50),
 
-    length DECIMAL(5,2),
+    length DECIMAL(5,2) CHECK(length > 0),
 
-    width DECIMAL(5,2),
+    width DECIMAL(5,2) CHECK(width > 0),
 
     description TEXT,
 
@@ -91,7 +82,7 @@ CREATE TABLE gallery (
 
     house_id INTEGER NOT NULL,
 
-    image_url VARCHAR(255) NOT NULL,
+    image_url TEXT NOT NULL,
 
     caption VARCHAR(255),
 
