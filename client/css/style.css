@@ -1212,3 +1212,7 @@ html[data-theme='dark'] .skeleton-line{
     vertical-align:middle;
 
 }
+
+html[data-theme='dark'] .info-card {
+    background: #162032;
+}
