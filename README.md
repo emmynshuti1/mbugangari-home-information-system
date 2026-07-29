@@ -270,7 +270,7 @@ The application includes:
 
 Frontend:
 
-- Netlify
+- Render
 
 Backend:
 
