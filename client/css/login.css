@@ -1,22 +1,43 @@
-/* ===========================
-   RESET
-=========================== */
+/* ==========================================
+   VARIABLES
+========================================== */
 
-*{
-
-    margin:0;
-
-    padding:0;
-
-    box-sizing:border-box;
-
-    font-family:Arial, Helvetica, sans-serif;
-
+:root{
+    --background:#f4f7fb;
+    --surface:rgba(255,255,255,.95);
+    --primary:#166534;
+    --primary-dark:#14532d;
+    --text:#111827;
+    --muted:#6b7280;
+    --border:#d1d5db;
+    --shadow:0 25px 70px rgba(0,0,0,.18);
 }
 
-/* ===========================
-   BODY
-=========================== */
+html[data-theme="dark"]{
+    --background:#0b1120;
+    --surface:rgba(17,24,39,.94);
+    --primary:#38bdf8;
+    --primary-dark:#0ea5e9;
+    --text:#e5e7eb;
+    --muted:#94a3b8;
+    --border:#334155;
+    --shadow:0 25px 70px rgba(0,0,0,.45);
+}
+
+/* ==========================================
+RESET
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"Poppins",sans-serif;
+}
+
+/* ==========================================
+BODY
+========================================== */
 
 body{
 
@@ -28,23 +49,33 @@ body{
 
     align-items:center;
 
-    background:linear-gradient(
-        rgba(46,125,50,.80),
-        rgba(46,125,50,.80)
+    background:
+    linear-gradient(
+        rgba(22,101,52,.82),
+        rgba(22,101,52,.82)
     ),
     url("../images/hero.jpg");
 
     background-size:cover;
-
     background-position:center;
-
     background-repeat:no-repeat;
-
 }
 
-/* ===========================
-   LOGIN CONTAINER
-=========================== */
+html[data-theme="dark"] body{
+
+    background:
+    linear-gradient(
+        rgba(2,6,23,.86),
+        rgba(2,6,23,.86)
+    ),
+    url("../images/hero.jpg");
+
+    background-size:cover;
+}
+
+/* ==========================================
+LOGIN CONTAINER
+========================================== */
 
 .login-container{
 
@@ -56,59 +87,63 @@ body{
 
     align-items:center;
 
-    padding:20px;
+    padding:30px;
 
 }
 
-/* ===========================
-   LOGIN CARD
-=========================== */
+/* ==========================================
+LOGIN CARD
+========================================== */
 
 .login-card{
 
     width:100%;
 
-    max-width:420px;
+    max-width:440px;
 
-    background:white;
+    background:var(--surface);
 
-    padding:40px;
+    backdrop-filter:blur(18px);
 
-    border-radius:15px;
+    border:1px solid rgba(255,255,255,.18);
 
-    box-shadow:0 15px 40px rgba(0,0,0,.25);
+    border-radius:24px;
+
+    padding:45px;
+
+    box-shadow:var(--shadow);
 
     animation:fadeIn .6s ease;
 
 }
 
-/* ===========================
-   HEADINGS
-=========================== */
-
 .login-card h1{
+
+    color:var(--primary);
 
     text-align:center;
 
-    color:#2E7D32;
-
     margin-bottom:10px;
+
+    font-size:2rem;
 
 }
 
 .login-card p{
 
+    color:var(--muted);
+
     text-align:center;
 
-    color:#666;
+    margin-bottom:35px;
 
-    margin-bottom:30px;
+    line-height:1.6;
 
 }
 
-/* ===========================
-   FORM
-=========================== */
+/* ==========================================
+FORM
+========================================== */
 
 #loginForm{
 
@@ -116,107 +151,117 @@ body{
 
     flex-direction:column;
 
+    gap:18px;
+
 }
 
-/* ===========================
-   INPUTS
-=========================== */
+#loginForm label{
+
+    font-weight:600;
+
+    color:var(--text);
+
+}
 
 #loginForm input{
 
-    padding:14px;
+    padding:15px 18px;
 
-    margin-bottom:20px;
+    border-radius:14px;
 
-    border:2px solid #ddd;
+    border:1px solid var(--border);
 
-    border-radius:8px;
+    background:rgba(255,255,255,.65);
 
-    font-size:16px;
+    color:var(--text);
 
-    transition:.3s;
+    transition:.25s;
+
+}
+
+html[data-theme="dark"] #loginForm input{
+
+    background:#111827;
 
 }
 
 #loginForm input:focus{
 
-    border-color:#2E7D32;
-
     outline:none;
 
-    box-shadow:0 0 8px rgba(46,125,50,.3);
+    border-color:var(--primary);
+
+    box-shadow:0 0 0 4px rgba(34,197,94,.12);
 
 }
 
-/* ===========================
-   BUTTON
-=========================== */
+/* ==========================================
+BUTTON
+========================================== */
 
 #loginForm button{
+
+    margin-top:10px;
 
     padding:15px;
 
     border:none;
 
-    border-radius:8px;
+    border-radius:14px;
 
-    background:#2E7D32;
+    background:var(--primary);
 
     color:white;
 
-    font-size:17px;
+    font-size:16px;
 
-    font-weight:bold;
+    font-weight:600;
 
     cursor:pointer;
 
-    transition:.3s;
+    transition:.25s;
 
 }
 
 #loginForm button:hover{
 
-    background:#1B5E20;
+    background:var(--primary-dark);
 
     transform:translateY(-2px);
 
 }
 
-/* ===========================
-   MESSAGE
-=========================== */
+/* ==========================================
+MESSAGE
+========================================== */
 
 #message{
 
     margin-top:20px;
 
-    text-align:center;
-
-    font-weight:bold;
-
     min-height:24px;
 
-}
+    text-align:center;
 
-/* Success */
+    font-weight:600;
+
+}
 
 .success{
 
-    color:#2E7D32;
+    color:#16a34a;
 
 }
-
-/* Error */
 
 .error{
 
-    color:#D32F2F;
+    color:#dc2626;
 
 }
 
-/* ===========================
-   ANIMATION
-=========================== */
+/* ==========================================
+ANIMATION
+========================================== */
 
 @keyframes fadeIn{
 
@@ -224,7 +269,7 @@ body{
 
         opacity:0;
 
-        transform:translateY(30px);
+        transform:translateY(35px);
 
     }
 
@@ -238,21 +283,23 @@ body{
 
 }
 
-/* ===========================
-   RESPONSIVE
-=========================== */
+/* ==========================================
+RESPONSIVE
+========================================== */
 
 @media(max-width:600px){
 
 .login-card{
 
-padding:30px 20px;
+padding:30px 22px;
+
+border-radius:18px;
 
 }
 
 .login-card h1{
 
-font-size:28px;
+font-size:1.7rem;
 
 }
 
