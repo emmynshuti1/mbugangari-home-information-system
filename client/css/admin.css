@@ -1278,3 +1278,17 @@ table img{
     }
 
 }
+
+.sidebar ul li a.active{
+
+    background:rgba(255,255,255,.18);
+
+    font-weight:600;
+
+}
+
+html[data-theme='dark'] .sidebar ul li a.active{
+
+    background:rgba(255,255,255,.12);
+
+}
