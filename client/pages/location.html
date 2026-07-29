@@ -14,114 +14,186 @@
     <link rel="stylesheet" href="../css/location.css">
     <link rel="stylesheet" href="../css/responsive.css">
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon"
+          href="/favicon.svg"
+          type="image/svg+xml">
+
 </head>
 
 <body>
 
-<nav class="navbar">
+<header>
 
-    <div class="logo">
+    <nav class="navbar">
 
-        <a href="../index.html">
+        <div class="logo">
 
-            Mbugangari Home
+            <a href="../index.html">
 
-        </a>
+                Mbugangari Home
 
-    </div>
+            </a>
 
-    <ul class="nav-links">
+        </div>
 
-        <li><a href="../index.html">Home</a></li>
+        <ul class="nav-links">
 
-        <li><a href="about.html">About</a></li>
+            <li><a href="../index.html">Home</a></li>
 
-        <li><a href="rooms.html">Rooms</a></li>
+            <li><a href="about.html">About</a></li>
 
-        <li><a href="gallery.html">Gallery</a></li>
+            <li><a href="rooms.html">Rooms</a></li>
 
-        <li><a href="materials.html">Materials</a></li>
+            <li><a href="gallery.html">Gallery</a></li>
 
-        <li><a href="history.html">History</a></li>
+            <li><a href="materials.html">Materials</a></li>
 
-        <li><a href="location.html" class="active">Nearby Places</a></li>
+            <li><a href="history.html">History</a></li>
 
-            <li><a href='../admin/login.html'>Admin</a></li>
-            <li><button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
-</ul>
+            <li><a href="location.html" class="active">Nearby Places</a></li>
 
-</nav>
+            <li><a href="../admin/login.html">Admin</a></li>
 
-<section class="page-banner">
+            <li>
 
-    <div class="banner-content">
+                <button
+                    id="themeToggle"
+                    class="theme-toggle"
+                    aria-label="Toggle theme">
 
-        <h1>Nearby Places</h1>
+                    🌙
 
-        <p>
+                </button>
 
-            Discover important places located near the Mbugangari Home.
+            </li>
 
-        </p>
+        </ul>
 
-    </div>
+    </nav>
 
-</section>
+</header>
 
-<section class="container">
+<main>
 
-    <input
-        type="text"
-        id="searchPlace"
-        placeholder="Search by place name or category..."
-    >
+    <!-- Banner -->
 
-</section>
+    <section class="page-banner">
 
-<section class="container">
+        <div class="banner-content">
 
-    <div id="loading">
+            <h1>
 
-        Loading nearby places...
+                Nearby Places
 
-    </div>
+            </h1>
 
-    <div
-        id="placesContainer"
-        class="places-grid">
+            <p>
 
-    </div>
+                Explore important places surrounding the
+                Mbugangari Home, including schools,
+                markets, health facilities, and other
+                nearby landmarks.
 
-</section>
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Search -->
+
+    <section class="container">
+
+        <h2 class="section-title">
+
+            Explore Nearby Places
+
+        </h2>
+
+        <input
+            type="text"
+            id="searchPlace"
+            placeholder="Search by place name or category...">
+
+    </section>
+
+    <!-- Places -->
+
+    <section class="container">
+
+        <div id="loading">
+
+            Loading nearby places...
+
+        </div>
+
+        <div
+            id="placesContainer"
+            class="places-grid">
+
+        </div>
+
+    </section>
+
+</main>
 
 <footer class="footer">
 
-    <p>
+    <div class="container">
 
-        Made with ❤️ by NSHUTI Emmanuel &copy; 2026 Mbugangari Home Information System
+        <div>
 
-    </p>
+            <h3>
+
+                Mbugangari Home
+
+            </h3>
+
+            <p>
+
+                A digital archive preserving the history,
+                architecture, rooms, construction materials,
+                gallery, and surrounding landmarks of our
+                family home.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Quick Links
+
+            </h3>
+
+            <p><a href="../index.html">Home</a></p>
+
+            <p><a href="about.html">About</a></p>
+
+            <p><a href="rooms.html">Rooms</a></p>
+
+            <p><a href="gallery.html">Gallery</a></p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 Mbugangari Home Information System •
+        Developed by NSHUTI Emmanuel
+
+    </div>
 
 </footer>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
 <script src="../js/location.js"></script>
+<script src="../js/theme.js"></script>
 
-    <script src="../js/theme.js"></script>
-
+</body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

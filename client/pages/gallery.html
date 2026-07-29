@@ -14,81 +14,125 @@
     <link rel="stylesheet" href="../css/gallery.css">
     <link rel="stylesheet" href="../css/responsive.css">
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon"
+          href="/favicon.svg"
+          type="image/svg+xml">
+
 </head>
 
 <body>
 
-<nav class="navbar">
+<header>
 
-    <div class="logo">
+    <nav class="navbar">
 
-        <a href="../index.html">
-            Mbugangari Home
-        </a>
+        <div class="logo">
 
-    </div>
+            <a href="../index.html">
 
-    <ul class="nav-links">
+                Mbugangari Home
 
-        <li><a href="../index.html">Home</a></li>
+            </a>
 
-        <li><a href="about.html">About</a></li>
+        </div>
 
-        <li><a href="rooms.html">Rooms</a></li>
+        <ul class="nav-links">
 
-        <li><a href="gallery.html" class="active">Gallery</a></li>
+            <li><a href="../index.html">Home</a></li>
 
-        <li><a href="materials.html">Materials</a></li>
+            <li><a href="about.html">About</a></li>
 
-        <li><a href="history.html">History</a></li>
+            <li><a href="rooms.html">Rooms</a></li>
 
-        <li><a href="location.html">Nearby Places</a></li>
+            <li><a href="gallery.html" class="active">Gallery</a></li>
 
-            <li><a href='../admin/login.html'>Admin</a></li>
-            <li><button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
-</ul>
+            <li><a href="materials.html">Materials</a></li>
 
-</nav>
+            <li><a href="history.html">History</a></li>
 
-<section class="page-banner">
+            <li><a href="location.html">Nearby Places</a></li>
 
-    <div class="banner-content">
+            <li><a href="../admin/login.html">Admin</a></li>
 
-        <h1>Home Gallery</h1>
+            <li>
 
-        <p>
+                <button
+                    id="themeToggle"
+                    class="theme-toggle"
+                    aria-label="Toggle theme">
 
-            Explore photographs of the home and its different areas.
+                    🌙
 
-        </p>
+                </button>
 
-    </div>
+            </li>
 
-</section>
+        </ul>
 
-<section class="container">
+    </nav>
 
-    <div id="loading">
+</header>
 
-        Loading gallery...
+<main>
 
-    </div>
+    <!-- Banner -->
 
-    <div id="galleryContainer"
-         class="gallery-grid">
+    <section class="page-banner">
 
-    </div>
+        <div class="banner-content">
 
-</section>
+            <h1>
 
-<!-- Image Modal -->
+                Home Gallery
+
+            </h1>
+
+            <p>
+
+                Explore photographs of the Mbugangari Home,
+                its rooms, architectural features, and
+                surrounding environment.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Gallery -->
+
+    <section class="container">
+
+        <h2 class="section-title">
+
+            Gallery Collection
+
+        </h2>
+
+        <div id="loading">
+
+            Loading gallery...
+
+        </div>
+
+        <div
+            id="galleryContainer"
+            class="gallery-grid">
+
+        </div>
+
+    </section>
+
+</main>
+
+<!-- Image Preview -->
 
 <div id="imageModal" class="modal">
 
     <span class="close">&times;</span>
 
-    <img id="modalImage">
+    <img id="modalImage"
+         alt="Gallery Image">
 
     <div id="modalCaption"></div>
 
@@ -96,31 +140,60 @@
 
 <footer class="footer">
 
-    <p>
+    <div class="container">
 
-        Made with ❤️ by NSHUTI Emmanuel &copy; 2026 Mbugangari Home Information System
+        <div>
 
-    </p>
+            <h3>
+
+                Mbugangari Home
+
+            </h3>
+
+            <p>
+
+                A digital archive preserving the history,
+                construction, rooms, materials and nearby
+                places of our family home.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Quick Links
+
+            </h3>
+
+            <p><a href="../index.html">Home</a></p>
+
+            <p><a href="about.html">About</a></p>
+
+            <p><a href="rooms.html">Rooms</a></p>
+
+            <p><a href="history.html">History</a></p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 Mbugangari Home Information System •
+        Developed by NSHUTI Emmanuel
+
+    </div>
 
 </footer>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
 <script src="../js/gallery.js"></script>
+<script src="../js/theme.js"></script>
 
-    <script src="../js/theme.js"></script>
-
+</body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

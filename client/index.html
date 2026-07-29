@@ -1,10 +1,12 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
+
 <head>
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Mbugangari Home Information System</title>
 
@@ -13,174 +15,261 @@
     <link rel="stylesheet" href="css/responsive.css">
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
 </head>
 
 <body>
 
 <header>
 
-<nav class="navbar">
+    <nav class="navbar">
 
-    <div class="logo">
+        <div class="logo">
 
-        <a href="index.html">Mbugangari Home</a>
+            <a href="index.html">
 
-    </div>
+                Mbugangari Home
 
-    <ul class="nav-links">
+            </a>
 
-        <li><a href="index.html">Home</a></li>
+        </div>
 
-        <li><a href="pages/about.html">About</a></li>
+        <ul class="nav-links">
 
-        <li><a href="pages/rooms.html">Rooms</a></li>
+            <li><a href="index.html" class="active">Home</a></li>
 
-        <li><a href="pages/gallery.html">Gallery</a></li>
+            <li><a href="pages/about.html">About</a></li>
 
-        <li><a href="pages/materials.html">Materials</a></li>
+            <li><a href="pages/rooms.html">Rooms</a></li>
 
-        <li><a href="pages/history.html">History</a></li>
+            <li><a href="pages/gallery.html">Gallery</a></li>
 
-        <li><a href="pages/location.html">Nearby Places</a></li>
+            <li><a href="pages/materials.html">Materials</a></li>
 
-            <li><a href='admin/login.html'>Admin</a></li>
-            <li><button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
-</ul>
+            <li><a href="pages/history.html">History</a></li>
 
-</nav>
+            <li><a href="pages/location.html">Nearby Places</a></li>
+
+            <li><a href="admin/login.html">Admin</a></li>
+
+            <li>
+
+                <button
+                    id="themeToggle"
+                    class="theme-toggle"
+                    aria-label="Toggle theme">
+
+                    🌙
+
+                </button>
+
+            </li>
+
+        </ul>
+
+    </nav>
 
 </header>
 
-<!-- Hero -->
+<main>
 
-<section class="hero">
+    <!-- Hero -->
 
-    <div class="hero-content">
+    <section class="hero">
 
-        <h1>Mbugangari Home Information System</h1>
+        <div class="hero-content fade-up">
 
-        <p>
-            Explore the structure, history, rooms,
-            construction materials and surrounding places
-            of our home located near Mbugangari Market.
+            <h1>
+
+                Mbugangari Home Information System
+
+            </h1>
+
+            <p>
+
+                Discover the history, architectural design,
+                rooms, construction materials, and nearby
+                landmarks of our family home located near
+                Mbugangari Market in Rwanda.
+
+            </p>
+
+            <a href="pages/about.html" class="btn">
+
+                Explore the Home
+
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- About -->
+
+    <section class="container">
+
+        <h2 class="section-title">
+
+            About the Home
+
+        </h2>
+
+        <p id="homeDescription">
+
+            Loading...
+
         </p>
 
-        <a href="pages/about.html" class="btn">
-            Explore the Home
-        </a>
+    </section>
 
-    </div>
+    <!-- Statistics -->
 
-</section>
+    <section class="container">
 
-<!-- About -->
+        <h2 class="section-title">
 
-<section class="container">
+            Home Overview
 
-<h2>About the Home</h2>
+        </h2>
 
-<p id="homeDescription">
+        <div class="stats">
 
-Loading...
+            <div class="card">
 
-</p>
+                <h3 id="roomCount">0</h3>
 
-</section>
+                <p>Rooms</p>
 
-<!-- Statistics -->
+            </div>
 
-<section class="container stats">
+            <div class="card">
 
-<div class="card">
+                <h3 id="galleryCount">0</h3>
 
-<h3 id="roomCount">0</h3>
+                <p>Gallery Images</p>
 
-<p>Rooms</p>
+            </div>
 
-</div>
+            <div class="card">
 
-<div class="card">
+                <h3 id="materialCount">0</h3>
 
-<h3 id="galleryCount">0</h3>
+                <p>Construction Materials</p>
 
-<p>Gallery Images</p>
+            </div>
 
-</div>
+            <div class="card">
 
-<div class="card">
+                <h3 id="placeCount">0</h3>
 
-<h3 id="materialCount">0</h3>
+                <p>Nearby Places</p>
 
-<p>Materials</p>
+            </div>
 
-</div>
+        </div>
 
-<div class="card">
+    </section>
 
-<h3 id="placeCount">0</h3>
+    <!-- Featured Rooms -->
 
-<p>Nearby Places</p>
+    <section class="container">
 
-</div>
+        <h2 class="section-title">
 
-</section>
+            Featured Rooms
 
-<!-- Featured Rooms -->
+        </h2>
 
-<section class="container">
+        <div
+            id="featuredRooms"
+            class="room-grid">
 
-<h2>Featured Rooms</h2>
+            Loading rooms...
 
-<div id="featuredRooms" class="room-grid">
+        </div>
 
-Loading rooms...
+    </section>
 
-</div>
+    <!-- Latest History -->
 
-</section>
+    <section class="container">
 
-<!-- Latest History -->
+        <h2 class="section-title">
 
-<section class="container">
+            Latest History Event
 
-<h2>Latest Home History</h2>
+        </h2>
 
-<div id="latestHistory">
+        <div id="latestHistory">
 
-Loading history...
+            Loading history...
 
-</div>
+        </div>
 
-</section>
+    </section>
+
+</main>
 
 <footer class="footer">
 
-<p>
+    <div class="container">
 
-     Made with ❤️ by NSHUTI Emmanuel &copy; 2026 Mbugangari Home Information System
+        <div>
 
-</p>
+            <h3>
+
+                Mbugangari Home
+
+            </h3>
+
+            <p>
+
+                A digital documentation of our family home,
+                preserving its architectural features,
+                historical background, and surrounding
+                environment.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Quick Links
+
+            </h3>
+
+            <p><a href="index.html">Home</a></p>
+
+            <p><a href="pages/about.html">About</a></p>
+
+            <p><a href="pages/gallery.html">Gallery</a></p>
+
+            <p><a href="pages/history.html">History</a></p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 Mbugangari Home Information System •
+        Developed by NSHUTI Emmanuel
+
+    </div>
 
 </footer>
 
 <script src="js/config.js"></script>
+
 <script src="js/api.js"></script>
+
 <script src="js/app.js"></script>
 
-    <script src="js/theme.js"></script>
+<script src="js/theme.js"></script>
 
+</body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-

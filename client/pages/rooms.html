@@ -5,7 +5,8 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>Rooms | Mbugangari Home Information System</title>
 
@@ -13,106 +14,186 @@
     <link rel="stylesheet" href="../css/rooms.css">
     <link rel="stylesheet" href="../css/responsive.css">
 
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon"
+          href="/favicon.svg"
+          type="image/svg+xml">
+
 </head>
 
 <body>
 
-<nav class="navbar">
+<header>
 
-    <div class="logo">
-        <a href="../index.html">Mbugangari Home</a>
-    </div>
+    <nav class="navbar">
 
-    <ul class="nav-links">
+        <div class="logo">
 
-        <li><a href="../index.html">Home</a></li>
+            <a href="../index.html">
 
-        <li><a href="about.html">About</a></li>
+                Mbugangari Home
 
-        <li><a href="rooms.html" class="active">Rooms</a></li>
+            </a>
 
-        <li><a href="gallery.html">Gallery</a></li>
+        </div>
 
-        <li><a href="materials.html">Materials</a></li>
+        <ul class="nav-links">
 
-        <li><a href="history.html">History</a></li>
+            <li><a href="../index.html">Home</a></li>
 
-        <li><a href="location.html">Nearby Places</a></li>
+            <li><a href="about.html">About</a></li>
 
-            <li><a href='../admin/login.html'>Admin</a></li>
-            <li><button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
-</ul>
+            <li><a href="rooms.html" class="active">Rooms</a></li>
 
-</nav>
+            <li><a href="gallery.html">Gallery</a></li>
 
-<section class="page-banner">
+            <li><a href="materials.html">Materials</a></li>
 
-    <div class="banner-content">
+            <li><a href="history.html">History</a></li>
 
-        <h1>Rooms</h1>
+            <li><a href="location.html">Nearby Places</a></li>
 
-        <p>
+            <li><a href="../admin/login.html">Admin</a></li>
 
-            Explore every room in the house.
+            <li>
 
-        </p>
+                <button
+                    id="themeToggle"
+                    class="theme-toggle"
+                    aria-label="Toggle theme">
 
-    </div>
+                    🌙
 
-</section>
+                </button>
 
-<section class="container">
+            </li>
 
-    <input
-        type="text"
-        id="searchRoom"
-        placeholder="Search a room..."
-    >
+        </ul>
 
-</section>
+    </nav>
 
-<section class="container">
+</header>
 
-    <div id="loading">
+<main>
 
-        Loading rooms...
+    <!-- Banner -->
 
-    </div>
+    <section class="page-banner">
 
-    <div class="room-grid" id="roomContainer">
+        <div class="banner-content">
 
-    </div>
+            <h1>
 
-</section>
+                House Rooms
+
+            </h1>
+
+            <p>
+
+                Explore every room in the Mbugangari Home,
+                learn its purpose, dimensions, and discover
+                how each space contributes to the overall
+                design of the home.
+
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Search -->
+
+    <section class="container">
+
+        <h2 class="section-title">
+
+            Explore Our Rooms
+
+        </h2>
+
+        <input
+            type="text"
+            id="searchRoom"
+            placeholder="Search by room name...">
+
+    </section>
+
+    <!-- Rooms -->
+
+    <section class="container">
+
+        <div id="loading">
+
+            Loading rooms...
+
+        </div>
+
+        <div
+            id="roomContainer"
+            class="room-grid">
+
+        </div>
+
+    </section>
+
+</main>
 
 <footer class="footer">
 
-    <p>
+    <div class="container">
 
-        Made with ❤️ by NSHUTI Emmanuel &copy; 2026 Mbugangari Home Information System
+        <div>
 
-    </p>
+            <h3>
+
+                Mbugangari Home
+
+            </h3>
+
+            <p>
+
+                A digital archive preserving the history,
+                architecture, rooms, construction materials,
+                gallery, and surrounding landmarks of our
+                family home.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Quick Links
+
+            </h3>
+
+            <p><a href="../index.html">Home</a></p>
+
+            <p><a href="about.html">About</a></p>
+
+            <p><a href="gallery.html">Gallery</a></p>
+
+            <p><a href="history.html">History</a></p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 Mbugangari Home Information System •
+        Developed by NSHUTI Emmanuel
+
+    </div>
 
 </footer>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
 <script src="../js/rooms.js"></script>
+<script src="../js/theme.js"></script>
 
-    <script src="../js/theme.js"></script>
-
+</body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
-

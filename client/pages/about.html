@@ -5,7 +5,8 @@
 
     <meta charset="UTF-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>About the Home | Mbugangari Home Information System</title>
 
@@ -14,16 +15,23 @@
     <link rel="stylesheet" href="../css/responsive.css">
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+
 </head>
 
 <body>
 
-    <!-- Navigation -->
+<header>
 
     <nav class="navbar">
 
         <div class="logo">
-            <a href="../index.html">Mbugangari Home</a>
+
+            <a href="../index.html">
+
+                Mbugangari Home
+
+            </a>
+
         </div>
 
         <ul class="nav-links">
@@ -42,11 +50,23 @@
 
             <li><a href="location.html">Nearby Places</a></li>
 
-            <li><a href='../admin/login.html'>Admin</a></li>
-            <li><button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button></li>
+            <li><a href="../admin/login.html">Admin</a></li>
+
+            <li>
+
+                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+                    🌙
+                </button>
+
+            </li>
+
         </ul>
 
     </nav>
+
+</header>
+
+<main>
 
     <!-- Banner -->
 
@@ -54,11 +74,18 @@
 
         <div class="banner-content">
 
-            <h1>About Our Home</h1>
+            <h1>
+
+                About Our Home
+
+            </h1>
 
             <p>
-                Learn more about our home located near
-                Mbugangari Market in Rubavu District.
+
+                Learn about the history, ownership,
+                location and important details of the
+                Mbugangari Home.
+
             </p>
 
         </div>
@@ -77,15 +104,20 @@
 
     </section>
 
-    <!-- About Container -->
+    <!-- About -->
 
-    <section class="container about-container" id="aboutContainer" style="display:none;">
-
-        <!-- Basic Information -->
+    <section
+        class="container about-container"
+        id="aboutContainer"
+        style="display:none;">
 
         <div class="info-card">
 
-            <h2>General Information</h2>
+            <h2 class="section-title">
+
+                General Information
+
+            </h2>
 
             <table>
 
@@ -117,21 +149,25 @@
 
         </div>
 
-        <!-- Description -->
-
         <div class="info-card">
 
-            <h2>Description</h2>
+            <h2 class="section-title">
+
+                Description
+
+            </h2>
 
             <p id="houseDescription"></p>
 
         </div>
 
-        <!-- Location -->
-
         <div class="info-card">
 
-            <h2>Location Information</h2>
+            <h2 class="section-title">
+
+                Location Information
+
+            </h2>
 
             <table>
 
@@ -179,11 +215,13 @@
 
         </div>
 
-        <!-- Coordinates -->
-
         <div class="info-card">
 
-            <h2>Coordinates</h2>
+            <h2 class="section-title">
+
+                Coordinates
+
+            </h2>
 
             <table>
 
@@ -209,32 +247,64 @@
 
     </section>
 
-    <footer class="footer">
+</main>
 
-        <p>
+<footer class="footer">
 
-            Made with ❤️ by NSHUTI Emmanuel &copy; 2026 Mbugangari Home Information System
+    <div class="container">
 
-        </p>
+        <div>
 
-    </footer>
+            <h3>
 
-    <script src="../js/config.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/about.js"></script>
+                Mbugangari Home
 
-    <script src="../js/theme.js"></script>
+            </h3>
 
+            <p>
+
+                A digital archive preserving the history,
+                structure, and environment of our family
+                home in Mbugangari.
+
+            </p>
+
+        </div>
+
+        <div>
+
+            <h3>
+
+                Quick Links
+
+            </h3>
+
+            <p><a href="../index.html">Home</a></p>
+
+            <p><a href="rooms.html">Rooms</a></p>
+
+            <p><a href="gallery.html">Gallery</a></p>
+
+            <p><a href="history.html">History</a></p>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+
+        © 2026 Mbugangari Home Information System •
+        Developed by NSHUTI Emmanuel
+
+    </div>
+
+</footer>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/about.js"></script>
+<script src="../js/theme.js"></script>
+
+</body>
 
 </html>
-
-
-
-
-
-
-
-
-
-
-
