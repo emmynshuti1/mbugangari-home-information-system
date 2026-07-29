@@ -33,6 +33,7 @@
 .banner-content p {
 
     font-size: 18px;
+    white-space: normal;
     max-width: 700px;
 
 }
