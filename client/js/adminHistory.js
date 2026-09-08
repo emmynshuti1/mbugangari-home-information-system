@@ -239,7 +239,12 @@ async function saveHistory(e) {
 
     showToast("History saved.");
 
-    loadHistory();
+    const savedHistory = response.data;
+    const existingIndex = historyItems.findIndex(item => String(item.id) === String(savedHistory.id));
+    if (existingIndex >= 0) historyItems[existingIndex] = { ...historyItems[existingIndex], ...savedHistory };
+    else historyItems.push(savedHistory);
+    historyItems.sort((first, second) => Number(first.id) - Number(second.id));
+    renderHistory(historyItems);
 
 }
 

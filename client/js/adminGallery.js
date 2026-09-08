@@ -261,13 +261,22 @@ async function handleUpload(event) {
             .getElementById("galleryForm")
             .reset();
 
+        const savedImage = response.data;
+        const existingIndex = galleryItems.findIndex(item => String(item.id) === String(savedImage.id));
+
+        if (existingIndex >= 0) {
+            galleryItems[existingIndex] = { ...galleryItems[existingIndex], ...savedImage };
+        } else {
+            galleryItems.push(savedImage);
+        }
+
+        galleryItems.sort((first, second) => Number(first.id) - Number(second.id));
+        renderGallery(galleryItems);
         hideGalleryForm();
 
         showToast(
             "Image uploaded successfully."
         );
-
-        loadGallery();
 
     }
 

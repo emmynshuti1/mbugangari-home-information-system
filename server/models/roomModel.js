@@ -22,7 +22,15 @@ const getAllRooms = async () => {
 
     const result = await pool.query(`
         SELECT
-            rooms.*,
+            rooms.id,
+            rooms.house_id,
+            rooms.name,
+            rooms.floor,
+            rooms.length,
+            rooms.width,
+            rooms.description,
+            rooms.image_url,
+            rooms.image_data IS NOT NULL AS has_image,
             houses.name AS house_name
         FROM rooms
         INNER JOIN houses

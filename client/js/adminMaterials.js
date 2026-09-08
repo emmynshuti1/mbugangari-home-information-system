@@ -297,7 +297,12 @@ async function saveMaterial(event) {
 
     showToast("Material saved successfully.");
 
-    loadMaterials();
+    const savedMaterial = response.data;
+    const existingIndex = materialItems.findIndex(item => String(item.id) === String(savedMaterial.id));
+    if (existingIndex >= 0) materialItems[existingIndex] = { ...materialItems[existingIndex], ...savedMaterial };
+    else materialItems.push(savedMaterial);
+    materialItems.sort((first, second) => Number(first.id) - Number(second.id));
+    renderMaterials(materialItems);
 
 }
 

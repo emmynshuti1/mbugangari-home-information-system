@@ -3,10 +3,10 @@ const houseModel = require("../models/houseModel");
 const { saveLocalCopy } = require("../config/imageStorage");
 
 const serializeRoom = room => {
-    const { image_data, image_mime_type, ...data } = room;
+    const { image_data, image_mime_type, has_image, ...data } = room;
     return {
         ...data,
-        image_url: image_data ? `/api/rooms/${data.id}/image` : data.image_url
+        image_url: (has_image || image_data) ? `/api/rooms/${data.id}/image` : data.image_url
     };
 };
 

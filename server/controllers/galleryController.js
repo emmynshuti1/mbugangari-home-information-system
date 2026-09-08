@@ -5,10 +5,10 @@ const ApiResponse = require("../utils/ApiResponse");
 const { saveLocalCopy } = require("../config/imageStorage");
 
 const serializeImage = image => {
-    const { image_data, image_mime_type, ...data } = image;
+    const { image_data, image_mime_type, has_image, ...data } = image;
     return {
         ...data,
-        image_url: image_data ? `/api/gallery/${data.id}/image` : data.image_url
+        image_url: (has_image || image_data) ? `/api/gallery/${data.id}/image` : data.image_url
     };
 };
 

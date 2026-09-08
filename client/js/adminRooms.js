@@ -401,9 +401,18 @@ async function saveRoom(e) {
 
     if (response.success) {
 
-        hideRoomForm();
+        const savedRoom = response.data;
+        const existingIndex = rooms.findIndex(room => String(room.id) === String(savedRoom.id));
 
-        await loadRooms();
+        if (existingIndex >= 0) {
+            rooms[existingIndex] = { ...rooms[existingIndex], ...savedRoom };
+        } else {
+            rooms.push(savedRoom);
+        }
+
+        rooms.sort((first, second) => Number(first.id) - Number(second.id));
+        displayRooms(rooms);
+        hideRoomForm();
 
     } else {
 

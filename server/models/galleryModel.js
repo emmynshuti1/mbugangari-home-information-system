@@ -4,7 +4,13 @@ const insertWithReusableId = require("../utils/reusableId");
 // Get all gallery images
 const getAllImages = async () => {
     const result = await pool.query(`
-        SELECT *
+        SELECT
+            id,
+            house_id,
+            image_url,
+            caption,
+            uploaded_at,
+            image_data IS NOT NULL AS has_image
         FROM gallery
         ORDER BY id ASC;
     `);

@@ -243,7 +243,12 @@ async function savePlace(e) {
 
     showToast("Nearby place saved.");
 
-    loadPlaces();
+    const savedPlace = response.data;
+    const existingIndex = placeItems.findIndex(item => String(item.id) === String(savedPlace.id));
+    if (existingIndex >= 0) placeItems[existingIndex] = { ...placeItems[existingIndex], ...savedPlace };
+    else placeItems.push(savedPlace);
+    placeItems.sort((first, second) => Number(first.id) - Number(second.id));
+    renderPlaces(placeItems);
 
 }
 
