@@ -45,7 +45,12 @@ const getRoomById = async (req, res, next) => {
 const createRoom = async (req, res, next) => {
     try {
 
-        const house = await houseModel.getHouseById(req.body.house_id);
+        const roomData = {
+            ...req.body,
+            image_url: req.file ? `/uploads/${req.file.filename}` : req.body.image_url
+        };
+
+        const house = await houseModel.getHouseById(roomData.house_id);
 
         if (!house) {
             return res.status(400).json({
@@ -54,7 +59,7 @@ const createRoom = async (req, res, next) => {
             });
         }
 
-        const room = await roomModel.createRoom(req.body);
+        const room = await roomModel.createRoom(roomData);
 
         res.status(201).json({
             success: true,
@@ -71,7 +76,20 @@ const createRoom = async (req, res, next) => {
 const updateRoom = async (req, res, next) => {
     try {
 
-        const house = await houseModel.getHouseById(req.body.house_id);
+        const existingRoom = await roomModel.getRoomById(req.params.id);
+
+        if (!existingRoom) {
+            return res.status(404).json({ success: false, message: "Room not found." });
+        }
+
+        const roomData = {
+            ...req.body,
+            image_url: req.file
+                ? `/uploads/${req.file.filename}`
+                : (req.body.image_url || existingRoom.image_url)
+        };
+
+        const house = await houseModel.getHouseById(roomData.house_id);
 
         if (!house) {
             return res.status(400).json({
@@ -80,7 +98,7 @@ const updateRoom = async (req, res, next) => {
             });
         }
 
-        const room = await roomModel.updateRoom(req.params.id, req.body);
+        const room = await roomModel.updateRoom(req.params.id, roomData);
 
         if (!room) {
             return res.status(404).json({

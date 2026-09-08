@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .getElementById("cancelGalleryBtn")
             ?.addEventListener("click", hideGalleryForm);
 
+        setupGalleryUpload();
+
     });
 
 });
@@ -83,6 +85,8 @@ function hideGalleryForm() {
     document
         .getElementById("galleryForm")
         .reset();
+
+    clearGalleryPreview();
 
 }
 
@@ -340,4 +344,50 @@ async function deleteGalleryItem(id) {
 
     loadGallery();
 
+}
+
+function setupGalleryUpload() {
+    const input = document.getElementById("image");
+    const zone = document.getElementById("galleryUploadZone");
+    if (!input || !zone) return;
+
+    input.addEventListener("change", () => previewGalleryFile(input.files[0]));
+    ["dragenter", "dragover"].forEach(event => zone.addEventListener(event, e => {
+        e.preventDefault();
+        zone.classList.add("is-dragging");
+    }));
+    ["dragleave", "drop"].forEach(event => zone.addEventListener(event, e => {
+        e.preventDefault();
+        zone.classList.remove("is-dragging");
+    }));
+    zone.addEventListener("drop", e => {
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+        const transfer = new DataTransfer();
+        transfer.items.add(file);
+        input.files = transfer.files;
+        previewGalleryFile(file);
+    });
+    document.getElementById("clearGalleryImage")?.addEventListener("click", clearGalleryPreview);
+}
+
+function previewGalleryFile(file) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+        showToast("Please choose an image file.", "error");
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => {
+        document.getElementById("galleryPreviewImage").src = reader.result;
+        document.getElementById("galleryFileName").textContent = file.name;
+        document.getElementById("galleryImagePreview").classList.remove("hidden");
+    };
+    reader.readAsDataURL(file);
+}
+
+function clearGalleryPreview() {
+    const input = document.getElementById("image");
+    if (input) input.value = "";
+    document.getElementById("galleryImagePreview")?.classList.add("hidden");
 }

@@ -14,6 +14,10 @@ function normalizeImageUrl(imageUrl) {
         return imageUrl;
     }
 
+    if (/^data:image\//i.test(imageUrl)) {
+        return imageUrl;
+    }
+
     if (/^\/?uploads\//i.test(imageUrl)) {
         return CONFIG.IMAGE_URL + '/' + imageUrl.replace(/^\/?uploads\//i, "");
     }

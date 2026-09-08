@@ -24,6 +24,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .getElementById("roomForm")
             ?.addEventListener("submit", saveRoom);
 
+        setupRoomUpload();
+
     });
 
 });
@@ -105,21 +107,30 @@ function displayRooms(data) {
         sizeTd.textContent = `${room.length} × ${room.width}`;
 
         // Image
-        const imageTd = document.createElement("td");
+       
+        // Image
 
-        const img = document.createElement("img");
+const imageTd = document.createElement("td");
 
-        img.src = `../images/${room.image_url}`;
+const img = document.createElement("img");
 
-        img.alt = room.name;
+img.src = normalizeImageUrl(room.image_url);
 
-        img.width = 80;
+img.alt = room.name || "Room Image";
 
-        img.onerror = function () {
+img.width = 80;
 
-            this.src = "../images/no-image.jpg";
+img.height = 60;
 
-        };
+img.style.objectFit = "cover";
+
+img.onerror = function () {
+
+    this.src = DEFAULT_IMAGE_URL;
+
+};
+
+imageTd.appendChild(img);
 
         imageTd.appendChild(img);
 
@@ -185,37 +196,56 @@ function showRoomForm(room = null) {
         .classList
         .remove("hidden");
 
+
     if (room) {
 
-        document.getElementById("roomFormTitle").textContent = "Edit Room";
+        document
+            .getElementById("roomFormTitle")
+            .textContent = "Edit Room";
 
-        document.getElementById("roomId").value = room.id;
+        document.getElementById("roomId").value =
+            room.id;
 
-        document.getElementById("roomName").value = room.name || "";
+        document.getElementById("roomName").value =
+            room.name || "";
 
-        document.getElementById("roomFloor").value = room.floor || "";
+        document.getElementById("roomFloor").value =
+            room.floor || "";
 
-        document.getElementById("roomLength").value = room.length || "";
+        document.getElementById("roomLength").value =
+            room.length || "";
 
-        document.getElementById("roomWidth").value = room.width || "";
+        document.getElementById("roomWidth").value =
+            room.width || "";
 
-        document.getElementById("roomDescription").value = room.description || "";
+        document.getElementById("roomDescription").value =
+            room.description || "";
 
-        document.getElementById("roomImage").value = room.image_url || "";
+        document.getElementById("room_house_id").value =
+            room.house_id;
 
-        document.getElementById("room_house_id").value = room.house_id;
+
+        // Clear file input
+        document.getElementById("roomImage").value = "";
+        showRoomPreview(room.image_url, "Current image", "Current image — choose a new photo to replace it");
 
     }
 
     else {
 
-        document.getElementById("roomFormTitle").textContent = "Add Room";
+        document
+            .getElementById("roomFormTitle")
+            .textContent = "Add Room";
 
-        document.getElementById("roomForm").reset();
+        document
+            .getElementById("roomForm")
+            .reset();
 
         document.getElementById("roomId").value = "";
+        clearRoomPreview();
 
     }
+
 
     clearMessage();
 
@@ -262,27 +292,31 @@ async function saveRoom(e) {
 
     const id = document.getElementById("roomId").value;
 
-    const room = {
+    const houseId =
+        document.getElementById("room_house_id").value;
 
-        house_id: document.getElementById("room_house_id").value,
+    const name =
+        document.getElementById("roomName").value.trim();
 
-        name: document.getElementById("roomName").value.trim(),
+    const floor =
+        document.getElementById("roomFloor").value.trim();
 
-        floor: document.getElementById("roomFloor").value.trim(),
+    const length =
+        Number(document.getElementById("roomLength").value);
 
-        length: Number(document.getElementById("roomLength").value),
+    const width =
+        Number(document.getElementById("roomWidth").value);
 
-        width: Number(document.getElementById("roomWidth").value),
+    const description =
+        document.getElementById("roomDescription").value.trim();
 
-        description: document.getElementById("roomDescription").value.trim(),
+    const imageFile =
+        document.getElementById("roomImage").files[0];
 
-        image_url: document.getElementById("roomImage").value.trim()
-
-    };
 
     // Validation
 
-    if (!room.house_id) {
+    if (!houseId) {
 
         showMessage("Please select a house.", "error");
 
@@ -290,7 +324,8 @@ async function saveRoom(e) {
 
     }
 
-    if (!room.name) {
+
+    if (!name) {
 
         showMessage("Room name is required.", "error");
 
@@ -298,27 +333,71 @@ async function saveRoom(e) {
 
     }
 
-    if (room.length <= 0 || room.width <= 0) {
 
-        showMessage("Length and width must be greater than zero.", "error");
+    if (length <= 0 || width <= 0) {
+
+        showMessage(
+            "Length and width must be greater than zero.",
+            "error"
+        );
 
         return;
 
     }
 
+
+    // Create FormData
+
+    const formData = new FormData();
+
+    formData.append("house_id", houseId);
+
+    formData.append("name", name);
+
+    formData.append("floor", floor);
+
+    formData.append("length", length);
+
+    formData.append("width", width);
+
+    formData.append("description", description);
+
+
+    // Add image only if one was selected
+
+    if (imageFile) {
+
+        formData.append("image", imageFile);
+
+    }
+
+
     let response;
+
 
     if (id) {
 
-        response = await updateRoom(id, room);
+        response = await updateRoom(id, formData);
+
+    } else {
+
+        // Require image when creating a new room
+
+        if (!imageFile) {
+
+            showMessage(
+                "Please select an image for the room.",
+                "error"
+            );
+
+            return;
+
+        }
+
+        response = await createRoom(formData);
 
     }
 
-    else {
-
-        response = await createRoom(room);
-
-    }
 
     if (response.success) {
 
@@ -326,11 +405,12 @@ async function saveRoom(e) {
 
         await loadRooms();
 
-    }
+    } else {
 
-    else {
-
-        showMessage(response.message || "Unable to save room.", "error");
+        showMessage(
+            response.message || "Unable to save room.",
+            "error"
+        );
 
     }
 
@@ -374,4 +454,55 @@ async function removeRoom(id) {
 
     }
 
+}
+
+function setupRoomUpload() {
+    const input = document.getElementById("roomImage");
+    const zone = document.getElementById("roomUploadZone");
+    if (!input || !zone) return;
+
+    input.addEventListener("change", () => previewRoomFile(input.files[0]));
+    ["dragenter", "dragover"].forEach(event => zone.addEventListener(event, e => {
+        e.preventDefault();
+        zone.classList.add("is-dragging");
+    }));
+    ["dragleave", "drop"].forEach(event => zone.addEventListener(event, e => {
+        e.preventDefault();
+        zone.classList.remove("is-dragging");
+    }));
+    zone.addEventListener("drop", e => {
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+        const transfer = new DataTransfer();
+        transfer.items.add(file);
+        input.files = transfer.files;
+        previewRoomFile(file);
+    });
+    document.getElementById("clearRoomImage")?.addEventListener("click", clearRoomPreview);
+}
+
+function previewRoomFile(file) {
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+        showMessage("Please choose an image file.", "error");
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => showRoomPreview(reader.result, file.name, "New image ready to upload");
+    reader.readAsDataURL(file);
+}
+
+function showRoomPreview(src, name, status) {
+    const preview = document.getElementById("roomImagePreview");
+    if (!preview || !src) return;
+    document.getElementById("roomPreviewImage").src = normalizeImageUrl(src);
+    document.getElementById("roomFileName").textContent = name;
+    document.getElementById("roomUploadStatus").textContent = status;
+    preview.classList.remove("hidden");
+}
+
+function clearRoomPreview() {
+    const input = document.getElementById("roomImage");
+    if (input) input.value = "";
+    document.getElementById("roomImagePreview")?.classList.add("hidden");
 }

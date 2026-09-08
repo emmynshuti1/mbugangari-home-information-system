@@ -1,4 +1,4 @@
-// middleware/validateRoom.js
+const ApiResponse = require("../utils/ApiResponse");
 
 const validateRoom = (req, res, next) => {
   const {

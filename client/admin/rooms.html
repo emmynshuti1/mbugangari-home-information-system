@@ -80,7 +80,7 @@
 
     <div id="roomMessage" class="form-message"></div>
 
-    <form id="roomForm">
+    <form id="roomForm" enctype="multipart/form-data">
 
         <input type="hidden" id="roomId">
 
@@ -105,6 +105,7 @@
                 <input
                     type="text"
                     id="roomFloor"
+                    required
                 >
             </div>
 
@@ -115,6 +116,7 @@
                     id="roomLength"
                     step="0.01"
                     min="0"
+                    required
                 >
             </div>
 
@@ -125,16 +127,24 @@
                     id="roomWidth"
                     step="0.01"
                     min="0"
+                    required
                 >
             </div>
 
-            <div class="form-group">
-                <label>Image</label>
-                <input
-                    type="text"
-                    id="roomImage"
-                    placeholder="bedroom.jpg"
-                >
+            <div class="form-group upload-group">
+                <label for="roomImage">Room image</label>
+                <label for="roomImage" class="upload-dropzone" id="roomUploadZone">
+                    <span class="upload-icon">↑</span>
+                    <span class="upload-title">Choose a photo or drop it here</span>
+                    <span class="upload-hint">JPG, PNG, WEBP or GIF · up to 100 MB</span>
+                </label>
+                <input type="file" id="roomImage" accept="image/*" class="visually-hidden">
+                <div id="roomImagePreview" class="upload-preview hidden">
+                    <img id="roomPreviewImage" alt="Selected room preview">
+                    <div><strong id="roomFileName"></strong><span id="roomUploadStatus">Ready to upload</span></div>
+                    <button type="button" id="clearRoomImage" class="textBtn">Remove</button>
+                </div>
+                <p class="field-note">A photo is required for a new room. When editing, leave this empty to keep the current image.</p>
             </div>
 
         </div>
