@@ -1,4 +1,5 @@
 const pool = require("../config/db");
+const insertWithReusableId = require("../utils/reusableId");
 
 // Check if nearby place exists
 const exists = async (id) => {
@@ -25,7 +26,7 @@ const getAllPlaces = async () => {
         FROM nearby_places
         INNER JOIN houses
             ON nearby_places.house_id = houses.id
-        ORDER BY distance_meters ASC;
+        ORDER BY nearby_places.id ASC;
     `);
 
     return result.rows;
@@ -59,32 +60,11 @@ const createPlace = async ({
     description
 }) => {
 
-    const result = await pool.query(
-        `
-        INSERT INTO nearby_places
-        (
-            house_id,
-            name,
-            category,
-            distance_meters,
-            description
-        )
-        VALUES
-        (
-            $1,$2,$3,$4,$5
-        )
-        RETURNING *;
-        `,
-        [
-            house_id,
-            name,
-            category,
-            distance_meters,
-            description
-        ]
-    );
-
-    return result.rows[0];
+    return insertWithReusableId({
+        table: "nearby_places",
+        columns: ["house_id", "name", "category", "distance_meters", "description"],
+        values: [house_id, name, category, distance_meters, description]
+    });
 };
 
 // Update place

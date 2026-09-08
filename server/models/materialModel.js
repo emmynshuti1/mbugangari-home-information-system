@@ -1,4 +1,5 @@
 const pool = require("../config/db");
+const insertWithReusableId = require("../utils/reusableId");
 
 // Check if material exists
 const exists = async (id) => {
@@ -55,30 +56,11 @@ const createMaterial = async ({
     description
 }) => {
 
-    const result = await pool.query(
-        `
-        INSERT INTO materials
-        (
-            house_id,
-            component,
-            material_name,
-            description
-        )
-        VALUES
-        (
-            $1,$2,$3,$4
-        )
-        RETURNING *;
-        `,
-        [
-            house_id,
-            component,
-            material_name,
-            description
-        ]
-    );
-
-    return result.rows[0];
+    return insertWithReusableId({
+        table: "materials",
+        columns: ["house_id", "component", "material_name", "description"],
+        values: [house_id, component, material_name, description]
+    });
 };
 
 // Update material

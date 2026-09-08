@@ -1,4 +1,5 @@
 const pool = require("../config/db");
+const insertWithReusableId = require("../utils/reusableId");
 
 // Check if room exists
 const exists = async (id) => {
@@ -68,40 +69,11 @@ const createRoom = async (room) => {
         image_mime_type = null
     } = room;
 
-    const result = await pool.query(
-        `
-        INSERT INTO rooms
-        (
-            house_id,
-            name,
-            floor,
-            length,
-            width,
-            description,
-            image_url,
-            image_data,
-            image_mime_type
-        )
-        VALUES
-        (
-            $1,$2,$3,$4,$5,$6,$7,$8,$9
-        )
-        RETURNING *;
-        `,
-        [
-            house_id,
-            name,
-            floor,
-            length,
-            width,
-            description,
-            image_url,
-            image_data,
-            image_mime_type
-        ]
-    );
-
-    return result.rows[0];
+    return insertWithReusableId({
+        table: "rooms",
+        columns: ["house_id", "name", "floor", "length", "width", "description", "image_url", "image_data", "image_mime_type"],
+        values: [house_id, name, floor, length, width, description, image_url, image_data, image_mime_type]
+    });
 
 };
 

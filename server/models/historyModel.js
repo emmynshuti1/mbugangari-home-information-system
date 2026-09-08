@@ -1,4 +1,5 @@
 const pool = require("../config/db");
+const insertWithReusableId = require("../utils/reusableId");
 
 // Get all history records
 const getAllHistory = async () => {
@@ -9,7 +10,7 @@ const getAllHistory = async () => {
         FROM history
         INNER JOIN houses
             ON history.house_id = houses.id
-        ORDER BY event_date DESC, history.id DESC;
+        ORDER BY history.id ASC;
     `);
 
     return result.rows;
@@ -55,30 +56,11 @@ const createHistory = async ({
     event_date
 }) => {
 
-    const result = await pool.query(
-        `
-        INSERT INTO history
-        (
-            house_id,
-            title,
-            description,
-            event_date
-        )
-        VALUES
-        (
-            $1, $2, $3, $4
-        )
-        RETURNING *;
-        `,
-        [
-            house_id,
-            title,
-            description,
-            event_date
-        ]
-    );
-
-    return result.rows[0];
+    return insertWithReusableId({
+        table: "history",
+        columns: ["house_id", "title", "description", "event_date"],
+        values: [house_id, title, description, event_date]
+    });
 };
 
 // Update history record

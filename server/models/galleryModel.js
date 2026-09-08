@@ -1,11 +1,12 @@
 const pool = require("../config/db");
+const insertWithReusableId = require("../utils/reusableId");
 
 // Get all gallery images
 const getAllImages = async () => {
     const result = await pool.query(`
         SELECT *
         FROM gallery
-        ORDER BY uploaded_at DESC;
+        ORDER BY id ASC;
     `);
 
     return result.rows;
@@ -34,32 +35,11 @@ const createImage = async ({
     image_mime_type = null
 }) => {
 
-    const result = await pool.query(
-        `
-        INSERT INTO gallery
-        (
-            house_id,
-            image_url,
-            caption,
-            image_data,
-            image_mime_type
-        )
-        VALUES
-        (
-            $1, $2, $3, $4, $5
-        )
-        RETURNING *;
-        `,
-        [
-            house_id,
-            image_url,
-            caption,
-            image_data,
-            image_mime_type
-        ]
-    );
-
-    return result.rows[0];
+    return insertWithReusableId({
+        table: "gallery",
+        columns: ["house_id", "image_url", "caption", "image_data", "image_mime_type"],
+        values: [house_id, image_url, caption, image_data, image_mime_type]
+    });
 };
 
 // Delete gallery image
