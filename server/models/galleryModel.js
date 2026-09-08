@@ -29,7 +29,9 @@ const getImageById = async (id) => {
 const createImage = async ({
     house_id,
     image_url,
-    caption
+    caption,
+    image_data = null,
+    image_mime_type = null
 }) => {
 
     const result = await pool.query(
@@ -38,20 +40,22 @@ const createImage = async ({
         (
             house_id,
             image_url,
-            caption
+            caption,
+            image_data,
+            image_mime_type
         )
         VALUES
         (
-            $1,
-            $2,
-            $3
+            $1, $2, $3, $4, $5
         )
         RETURNING *;
         `,
         [
             house_id,
             image_url,
-            caption
+            caption,
+            image_data,
+            image_mime_type
         ]
     );
 

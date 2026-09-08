@@ -2,6 +2,15 @@ const galleryModel = require("../models/galleryModel");
 const houseModel = require("../models/houseModel");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+const { saveLocalCopy } = require("../config/imageStorage");
+
+const serializeImage = image => {
+    const { image_data, image_mime_type, ...data } = image;
+    return {
+        ...data,
+        image_url: image_data ? `/api/gallery/${data.id}/image` : data.image_url
+    };
+};
 
 // GET all gallery images
 const getAllImages = async (req, res, next) => {
@@ -18,7 +27,7 @@ const getAllImages = async (req, res, next) => {
 
                 "Gallery images retrieved successfully.",
 
-                images
+                images.map(serializeImage)
 
             ),
 
@@ -99,13 +108,19 @@ const uploadImage = async (req, res, next) => {
 
         }
 
+        const imageUrl = await saveLocalCopy(req.file);
+
         const image = await galleryModel.createImage({
 
             house_id: houseIdToUse,
 
-            image_url: `/uploads/${req.file.filename}`,
+            image_url: imageUrl,
 
-            caption: req.body.caption
+            caption: req.body.caption,
+
+            image_data: req.file.buffer,
+
+            image_mime_type: req.file.mimetype
 
         });
 
@@ -117,7 +132,7 @@ const uploadImage = async (req, res, next) => {
 
                 "Image uploaded successfully.",
 
-                image
+                serializeImage(image)
 
             )
 
@@ -131,6 +146,20 @@ const uploadImage = async (req, res, next) => {
 
     }
 
+};
+
+const getImageFile = async (req, res, next) => {
+    try {
+        const image = await galleryModel.getImageById(req.params.id);
+
+        if (!image || !image.image_data) {
+            throw new ApiError(404, "Gallery image file not found.");
+        }
+
+        res.type(image.image_mime_type || "image/jpeg").send(image.image_data);
+    } catch (error) {
+        next(error);
+    }
 };
 
 // DELETE image
@@ -179,6 +208,8 @@ const deleteImage = async (req, res, next) => {
 module.exports = {
 
     getAllImages,
+
+    getImageFile,
 
     uploadImage,
 

@@ -51,6 +51,10 @@ CREATE TABLE rooms (
 
     image_url VARCHAR(255),
 
+    image_data BYTEA,
+
+    image_mime_type VARCHAR(100),
+
     CONSTRAINT fk_room_house FOREIGN KEY(house_id) REFERENCES houses(id) ON DELETE CASCADE
 
 );
@@ -83,6 +87,10 @@ CREATE TABLE gallery (
     house_id INTEGER NOT NULL,
 
     image_url TEXT NOT NULL,
+
+    image_data BYTEA,
+
+    image_mime_type VARCHAR(100),
 
     caption VARCHAR(255),
 

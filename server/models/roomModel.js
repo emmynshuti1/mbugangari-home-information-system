@@ -63,7 +63,9 @@ const createRoom = async (room) => {
         length,
         width,
         description,
-        image_url
+        image_url,
+        image_data = null,
+        image_mime_type = null
     } = room;
 
     const result = await pool.query(
@@ -76,11 +78,13 @@ const createRoom = async (room) => {
             length,
             width,
             description,
-            image_url
+            image_url,
+            image_data,
+            image_mime_type
         )
         VALUES
         (
-            $1,$2,$3,$4,$5,$6,$7
+            $1,$2,$3,$4,$5,$6,$7,$8,$9
         )
         RETURNING *;
         `,
@@ -91,7 +95,9 @@ const createRoom = async (room) => {
             length,
             width,
             description,
-            image_url
+            image_url,
+            image_data,
+            image_mime_type
         ]
     );
 
@@ -109,7 +115,9 @@ const updateRoom = async (id, room) => {
         length,
         width,
         description,
-        image_url
+        image_url,
+        image_data = null,
+        image_mime_type = null
     } = room;
 
     const result = await pool.query(
@@ -122,8 +130,10 @@ const updateRoom = async (id, room) => {
             length = $4,
             width = $5,
             description = $6,
-            image_url = $7
-        WHERE id = $8
+            image_url = $7,
+            image_data = $8,
+            image_mime_type = $9
+        WHERE id = $10
         RETURNING *;
         `,
         [
@@ -134,6 +144,8 @@ const updateRoom = async (id, room) => {
             width,
             description,
             image_url,
+            image_data,
+            image_mime_type,
             id
         ]
     );

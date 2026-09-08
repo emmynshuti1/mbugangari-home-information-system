@@ -12,6 +12,8 @@ const validateGallery = require("../middleware/validateGallery");
 
 router.get("/", galleryController.getAllImages);
 
+router.get("/:id/image", galleryController.getImageFile);
+
 router.post("/", protect, upload.single("image"), validateGallery, galleryController.uploadImage);
 
 router.post("/upload", protect, upload.single("image"), galleryController.uploadImage);

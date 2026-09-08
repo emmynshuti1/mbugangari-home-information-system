@@ -27,7 +27,7 @@ The project was developed using modern web technologies including HTML, CSS, Jav
 - Manage construction materials
 - Manage history records
 - Manage nearby places
-- Upload images
+- Upload room and gallery images with durable PostgreSQL-backed storage (10 MB per image)
 
 ---
 
@@ -107,6 +107,10 @@ The application uses the following tables:
 - administrators
 
 Relationships are enforced using PostgreSQL foreign keys with cascade deletion.
+
+### Image persistence
+
+New room and gallery images are retained in PostgreSQL and served through public image endpoints. The server also keeps a local copy in `server/uploads` for local development. On startup, existing gallery and room records that reference files in `client/images` are migrated automatically when the original file is available.
 
 ---
 
@@ -209,6 +213,7 @@ DELETE /api/rooms/:id
 ```
 GET    /api/gallery
 POST   /api/gallery/upload
+GET    /api/gallery/:id/image
 DELETE /api/gallery/:id
 ```
 

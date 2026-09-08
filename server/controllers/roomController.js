@@ -1,5 +1,14 @@
 const roomModel = require("../models/roomModel");
 const houseModel = require("../models/houseModel");
+const { saveLocalCopy } = require("../config/imageStorage");
+
+const serializeRoom = room => {
+    const { image_data, image_mime_type, ...data } = room;
+    return {
+        ...data,
+        image_url: image_data ? `/api/rooms/${data.id}/image` : data.image_url
+    };
+};
 
 // GET all rooms
 const getAllRooms = async (req, res, next) => {
@@ -10,7 +19,7 @@ const getAllRooms = async (req, res, next) => {
         res.status(200).json({
             success: true,
             count: rooms.length,
-            data: rooms
+            data: rooms.map(serializeRoom)
         });
 
     } catch (error) {
@@ -33,7 +42,7 @@ const getRoomById = async (req, res, next) => {
 
         res.status(200).json({
             success: true,
-            data: room
+            data: serializeRoom(room)
         });
 
     } catch (error) {
@@ -45,9 +54,12 @@ const getRoomById = async (req, res, next) => {
 const createRoom = async (req, res, next) => {
     try {
 
+        const imageUrl = req.file ? await saveLocalCopy(req.file) : req.body.image_url;
         const roomData = {
             ...req.body,
-            image_url: req.file ? `/uploads/${req.file.filename}` : req.body.image_url
+            image_url: imageUrl,
+            image_data: req.file?.buffer || null,
+            image_mime_type: req.file?.mimetype || null
         };
 
         const house = await houseModel.getHouseById(roomData.house_id);
@@ -64,7 +76,7 @@ const createRoom = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "Room created successfully.",
-            data: room
+            data: serializeRoom(room)
         });
 
     } catch (error) {
@@ -82,11 +94,12 @@ const updateRoom = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Room not found." });
         }
 
+        const imageUrl = req.file ? await saveLocalCopy(req.file) : existingRoom.image_url;
         const roomData = {
             ...req.body,
-            image_url: req.file
-                ? `/uploads/${req.file.filename}`
-                : (req.body.image_url || existingRoom.image_url)
+            image_url: imageUrl,
+            image_data: req.file?.buffer || existingRoom.image_data,
+            image_mime_type: req.file?.mimetype || existingRoom.image_mime_type
         };
 
         const house = await houseModel.getHouseById(roomData.house_id);
@@ -110,9 +123,23 @@ const updateRoom = async (req, res, next) => {
         res.status(200).json({
             success: true,
             message: "Room updated successfully.",
-            data: room
+            data: serializeRoom(room)
         });
 
+    } catch (error) {
+        next(error);
+    }
+};
+
+const getRoomImage = async (req, res, next) => {
+    try {
+        const room = await roomModel.getRoomById(req.params.id);
+
+        if (!room || !room.image_data) {
+            return res.status(404).json({ success: false, message: "Room image file not found." });
+        }
+
+        res.type(room.image_mime_type || "image/jpeg").send(room.image_data);
     } catch (error) {
         next(error);
     }
@@ -144,6 +171,7 @@ const deleteRoom = async (req, res, next) => {
 module.exports = {
     getAllRooms,
     getRoomById,
+    getRoomImage,
     createRoom,
     updateRoom,
     deleteRoom

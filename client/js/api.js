@@ -18,6 +18,10 @@ function normalizeImageUrl(imageUrl) {
         return imageUrl;
     }
 
+    if (/^\/api\//i.test(imageUrl)) {
+        return CONFIG.API_URL.replace(/\/api\/?$/, "") + imageUrl;
+    }
+
     if (/^\/?uploads\//i.test(imageUrl)) {
         return CONFIG.IMAGE_URL + '/' + imageUrl.replace(/^\/?uploads\//i, "");
     }

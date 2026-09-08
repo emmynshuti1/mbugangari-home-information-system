@@ -1,27 +1,7 @@
 const multer = require("multer");
-const path = require("path");
-
-// Configure storage
-const storage = multer.diskStorage({
-
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "../uploads"));
-  },
-
-  filename: (req, file, cb) => {
-
-    const uniqueName =
-      Date.now() +
-      "-" +
-      Math.round(Math.random() * 1000000);
-
-    cb(
-      null,
-      uniqueName + path.extname(file.originalname)
-    );
-  }
-
-});
+// Keep the upload in memory long enough to persist it to PostgreSQL.
+// A local copy is also created by imageStorage for local development.
+const storage = multer.memoryStorage();
 
 // Allow only image files
 const fileFilter = (req, file, cb) => {
@@ -51,7 +31,7 @@ const upload = multer({
 
   limits: {
 
-    fileSize: 100 * 1024 * 1024
+    fileSize: 10 * 1024 * 1024
 
   }
 

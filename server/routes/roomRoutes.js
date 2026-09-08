@@ -10,6 +10,8 @@ const upload = require("../config/multer");
 // Public routes
 router.get("/", roomController.getAllRooms);
 
+router.get("/:id/image", roomController.getRoomImage);
+
 router.get("/:id", roomController.getRoomById);
 
 // Protected routes

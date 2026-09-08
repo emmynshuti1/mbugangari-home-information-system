@@ -11,6 +11,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/authRoutes");
 
 const path = require("path");
+const { ensureImageStorage, migrateLegacyImages, uploadDirectory } = require("./config/imageStorage");
 
 const galleryRoutes = require("./routes/galleryRoutes");
 
@@ -59,7 +60,7 @@ app.use("/api/history", historyRoutes);
 
 app.use("/api/nearby-places", nearbyPlaceRoutes);
 
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/uploads", express.static(uploadDirectory));
 
 app.use(express.static(path.join(__dirname, "../client")));
 
@@ -73,6 +74,17 @@ app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
-});
+async function startServer() {
+  try {
+    await ensureImageStorage();
+    await migrateLegacyImages();
+    app.listen(PORT, () => {
+      console.log(`🚀 Server running on http://localhost:${PORT}`);
+    });
+  } catch (error) {
+    console.error("Image storage setup failed:", error.message);
+    process.exit(1);
+  }
+}
+
+startServer();
