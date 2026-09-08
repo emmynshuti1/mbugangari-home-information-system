@@ -1347,3 +1347,71 @@ html[data-theme='dark'] .sidebar ul li a.active{
 .upload-preview strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .upload-preview span { color: var(--muted); font-size: .8rem; }
 .textBtn { border: 0; background: transparent; color: var(--danger); cursor: pointer; font-weight: 600; padding: 6px; }
+
+/* ==========================================
+   ADMIN SCROLLBARS
+========================================== */
+
+html,
+body,
+.sidebar,
+.table-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--surface-soft);
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+.sidebar::-webkit-scrollbar,
+.table-wrapper::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+html::-webkit-scrollbar-track,
+body::-webkit-scrollbar-track,
+.table-wrapper::-webkit-scrollbar-track {
+    background: var(--surface-soft);
+    border: 3px solid var(--background);
+    border-radius: 999px;
+}
+
+html::-webkit-scrollbar-thumb,
+body::-webkit-scrollbar-thumb,
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--primary-light), var(--primary));
+    border: 3px solid var(--background);
+    border-radius: 999px;
+    min-height: 44px;
+}
+
+html::-webkit-scrollbar-thumb:hover,
+body::-webkit-scrollbar-thumb:hover,
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: var(--primary);
+}
+
+.sidebar {
+    scrollbar-color: rgba(255, 255, 255, .55) transparent;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, .42);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, .7);
+    border: 2px solid transparent;
+    background-clip: padding-box;
+}
