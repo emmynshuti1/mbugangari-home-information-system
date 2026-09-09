@@ -1,3 +1,5 @@
+const ApiResponse = require("../utils/ApiResponse");
+
 const validateGallery = (req, res, next) => {
 
     const { caption, house_id } = req.body;

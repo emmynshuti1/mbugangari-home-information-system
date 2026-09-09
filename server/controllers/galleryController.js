@@ -2,7 +2,6 @@ const galleryModel = require("../models/galleryModel");
 const houseModel = require("../models/houseModel");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
-const { saveLocalCopy } = require("../config/imageStorage");
 
 const serializeImage = image => {
     const { image_data, image_mime_type, has_image, ...data } = image;
@@ -108,13 +107,11 @@ const uploadImage = async (req, res, next) => {
 
         }
 
-        const imageUrl = await saveLocalCopy(req.file);
-
         const image = await galleryModel.createImage({
 
             house_id: houseIdToUse,
 
-            image_url: imageUrl,
+            image_url: "",
 
             caption: req.body.caption,
 
@@ -150,7 +147,7 @@ const uploadImage = async (req, res, next) => {
 
 const getImageFile = async (req, res, next) => {
     try {
-        const image = await galleryModel.getImageById(req.params.id);
+        const image = await galleryModel.getImageFileById(req.params.id);
 
         if (!image || !image.image_data) {
             throw new ApiError(404, "Gallery image file not found.");
@@ -189,7 +186,7 @@ const deleteImage = async (req, res, next) => {
 
                 "Image deleted successfully.",
 
-                image
+                serializeImage(image)
 
             )
 

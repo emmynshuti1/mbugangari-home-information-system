@@ -1,9 +1,6 @@
-const crypto = require("crypto");
 const fs = require("fs/promises");
 const path = require("path");
 const pool = require("./db");
-
-const uploadDirectory = path.join(__dirname, "../uploads");
 
 const mimeByExtension = {
     ".jpg": "image/jpeg",
@@ -14,7 +11,6 @@ const mimeByExtension = {
 };
 
 async function ensureImageStorage() {
-    await fs.mkdir(uploadDirectory, { recursive: true });
     await pool.query(`
         ALTER TABLE rooms
             ADD COLUMN IF NOT EXISTS image_data BYTEA,
@@ -23,14 +19,6 @@ async function ensureImageStorage() {
             ADD COLUMN IF NOT EXISTS image_data BYTEA,
             ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(100);
     `);
-}
-
-async function saveLocalCopy(file) {
-    const extension = path.extname(file.originalname || "") || ".img";
-    const filename = `${Date.now()}-${crypto.randomUUID()}${extension.toLowerCase()}`;
-    await fs.mkdir(uploadDirectory, { recursive: true });
-    await fs.writeFile(path.join(uploadDirectory, filename), file.buffer);
-    return `/uploads/${filename}`;
 }
 
 async function migrateLegacyImages() {
@@ -67,4 +55,4 @@ async function migrateLegacyImages() {
     }
 }
 
-module.exports = { ensureImageStorage, migrateLegacyImages, saveLocalCopy, uploadDirectory };
+module.exports = { ensureImageStorage, migrateLegacyImages };

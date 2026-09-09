@@ -6,6 +6,7 @@ const roomController = require("../controllers/roomController");
 const protect = require("../middleware/authMiddleware");
 const validateRoom = require("../middleware/validateRoom");
 const upload = require("../config/multer");
+const validateImageFile = require("../middleware/validateImageFile");
 
 // Public routes
 router.get("/", roomController.getAllRooms);
@@ -15,9 +16,9 @@ router.get("/:id/image", roomController.getRoomImage);
 router.get("/:id", roomController.getRoomById);
 
 // Protected routes
-router.post("/", protect, upload.single("image"), validateRoom, roomController.createRoom);
+router.post("/", protect, upload.single("image"), validateImageFile, validateRoom, roomController.createRoom);
 
-router.put("/:id", protect, upload.single("image"), validateRoom, roomController.updateRoom);
+router.put("/:id", protect, upload.single("image"), validateImageFile, validateRoom, roomController.updateRoom);
 
 router.delete("/:id", protect, roomController.deleteRoom);
 

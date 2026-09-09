@@ -118,7 +118,7 @@ async function getGallery() {
 }
 
 async function uploadGalleryImage(formData) {
-    return await apiRequest("/gallery/upload", "POST", formData, true);
+    return await apiRequest("/gallery", "POST", formData, true);
 }
 
 async function deleteGalleryImage(id) {
@@ -156,12 +156,10 @@ async function getHistoryById(id) {
 }
 
 async function createHistory(historyData) {
-    console.log("Creating history entry:", historyData);
     return await apiRequest("/history", "POST", historyData, true);
 }
 
 async function updateHistory(id, historyData) {
-    console.log("Updating history entry:", historyData);
     return await apiRequest("/history/" + id, "PUT", historyData, true);
 }
 

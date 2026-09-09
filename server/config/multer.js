@@ -1,14 +1,11 @@
 const multer = require("multer");
-// Keep the upload in memory long enough to persist it to PostgreSQL.
-// A local copy is also created by imageStorage for local development.
+
 const storage = multer.memoryStorage();
 
 // Allow only image files
 const fileFilter = (req, file, cb) => {
 
-  if (
-    file.mimetype.startsWith("image/")
-  ) {
+  if (["image/jpeg", "image/png", "image/gif", "image/webp"].includes(file.mimetype)) {
 
     cb(null, true);
 

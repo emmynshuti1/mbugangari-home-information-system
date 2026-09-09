@@ -1,3 +1,5 @@
+const ApiResponse = require("../utils/ApiResponse");
+
 const validateNearbyPlace = (req, res, next) => {
 
     const {

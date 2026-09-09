@@ -1,6 +1,5 @@
 const roomModel = require("../models/roomModel");
 const houseModel = require("../models/houseModel");
-const { saveLocalCopy } = require("../config/imageStorage");
 
 const serializeRoom = room => {
     const { image_data, image_mime_type, has_image, ...data } = room;
@@ -54,10 +53,9 @@ const getRoomById = async (req, res, next) => {
 const createRoom = async (req, res, next) => {
     try {
 
-        const imageUrl = req.file ? await saveLocalCopy(req.file) : req.body.image_url;
         const roomData = {
             ...req.body,
-            image_url: imageUrl,
+            image_url: req.file ? null : req.body.image_url,
             image_data: req.file?.buffer || null,
             image_mime_type: req.file?.mimetype || null
         };
@@ -94,12 +92,11 @@ const updateRoom = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Room not found." });
         }
 
-        const imageUrl = req.file ? await saveLocalCopy(req.file) : existingRoom.image_url;
         const roomData = {
             ...req.body,
-            image_url: imageUrl,
-            image_data: req.file?.buffer || existingRoom.image_data,
-            image_mime_type: req.file?.mimetype || existingRoom.image_mime_type
+            image_url: req.file ? null : existingRoom.image_url,
+            image_data: req.file?.buffer || null,
+            image_mime_type: req.file?.mimetype || null
         };
 
         const house = await houseModel.getHouseById(roomData.house_id);
@@ -111,7 +108,7 @@ const updateRoom = async (req, res, next) => {
             });
         }
 
-        const room = await roomModel.updateRoom(req.params.id, roomData);
+        const room = await roomModel.updateRoom(req.params.id, roomData, Boolean(req.file));
 
         if (!room) {
             return res.status(404).json({
@@ -133,7 +130,7 @@ const updateRoom = async (req, res, next) => {
 
 const getRoomImage = async (req, res, next) => {
     try {
-        const room = await roomModel.getRoomById(req.params.id);
+        const room = await roomModel.getRoomImageById(req.params.id);
 
         if (!room || !room.image_data) {
             return res.status(404).json({ success: false, message: "Room image file not found." });

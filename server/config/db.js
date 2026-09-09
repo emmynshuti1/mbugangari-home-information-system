@@ -1,22 +1,24 @@
+require("./loadEnv");
+
 const { Pool } = require("pg");
-require("dotenv").config();
+
+const connectionString = process.env.DATABASE_URL || "";
+const isLocalDatabase = /localhost|127\.0\.0\.1/i.test(connectionString);
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+    connectionString,
+    ssl: isLocalDatabase ? false : { rejectUnauthorized: false }
 });
 
-// Test the database connection and ensure an admin exists
-pool.connect(async (err, client, release) => {
-  if (err) {
-    console.error("❌ Database connection failed.");
-    console.error(err.message);
-    return;
-  }
+pool.connect((err, client, release) => {
+    if (err) {
+        console.error("Database connection failed.");
+        console.error(err.message);
+        return;
+    }
 
-  console.log("✅ PostgreSQL connected successfully!");
+    console.log("PostgreSQL connected successfully.");
+    release();
 });
 
 module.exports = pool;

@@ -9,14 +9,13 @@ const protect = require("../middleware/authMiddleware");
 const galleryController = require("../controllers/galleryController");
 
 const validateGallery = require("../middleware/validateGallery");
+const validateImageFile = require("../middleware/validateImageFile");
 
 router.get("/", galleryController.getAllImages);
 
 router.get("/:id/image", galleryController.getImageFile);
 
-router.post("/", protect, upload.single("image"), validateGallery, galleryController.uploadImage);
-
-router.post("/upload", protect, upload.single("image"), galleryController.uploadImage);
+router.post("/", protect, upload.single("image"), validateImageFile, validateGallery, galleryController.uploadImage);
 
 router.delete("/:id", protect, galleryController.deleteImage);
 

@@ -1,3 +1,5 @@
+const ApiResponse = require("../utils/ApiResponse");
+
 const validateHistory = (req, res, next) => {
 
     const {

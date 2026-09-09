@@ -1,3 +1,5 @@
+const ApiResponse = require("../utils/ApiResponse");
+
 const validateHouse = (req, res, next) => {
   const {
     name,

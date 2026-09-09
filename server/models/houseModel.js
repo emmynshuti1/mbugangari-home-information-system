@@ -1,5 +1,4 @@
 const pool = require("../config/db");
-const insertWithReusableId = require("../utils/reusableId");
 
 // Get all houses
 const getAllHouses = async () => {
@@ -42,10 +41,10 @@ const createHouse = async (house) => {
     longitude,
   } = house;
 
-  return insertWithReusableId({
-    table: "houses",
-    columns: ["name", "owner", "description", "year_built", "village", "sector", "district", "province", "country", "latitude", "longitude"],
-    values: [
+  const result = await pool.query(
+    `INSERT INTO houses (name, owner, description, year_built, village, sector, district, province, country, latitude, longitude)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING *`,
+    [
       name.trim(),
       owner.trim(),
       description.trim(),
@@ -58,7 +57,9 @@ const createHouse = async (house) => {
       latitude || null,
       longitude || null,
     ]
-  });
+  );
+
+  return result.rows[0];
 };
 
 // Update house
