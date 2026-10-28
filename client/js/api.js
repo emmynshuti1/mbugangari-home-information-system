@@ -1,35 +1,86 @@
 ﻿function getAuthHeaders() {
     const token = localStorage.getItem("token");
-    return token ? { Authorization: 'Bearer ' + token } : {};
+    return token ? { Authorization: "Bearer " + token } : {};
 }
 
-const DEFAULT_IMAGE_URL = "https://via.placeholder.com/400x250?text=No+Image";
+// Neutral inline placeholder: works offline and is allowed by the CSP.
+const DEFAULT_IMAGE_URL = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">' +
+    '<rect width="400" height="300" fill="#e7e1d6"/>' +
+    '<path d="M150 170 200 128l50 42v52h-100z" fill="none" stroke="#9aa59e" stroke-width="8" stroke-linejoin="round"/>' +
+    '<path d="M188 222v-30h24v30" fill="none" stroke="#9aa59e" stroke-width="8" stroke-linejoin="round"/>' +
+    "</svg>"
+);
+
+const REQUEST_TIMEOUT_MS = 60000;
 
 function normalizeImageUrl(imageUrl) {
     if (!imageUrl || typeof imageUrl !== "string" || imageUrl.trim() === "") {
         return DEFAULT_IMAGE_URL;
     }
 
-    if (/^https?:\/\//i.test(imageUrl)) {
-        return imageUrl;
-    }
-
-    if (/^data:image\//i.test(imageUrl)) {
+    if (/^(https?:|data:image\/|blob:)/i.test(imageUrl)) {
         return imageUrl;
     }
 
     if (/^\/api\//i.test(imageUrl)) {
-        return CONFIG.API_URL.replace(/\/api\/?$/, "") + imageUrl;
+        return CONFIG.API_ORIGIN + imageUrl;
     }
 
     if (/^\/?uploads\//i.test(imageUrl)) {
-        return CONFIG.IMAGE_URL + '/' + imageUrl.replace(/^\/?uploads\//i, "");
+        return CONFIG.IMAGE_URL + "/" + imageUrl.replace(/^\/?uploads\//i, "");
     }
 
-    return '../' + imageUrl.replace(/^\/+/, "");
+    // Legacy relative paths such as "images/kitchen.jpg" live in the client folder.
+    return CONFIG.SITE_ROOT + imageUrl.replace(/^(\.\.\/)+|^\/+/, "");
 }
 
-async function apiRequest(endpoint, method = "GET", body = null, auth = false) {
+function networkErrorMessage(error) {
+    if (error && error.name === "AbortError") {
+        return "The server took too long to respond. It may be waking up — please try again in a moment.";
+    }
+
+    return navigator.onLine === false
+        ? "You appear to be offline. Check your connection and try again."
+        : "Unable to reach the server. Please try again shortly.";
+}
+
+function handleUnauthorized(auth, status) {
+    if (auth && status === 401) {
+        window.dispatchEvent(new CustomEvent("auth:expired"));
+    }
+}
+
+// Multipart uploads go through XHR so callers can show upload progress.
+function uploadWithProgress(url, method, formData, headers, onProgress) {
+    return new Promise(resolve => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(method, url);
+        xhr.timeout = REQUEST_TIMEOUT_MS * 2;
+        Object.entries(headers).forEach(([key, value]) => xhr.setRequestHeader(key, value));
+
+        xhr.upload.addEventListener("progress", event => {
+            if (event.lengthComputable) onProgress(event.loaded / event.total);
+        });
+
+        xhr.addEventListener("load", () => {
+            let data = null;
+            try {
+                data = JSON.parse(xhr.responseText);
+            } catch (error) {
+                data = null;
+            }
+            resolve({ status: xhr.status, ok: xhr.status >= 200 && xhr.status < 300, data });
+        });
+
+        xhr.addEventListener("error", () => resolve({ status: 0, ok: false, data: null, error: new Error("Network error") }));
+        xhr.addEventListener("timeout", () => resolve({ status: 0, ok: false, data: null, error: { name: "AbortError" } }));
+
+        xhr.send(formData);
+    });
+}
+
+async function apiRequest(endpoint, method = "GET", body = null, auth = false, options = {}) {
     const headers = {};
     const config = {
         method,
@@ -38,6 +89,7 @@ async function apiRequest(endpoint, method = "GET", body = null, auth = false) {
 
     if (body !== null) {
         if (body instanceof FormData) {
+            // Let the browser set the multipart boundary header.
             config.body = body;
         } else {
             headers["Content-Type"] = "application/json";
@@ -49,25 +101,60 @@ async function apiRequest(endpoint, method = "GET", body = null, auth = false) {
         Object.assign(headers, getAuthHeaders());
     }
 
+    const url = CONFIG.API_URL + endpoint;
+
+    if (body instanceof FormData && typeof options.onProgress === "function") {
+        const result = await uploadWithProgress(url, method, body, headers, options.onProgress);
+
+        if (result.error) {
+            return { success: false, message: networkErrorMessage(result.error) };
+        }
+
+        handleUnauthorized(auth, result.status);
+
+        if (!result.ok) {
+            return result.data || { success: false, message: "Request failed (HTTP " + result.status + ")." };
+        }
+
+        return result.data || { success: true };
+    }
+
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    config.signal = controller.signal;
+
     try {
-        const response = await fetch(CONFIG.API_URL + endpoint, config);
+        const response = await fetch(url, config);
         const data = await response.json().catch(() => null);
+
+        handleUnauthorized(auth, response.status);
 
         if (!response.ok) {
             return data || {
                 success: false,
-                message: "HTTP Error: " + response.status,
+                message: "Request failed (HTTP " + response.status + ").",
             };
         }
 
         return data;
     } catch (error) {
-        console.error(error);
+        // Network failures are reported to the user through the returned message.
         return {
             success: false,
-            message: error.message,
+            message: networkErrorMessage(error),
         };
+    } finally {
+        clearTimeout(timer);
     }
+}
+
+// Auth
+async function getCurrentAdmin() {
+    return await apiRequest("/auth/me", "GET", null, true);
+}
+
+async function getActivity(limit = 15) {
+    return await apiRequest("/activity?limit=" + limit, "GET", null, true);
 }
 
 // Houses
@@ -79,12 +166,12 @@ async function getHouseById(id) {
     return await apiRequest("/houses/" + id);
 }
 
-async function createHouse(houseData) {
-    return await apiRequest("/houses", "POST", houseData, true);
+async function createHouse(houseData, options) {
+    return await apiRequest("/houses", "POST", houseData, true, options);
 }
 
-async function updateHouse(id, houseData) {
-    return await apiRequest("/houses/" + id, "PUT", houseData, true);
+async function updateHouse(id, houseData, options) {
+    return await apiRequest("/houses/" + id, "PUT", houseData, true, options);
 }
 
 async function deleteHouse(id) {
@@ -100,12 +187,12 @@ async function getRoomById(id) {
     return await apiRequest("/rooms/" + id);
 }
 
-async function createRoom(roomData) {
-    return await apiRequest("/rooms", "POST", roomData, true);
+async function createRoom(roomData, options) {
+    return await apiRequest("/rooms", "POST", roomData, true, options);
 }
 
-async function updateRoom(id, roomData) {
-    return await apiRequest("/rooms/" + id, "PUT", roomData, true);
+async function updateRoom(id, roomData, options) {
+    return await apiRequest("/rooms/" + id, "PUT", roomData, true, options);
 }
 
 async function deleteRoom(id) {
@@ -117,8 +204,12 @@ async function getGallery() {
     return await apiRequest("/gallery");
 }
 
-async function uploadGalleryImage(formData) {
-    return await apiRequest("/gallery", "POST", formData, true);
+async function uploadGalleryImage(formData, options) {
+    return await apiRequest("/gallery", "POST", formData, true, options);
+}
+
+async function updateGalleryImage(id, formData, options) {
+    return await apiRequest("/gallery/" + id, "PUT", formData, true, options);
 }
 
 async function deleteGalleryImage(id) {

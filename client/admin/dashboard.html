@@ -1,217 +1,113 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Administrator Dashboard</title>
-
-<link rel="stylesheet" href="../css/admin.css">
-
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Dashboard · Mbugangari Home Admin</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&amp;family=Poppins:wght@400;500;600&amp;display=swap">
+    <link rel="stylesheet" href="../css/admin.css">
+    <script src="../js/theme.js"></script>
 </head>
-
 <body>
 
-<div class="dashboard">
+<div class="boot" aria-live="polite"><div><span class="spinner" aria-hidden="true"></span> Checking your session…</div></div>
 
-    <!-- Sidebar -->
+<div class="admin">
+    <aside class="sidebar" id="sidebar" aria-label="Administration">
+        <a class="sidebar-brand" href="dashboard.html">
+            <img src="../favicon.svg" alt="" width="36" height="36">
+            <div><strong>Mbugangari Home</strong><span>Administration</span></div>
+        </a>
 
-    <aside class="sidebar">
+        <p class="sidebar-label">Content</p>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" aria-current="page" data-icon="dashboard">Dashboard</a>
+            <a href="houses.html" data-icon="home">House</a>
+            <a href="rooms.html" data-icon="door">Rooms<span class="sidebar-count" data-count="rooms"></span></a>
+            <a href="gallery.html" data-icon="image">Gallery<span class="sidebar-count" data-count="gallery"></span></a>
+            <a href="materials.html" data-icon="brick">Materials<span class="sidebar-count" data-count="materials"></span></a>
+            <a href="history.html" data-icon="clock">History<span class="sidebar-count" data-count="history"></span></a>
+            <a href="places.html" data-icon="pin">Nearby Places<span class="sidebar-count" data-count="places"></span></a>
+        </nav>
 
-        <h2>🏡 Mbugangari Home </h2>
-
-        <ul>
-            <li>
-                <a href="dashboard.html" class="active"><span>📊</span>Dashboard</a>
-            </li>
-
-            <li>
-                <a href="houses.html"><span>🏠</span>House</a>
-            </li>
-
-            <li>
-                <a href="rooms.html"><span>🚪</span>Rooms</a>
-            </li>
-
-            <li>
-                <a href="gallery.html"><span>🖼️</span>Gallery</a>
-            </li>
-
-            <li>
-                <a href="materials.html"><span>🧱</span>Materials</a>
-            </li>
-
-            <li>
-                <a href="history.html"><span>📜</span>History</a>
-            </li>
-
-            <li>
-                <a href="places.html"><span>📍</span>Nearby Places</a>
-            </li>
-
-        </ul>
-
-    </aside>
-
-    <!-- Main Content -->
-
-    <main class="main-content">
-
-        <header class="topbar">
-
-            <h1>
-
-                Dashboard
-
-            </h1>
-
-            <div>
-
-                <span id="adminName"></span>
-
-                            <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-            <button
-                    id="logoutBtn">
-
-                    Logout
-
-                </button>
-
+        <div class="sidebar-footer">
+            <nav class="sidebar-nav">
+                <a href="../index.html" target="_blank" rel="noopener" data-icon="globe">View website</a>
+                <button type="button" data-logout data-icon="logout">Log out</button>
+            </nav>
+            <div class="sidebar-user">
+                <span class="avatar" data-admin-initials>A</span>
+                <div><strong data-admin-name>Administrator</strong><span data-admin-email></span></div>
             </div>
+        </div>
+    </aside>
+    <div class="sidebar-backdrop"></div>
 
+    <div class="main">
+        <header class="topbar">
+            <button class="icon-btn menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu" data-icon="menu"></button>
+            <div>
+                <h1>Dashboard</h1>
+                <p>Overview of the website content</p>
+            </div>
+            <div class="topbar-actions">
+                <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"></button>
+            </div>
         </header>
 
-        <!-- Statistics -->
+        <main class="content" id="main">
+            <section class="welcome">
+                <div>
+                    <h2 id="welcomeTitle">Welcome back</h2>
+                    <p id="welcomeText">Manage the content shown on the public website.</p>
+                </div>
+                <div class="quick-actions">
+                    <a class="btn" href="gallery.html?new=1" data-icon="upload">Upload photo</a>
+                    <a class="btn btn-secondary" href="rooms.html?new=1" data-icon="plus">Add room</a>
+                    <a class="btn btn-secondary" href="history.html?new=1" data-icon="plus">Add event</a>
+                </div>
+            </section>
 
-        <section class="cards">
+            <section class="stats" id="stats" aria-label="Statistics"></section>
 
-            <div class="card">
+            <div class="dashboard-grid">
+                <section class="panel">
+                    <div class="panel-head">
+                        <div><h2>Recent activity</h2><p>Latest changes made by administrators</p></div>
+                    </div>
+                    <div class="list" id="activity" aria-live="polite"></div>
+                </section>
 
-                <h3>
+                <div style="display:grid;gap:24px">
+                    <section class="panel">
+                        <div class="panel-head">
+                            <div><h2>Content checklist</h2><p id="checksSummary">Checking content…</p></div>
+                        </div>
+                        <div class="list" id="checks"></div>
+                    </section>
 
-                    Rooms
-
-                </h3>
-
-                <h2 id="roomCount">
-
-                    0
-
-                </h2>
-
+                    <section class="panel">
+                        <div class="panel-head">
+                            <div><h2>Latest photos</h2></div>
+                            <a class="btn btn-ghost btn-sm" href="gallery.html">Manage gallery</a>
+                        </div>
+                        <div class="thumb-row" id="latestPhotos"></div>
+                    </section>
+                </div>
             </div>
-
-            <div class="card">
-
-                <h3>
-
-                    Gallery
-
-                </h3>
-
-                <h2 id="galleryCount">
-
-                    0
-
-                </h2>
-
-            </div>
-
-            <div class="card">
-
-                <h3>
-
-                    Materials
-
-                </h3>
-
-                <h2 id="materialCount">
-
-                    0
-
-                </h2>
-
-            </div>
-
-            <div class="card">
-
-                <h3>
-
-                    History
-
-                </h3>
-
-                <h2 id="historyCount">
-
-                    0
-
-                </h2>
-
-            </div>
-
-            <div class="card">
-
-                <h3>
-
-                    Nearby Places
-
-                </h3>
-
-                <h2 id="placeCount">
-
-                    0
-
-                </h2>
-
-            </div>
-
-        </section>
-
-        <!-- Welcome Panel -->
-
-        <section class="welcome-card">
-
-            <h2>
-
-                Welcome to the Administrator Dashboard
-
-            </h2>
-
-            <p>
-
-                From here you can manage the entire
-                Mbugangari Home Information System.
-
-            </p>
-
-            <p>
-
-                Use the navigation menu on the left
-                to manage rooms, gallery images,
-                construction materials,
-                historical events and nearby places.
-
-            </p>
-
-        </section>
-
-    </main>
-
+        </main>
+    </div>
 </div>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
+<script src="../js/icons.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin.js"></script>
 <script src="../js/dashboard.js"></script>
-
-<script src="../js/theme.js"></script>
 </body>
-
 </html>
-

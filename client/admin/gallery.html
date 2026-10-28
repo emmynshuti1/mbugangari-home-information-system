@@ -1,241 +1,76 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gallery Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Gallery · Mbugangari Home Admin</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&amp;family=Poppins:wght@400;500;600&amp;display=swap">
     <link rel="stylesheet" href="../css/admin.css">
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <script src="../js/theme.js"></script>
 </head>
-
 <body>
 
-<div class="dashboard">
-    <aside class="sidebar">
+<div class="boot" aria-live="polite"><div><span class="spinner" aria-hidden="true"></span> Checking your session…</div></div>
 
-        <h2>🏡 Mbugangari Home </h2>
+<div class="admin">
+    <aside class="sidebar" id="sidebar" aria-label="Administration">
+        <a class="sidebar-brand" href="dashboard.html">
+            <img src="../favicon.svg" alt="" width="36" height="36">
+            <div><strong>Mbugangari Home</strong><span>Administration</span></div>
+        </a>
 
-        <ul>
-            <li>
-                <a href="dashboard.html"><span>📊</span>Dashboard</a>
-            </li>
+        <p class="sidebar-label">Content</p>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" data-icon="dashboard">Dashboard</a>
+            <a href="houses.html" data-icon="home">House</a>
+            <a href="rooms.html" data-icon="door">Rooms</a>
+            <a href="gallery.html" aria-current="page" data-icon="image">Gallery</a>
+            <a href="materials.html" data-icon="brick">Materials</a>
+            <a href="history.html" data-icon="clock">History</a>
+            <a href="places.html" data-icon="pin">Nearby Places</a>
+        </nav>
 
-            <li>
-                <a href="houses.html"><span>🏠</span>House</a>
-            </li>
-
-            <li>
-                <a href="rooms.html"><span>🚪</span>Rooms</a>
-            </li>
-
-            <li>
-                <a href="gallery.html" class="active"><span>🖼️</span>Gallery</a>
-            </li>
-
-            <li>
-                <a href="materials.html"><span>🧱</span>Materials</a>
-            </li>
-
-            <li>
-                <a href="history.html"><span>📜</span>History</a>
-            </li>
-
-            <li>
-                <a href="places.html"><span>📍</span>Nearby Places</a>
-            </li>
-
-        </ul>
-
+        <div class="sidebar-footer">
+            <nav class="sidebar-nav">
+                <a href="../index.html" target="_blank" rel="noopener" data-icon="globe">View website</a>
+                <button type="button" data-logout data-icon="logout">Log out</button>
+            </nav>
+            <div class="sidebar-user">
+                <span class="avatar" data-admin-initials>A</span>
+                <div><strong data-admin-name>Administrator</strong><span data-admin-email></span></div>
+            </div>
+        </div>
     </aside>
-<main class="main-content">
+    <div class="sidebar-backdrop"></div>
 
-    <header class="topbar">
-
-        <h1>Gallery Management</h1>
-
-        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-
-        <button id="logoutBtn">
-
-            Logout
-
-        </button>
-
-    </header>
-
-    <div id="galleryFormCard" class="form-card hidden">
-
-        <h2 id="galleryFormTitle">
-
-            Upload Image
-
-        </h2>
-
-        <form id="galleryForm" enctype="multipart/form-data">
-
-            <div class="form-group upload-group">
-                <label for="image">Gallery image</label>
-                <label for="image" class="upload-dropzone" id="galleryUploadZone">
-                    <span class="upload-icon">↑</span>
-                    <span class="upload-title">Choose a photo or drop it here</span>
-                    <span class="upload-hint">JPG, PNG, WEBP or GIF · up to 10 MB</span>
-                </label>
-                <input type="file" id="image" accept="image/*" required class="visually-hidden">
-                <div id="galleryImagePreview" class="upload-preview hidden">
-                    <img id="galleryPreviewImage" alt="Selected gallery preview">
-                    <div><strong id="galleryFileName"></strong><span>Ready to upload</span></div>
-                    <button type="button" id="clearGalleryImage" class="textBtn">Remove</button>
-                </div>
+    <div class="main">
+        <header class="topbar">
+            <button class="icon-btn menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu" data-icon="menu"></button>
+            <div>
+                <h1>Gallery</h1>
+                <p>Upload, caption and replace website photos</p>
             </div>
-
-            <label for="caption">
-
-                Caption
-
-            </label>
-
-            <input
-                type="text"
-                id="caption"
-                placeholder="Describe the image"
-            >
-
-            <label for="house_id">
-
-                House
-
-            </label>
-
-            <select
-                id="house_id"
-                required
-            >
-
-                <option value="">
-
-                    Select a house
-
-                </option>
-
-            </select>
-
-            <p class="field-note">
-
-                Choose a house record before uploading the gallery image.
-
-            </p>
-
-            <div class="form-actions">
-
-                <button
-                    type="submit"
-                    class="saveBtn">
-
-                    Upload Image
-
-                </button>
-
-                <button
-                    type="button"
-                    id="cancelGalleryBtn"
-                    class="secondaryBtn">
-
-                    Cancel
-
-                </button>
-
+            <div class="topbar-actions">
+                <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"></button>
             </div>
+        </header>
 
-        </form>
-
+        <main class="content" id="main">
+            <div id="resource"></div>
+        </main>
     </div>
-
-    <section class="table-card">
-
-        <div class="section-header">
-
-            <h2>
-
-                Gallery Images
-
-            </h2>
-
-            <div class="table-actions">
-
-                <input
-                    id="searchGallery"
-                    type="search"
-                    placeholder="Search captions..."
-                >
-
-                <button id="addGalleryBtn">
-
-                    + Upload Image
-
-                </button>
-
-            </div>
-
-        </div>
-
-        <div
-            id="galleryTable"
-            class="admin-table"
-        ></div>
-
-    </section>
-
-</main>
 </div>
-
-<div id="confirmModal" class="modal hidden">
-
-    <div class="modal-content">
-
-        <h3 id="confirmTitle">Confirm Action</h3>
-
-        <p id="confirmMessage">
-            Are you sure?
-        </p>
-
-        <div class="modal-buttons">
-
-            <button
-                id="confirmCancel"
-                class="secondaryBtn">
-
-                Cancel
-
-            </button>
-
-            <button
-                id="confirmOk"
-                class="deleteBtn">
-
-                Delete
-
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<div id="toast" class="toast"></div>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
+<script src="../js/icons.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin.js"></script>
-<script src="../js/adminHouseHelpers.js"></script>
-<script src="../js/ui.js"></script>
+<script src="../js/adminCrud.js"></script>
 <script src="../js/adminGallery.js"></script>
-
-<script src="../js/theme.js"></script>
-
-
 </body>
-
 </html>

@@ -2,6 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 
+const validateId = require("../middleware/validateId");
+
+router.param("id", validateId);
+
 const nearbyPlaceController = require("../controllers/nearbyPlaceController");
 const protect = require("../middleware/authMiddleware");
 const validateNearbyPlace = require("../middleware/validateNearbyPlace");

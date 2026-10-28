@@ -1,277 +1,76 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Rooms Management</title>
-
-<link rel="stylesheet" href="../css/admin.css">
-
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Rooms · Mbugangari Home Admin</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&amp;family=Poppins:wght@400;500;600&amp;display=swap">
+    <link rel="stylesheet" href="../css/admin.css">
+    <script src="../js/theme.js"></script>
 </head>
-
 <body>
 
-<div class="dashboard">
+<div class="boot" aria-live="polite"><div><span class="spinner" aria-hidden="true"></span> Checking your session…</div></div>
 
-    <!-- Sidebar -->
+<div class="admin">
+    <aside class="sidebar" id="sidebar" aria-label="Administration">
+        <a class="sidebar-brand" href="dashboard.html">
+            <img src="../favicon.svg" alt="" width="36" height="36">
+            <div><strong>Mbugangari Home</strong><span>Administration</span></div>
+        </a>
 
-   <aside class="sidebar">
+        <p class="sidebar-label">Content</p>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" data-icon="dashboard">Dashboard</a>
+            <a href="houses.html" data-icon="home">House</a>
+            <a href="rooms.html" aria-current="page" data-icon="door">Rooms</a>
+            <a href="gallery.html" data-icon="image">Gallery</a>
+            <a href="materials.html" data-icon="brick">Materials</a>
+            <a href="history.html" data-icon="clock">History</a>
+            <a href="places.html" data-icon="pin">Nearby Places</a>
+        </nav>
 
-        <h2>🏡 Mbugangari Home </h2>
-
-        <ul>
-            <li>
-                <a href="dashboard.html"><span>📊</span>Dashboard</a>
-            </li>
-
-            <li>
-                <a href="houses.html"><span>🏠</span>House</a>
-            </li>
-
-            <li>
-                <a href="rooms.html" class="active"><span>🚪</span>Rooms</a>
-            </li>
-
-            <li>
-                <a href="gallery.html"><span>🖼️</span>Gallery</a>
-            </li>
-
-            <li>
-                <a href="materials.html"><span>🧱</span>Materials</a>
-            </li>
-
-            <li>
-                <a href="history.html"><span>📜</span>History</a>
-            </li>
-
-            <li>
-                <a href="places.html"><span>📍</span>Nearby Places</a>
-            </li>
-
-        </ul>
-
+        <div class="sidebar-footer">
+            <nav class="sidebar-nav">
+                <a href="../index.html" target="_blank" rel="noopener" data-icon="globe">View website</a>
+                <button type="button" data-logout data-icon="logout">Log out</button>
+            </nav>
+            <div class="sidebar-user">
+                <span class="avatar" data-admin-initials>A</span>
+                <div><strong data-admin-name>Administrator</strong><span data-admin-email></span></div>
+            </div>
+        </div>
     </aside>
+    <div class="sidebar-backdrop"></div>
 
-    <!-- Main -->
-
-    <main class="main-content">
-
+    <div class="main">
         <header class="topbar">
-
-            <h1>Rooms Management</h1>
-
-                        <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
-            <button id="logoutBtn">
-
-                Logout
-
-            </button>
-
+            <button class="icon-btn menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu" data-icon="menu"></button>
+            <div>
+                <h1>Rooms</h1>
+                <p>Rooms shown on the website, with photos and dimensions</p>
+            </div>
+            <div class="topbar-actions">
+                <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"></button>
+            </div>
         </header>
 
-        <div id="roomFormCard" class="form-card hidden">
-
-    <h2 id="roomFormTitle">Add Room</h2>
-
-    <div id="roomMessage" class="form-message"></div>
-
-    <form id="roomForm" enctype="multipart/form-data">
-
-        <input type="hidden" id="roomId">
-
-        <div class="form-grid">
-
-            <div class="form-group">
-                <label>House</label>
-                <select id="room_house_id"></select>
-            </div>
-
-            <div class="form-group">
-                <label>Room Name</label>
-                <input
-                    type="text"
-                    id="roomName"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Floor</label>
-                <input
-                    type="text"
-                    id="roomFloor"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Length (m)</label>
-                <input
-                    type="number"
-                    id="roomLength"
-                    step="0.01"
-                    min="0"
-                    required
-                >
-            </div>
-
-            <div class="form-group">
-                <label>Width (m)</label>
-                <input
-                    type="number"
-                    id="roomWidth"
-                    step="0.01"
-                    min="0"
-                    required
-                >
-            </div>
-
-            <div class="form-group upload-group">
-                <label for="roomImage">Room image</label>
-                <label for="roomImage" class="upload-dropzone" id="roomUploadZone">
-                    <span class="upload-icon">↑</span>
-                    <span class="upload-title">Choose a photo or drop it here</span>
-                    <span class="upload-hint">JPG, PNG, WEBP or GIF · up to 10 MB</span>
-                </label>
-                <input type="file" id="roomImage" accept="image/*" class="visually-hidden">
-                <div id="roomImagePreview" class="upload-preview hidden">
-                    <img id="roomPreviewImage" alt="Selected room preview">
-                    <div><strong id="roomFileName"></strong><span id="roomUploadStatus">Ready to upload</span></div>
-                    <button type="button" id="clearRoomImage" class="textBtn">Remove</button>
-                </div>
-                <p class="field-note">A photo is required for a new room. When editing, leave this empty to keep the current image.</p>
-            </div>
-
-        </div>
-
-        <div class="form-group">
-
-            <label>Description</label>
-
-            <textarea
-                id="roomDescription"
-                rows="5"
-            ></textarea>
-
-        </div>
-
-        <div class="form-actions">
-
-            <button type="submit" class="saveBtn">
-
-                Save Room
-
-            </button>
-
-            <button
-                type="button"
-                id="cancelRoomBtn"
-                class="secondaryBtn">
-
-                Cancel
-
-            </button>
-
-        </div>
-
-    </form>
-
-</div>
-
-        <section class="table-card">
-            <div class="section-header">
-                <h2>Rooms</h2>
-                <div class="table-actions">
-                    <input id="searchRoom" type="search" placeholder="Search rooms...">
-                    <button id="addRoomBtn">+ Add Room</button>
-                </div>
-                <p class="field-note">Choose a house before adding a room.</p>
-            </div>
-            <div class="table-wrapper">
-                <table id="roomsTable">
-
-            <thead>
-
-                <tr>
-
-                    <th>ID</th>
-
-                    <th>Name</th>
-
-                    <th>Floor</th>
-
-                    <th>Size</th>
-
-                    <th>Image</th>
-
-                    <th>Actions</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-            </tbody>
-
-        </table>
-            </div>
-        </section>
-
-    </main>
-
-</div>
-
-<div id="confirmModal" class="modal hidden">
-
-    <div class="modal-content">
-
-        <h3 id="confirmTitle">Confirm Action</h3>
-
-        <p id="confirmMessage">
-            Are you sure?
-        </p>
-
-        <div class="modal-buttons">
-
-            <button
-                id="confirmCancel"
-                class="secondaryBtn">
-
-                Cancel
-
-            </button>
-
-            <button
-                id="confirmOk"
-                class="deleteBtn">
-
-                Delete
-
-            </button>
-
-        </div>
-
+        <main class="content" id="main">
+            <div id="resource"></div>
+        </main>
     </div>
-
 </div>
-
-<div id="toast" class="toast"></div>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
+<script src="../js/icons.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin.js"></script>
-<script src="../js/adminHouseHelpers.js"></script>
-<script src="../js/ui.js"></script>
+<script src="../js/adminCrud.js"></script>
 <script src="../js/adminRooms.js"></script>
-
-<script src="../js/theme.js"></script>
 </body>
-
 </html>

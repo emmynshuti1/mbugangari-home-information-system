@@ -2,6 +2,7 @@ const materialModel = require("../models/materialModel");
 const houseModel = require("../models/houseModel");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+const logActivity = require("../utils/activity");
 
 // Get all materials
 const getAllMaterials = async (req, res, next) => {
@@ -100,6 +101,8 @@ const createMaterial = async (req, res, next) => {
 
         const material = await materialModel.createMaterial(req.body);
 
+        await logActivity(req, "create", "material", material.id, material.material_name);
+
         return res.status(201).json(
 
             new ApiResponse(
@@ -163,6 +166,8 @@ const updateMaterial = async (req, res, next) => {
 
         }
 
+        await logActivity(req, "update", "material", material.id, material.material_name);
+
         return res.status(200).json(
 
             new ApiResponse(
@@ -205,6 +210,8 @@ const deleteMaterial = async (req, res, next) => {
             );
 
         }
+
+        await logActivity(req, "delete", "material", material.id, material.material_name);
 
         return res.status(200).json(
 

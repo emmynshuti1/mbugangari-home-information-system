@@ -2,6 +2,7 @@ const nearbyPlaceModel = require("../models/nearbyPlaceModel");
 const houseModel = require("../models/houseModel");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+const logActivity = require("../utils/activity");
 
 // Get all places
 const getAllPlaces = async (req, res, next) => {
@@ -100,6 +101,8 @@ const createPlace = async (req, res, next) => {
 
         const place = await nearbyPlaceModel.createPlace(req.body);
 
+        await logActivity(req, "create", "place", place.id, place.name);
+
         return res.status(201).json(
 
             new ApiResponse(
@@ -163,6 +166,8 @@ const updatePlace = async (req, res, next) => {
 
         }
 
+        await logActivity(req, "update", "place", place.id, place.name);
+
         return res.status(200).json(
 
             new ApiResponse(
@@ -205,6 +210,8 @@ const deletePlace = async (req, res, next) => {
             );
 
         }
+
+        await logActivity(req, "delete", "place", place.id, place.name);
 
         return res.status(200).json(
 

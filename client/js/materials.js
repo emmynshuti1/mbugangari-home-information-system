@@ -1,110 +1,52 @@
+// Materials page: searchable list of construction materials by component.
+const { el } = Site;
+
 let allMaterials = [];
 
-document.addEventListener("DOMContentLoaded", () => {
-
+Site.ready(() => {
+    document.getElementById("searchMaterial").addEventListener("input", displayMaterials);
     loadMaterials();
-
-    document
-        .getElementById("searchMaterial")
-        .addEventListener("keyup", searchMaterials);
-
 });
 
 async function loadMaterials() {
-
-    const loading = document.getElementById("loading");
-
-    try {
-
-        const response = await getMaterials();
-
-        if (!response || !response.success) {
-
-            loading.textContent = "Unable to load construction materials.";
-
-            return;
-
-        }
-
-        allMaterials = response.data;
-
-        loading.style.display = "none";
-
-        displayMaterials(allMaterials);
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        loading.textContent = "Failed to connect to the server.";
-
-    }
-
-}
-
-
-function displayMaterials(materials) {
-
     const container = document.getElementById("materialsContainer");
+    Site.renderSkeletons(container, 6, "line");
 
-    container.innerHTML = "";
+    const response = await getMaterials();
 
-    if (materials.length === 0) {
-
-        const empty = document.createElement("div");
-        empty.className = "no-materials";
-        empty.textContent = "No construction materials found.";
-
-        container.appendChild(empty);
-
+    if (!response || !response.success) {
+        Site.renderState(container, { type: "error", title: "Unable to load materials", message: response?.message, retry: loadMaterials });
         return;
-
     }
 
-    materials.forEach(material => {
-
-        const card = document.createElement("div");
-        card.className = "material-card";
-
-        const title = document.createElement("h2");
-        title.textContent = material.component || "Unknown Component";
-
-        const materialName = document.createElement("div");
-        materialName.className = "material-name";
-        materialName.textContent =
-            material.material_name || "Unknown Material";
-
-        const description = document.createElement("p");
-        description.textContent =
-            material.description || "No description available.";
-
-        card.appendChild(title);
-        card.appendChild(materialName);
-        card.appendChild(description);
-
-        container.appendChild(card);
-
-    });
-
+    allMaterials = response.data || [];
+    displayMaterials();
 }
 
-function searchMaterials() {
+function displayMaterials() {
+    const container = document.getElementById("materialsContainer");
+    const query = document.getElementById("searchMaterial").value.trim().toLowerCase();
 
-    const keyword = document
-        .getElementById("searchMaterial")
-        .value
-        .toLowerCase();
+    const materials = allMaterials.filter(material =>
+        `${material.component} ${material.material_name} ${material.description || ""}`.toLowerCase().includes(query));
 
-    const filtered = allMaterials.filter(material =>
+    document.getElementById("materialCount").textContent =
+        `${materials.length} material${materials.length === 1 ? "" : "s"}${query ? " found" : ""}`;
 
-        material.component.toLowerCase().includes(keyword) ||
+    if (!materials.length) {
+        Site.renderState(container, allMaterials.length
+            ? { title: "No matching materials", message: "Try a different search." }
+            : { title: "No materials yet", message: "Construction materials will appear here once they are added." });
+        return;
+    }
 
-        material.material_name.toLowerCase().includes(keyword)
+    container.setAttribute("aria-busy", "false");
+    container.replaceChildren(...materials.map(material =>
+        el("article", { className: "card material-card reveal" },
+            el("span", { className: "material-icon", html: icon(Site.materialIcon(material.component)) }),
+            el("span", { className: "component", text: material.component }),
+            el("h3", { text: material.material_name }),
+            material.description ? el("p", { text: material.description }) : null)));
 
-    );
-
-    displayMaterials(filtered);
-
+    Site.reveal(container);
 }

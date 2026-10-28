@@ -1,6 +1,7 @@
 const pool = require("../config/db");
+const { imageMetadataColumns } = require("../utils/images");
 
-const ROOM_METADATA = `
+const ROOM_COLUMNS = `
     rooms.id,
     rooms.house_id,
     rooms.name,
@@ -9,7 +10,11 @@ const ROOM_METADATA = `
     rooms.width,
     rooms.description,
     rooms.image_url,
-    rooms.image_data IS NOT NULL AS has_image,
+    ${imageMetadataColumns("rooms")}
+`;
+
+const ROOM_METADATA = `
+    ${ROOM_COLUMNS},
     houses.name AS house_name
 `;
 
@@ -76,24 +81,15 @@ const createRoom = async (room) => {
         length,
         width,
         description,
-        image_url,
+        image_url = null,
         image_data = null,
         image_mime_type = null
     } = room;
 
     const result = await pool.query(
-        `INSERT INTO rooms (house_id, name, floor, length, width, description, image_url, image_data, image_mime_type)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-         RETURNING
-            id,
-            house_id,
-            name,
-            floor,
-            length,
-            width,
-            description,
-            image_url,
-            image_data IS NOT NULL AS has_image`,
+        `INSERT INTO rooms (house_id, name, floor, length, width, description, image_url, image_data, image_mime_type, image_updated_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, CASE WHEN $8::bytea IS NULL THEN NULL ELSE CURRENT_TIMESTAMP END)
+         RETURNING ${ROOM_COLUMNS}`,
         [house_id, name, floor, length, width, description, image_url, image_data, image_mime_type]
     );
     return result.rows[0];
@@ -107,7 +103,6 @@ const updateRoom = async (id, room, replaceImage = false) => {
         length,
         width,
         description,
-        image_url,
         image_data = null,
         image_mime_type = null
     } = room;
@@ -123,33 +118,14 @@ const updateRoom = async (id, room, replaceImage = false) => {
                 length = $4,
                 width = $5,
                 description = $6,
-                image_url = $7,
-                image_data = $8,
-                image_mime_type = $9
-            WHERE id = $10
-            RETURNING
-                id,
-                house_id,
-                name,
-                floor,
-                length,
-                width,
-                description,
-                image_url,
-                image_data IS NOT NULL AS has_image
+                image_url = NULL,
+                image_data = $7,
+                image_mime_type = $8,
+                image_updated_at = CURRENT_TIMESTAMP
+            WHERE id = $9
+            RETURNING ${ROOM_COLUMNS}
             `,
-            [
-                house_id,
-                name,
-                floor,
-                length,
-                width,
-                description,
-                image_url,
-                image_data,
-                image_mime_type,
-                id
-            ]
+            [house_id, name, floor, length, width, description, image_data, image_mime_type, id]
         )
         : await pool.query(
             `
@@ -162,16 +138,7 @@ const updateRoom = async (id, room, replaceImage = false) => {
                 width = $5,
                 description = $6
             WHERE id = $7
-            RETURNING
-                id,
-                house_id,
-                name,
-                floor,
-                length,
-                width,
-                description,
-                image_url,
-                image_data IS NOT NULL AS has_image
+            RETURNING ${ROOM_COLUMNS}
             `,
             [house_id, name, floor, length, width, description, id]
         );
@@ -184,7 +151,7 @@ const deleteRoom = async (id) => {
         `
         DELETE FROM rooms
         WHERE id = $1
-        RETURNING id;
+        RETURNING id, name;
         `,
         [id]
     );

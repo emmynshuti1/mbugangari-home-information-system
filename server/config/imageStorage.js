@@ -10,14 +10,34 @@ const mimeByExtension = {
     ".webp": "image/webp"
 };
 
+// Additive, idempotent schema changes applied on startup. Existing rows and
+// columns are never modified or removed.
 async function ensureImageStorage() {
     await pool.query(`
         ALTER TABLE rooms
             ADD COLUMN IF NOT EXISTS image_data BYTEA,
-            ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(100);
+            ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(100),
+            ADD COLUMN IF NOT EXISTS image_updated_at TIMESTAMP;
         ALTER TABLE gallery
             ADD COLUMN IF NOT EXISTS image_data BYTEA,
-            ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(100);
+            ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(100),
+            ADD COLUMN IF NOT EXISTS image_updated_at TIMESTAMP;
+        ALTER TABLE houses
+            ADD COLUMN IF NOT EXISTS image_data BYTEA,
+            ADD COLUMN IF NOT EXISTS image_mime_type VARCHAR(100),
+            ADD COLUMN IF NOT EXISTS image_updated_at TIMESTAMP;
+
+        CREATE TABLE IF NOT EXISTS activity_log (
+            id SERIAL PRIMARY KEY,
+            admin_id INTEGER,
+            admin_email VARCHAR(150),
+            action VARCHAR(20) NOT NULL,
+            entity VARCHAR(50) NOT NULL,
+            entity_id INTEGER,
+            label VARCHAR(255),
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
+        CREATE INDEX IF NOT EXISTS idx_activity_created ON activity_log(created_at DESC);
     `);
 }
 
@@ -44,7 +64,7 @@ async function migrateLegacyImages() {
                 const data = await fs.readFile(path.join(legacyImagesDirectory, filename));
                 await pool.query(
                     `UPDATE ${collection.table}
-                     SET image_data = $1, image_mime_type = $2
+                     SET image_data = $1, image_mime_type = $2, image_updated_at = CURRENT_TIMESTAMP
                      WHERE id = $3`,
                     [data, mimeType, image.id]
                 );

@@ -9,9 +9,9 @@ const login = async (req, res, next) => {
 
     try {
 
-        const { email, password } = req.body;
+        const { email, password } = req.body || {};
 
-        if (!email || !password) {
+        if (typeof email !== "string" || typeof password !== "string" || !email.trim() || !password) {
 
             throw new ApiError(
                 400,
@@ -20,7 +20,7 @@ const login = async (req, res, next) => {
 
         }
 
-        const admin = await authModel.getAdminByEmail(email);
+        const admin = await authModel.getAdminByEmail(email.trim().toLowerCase());
 
         if (!admin) {
 
@@ -96,6 +96,24 @@ const login = async (req, res, next) => {
 
 };
 
+// GET /api/auth/me - confirms the token is valid and the admin still exists
+const getCurrentAdmin = async (req, res, next) => {
+    try {
+        const admin = await authModel.getAdminById(req.admin.id);
+
+        if (!admin) {
+            throw new ApiError(401, "Administrator account no longer exists.");
+        }
+
+        return res.status(200).json(
+            new ApiResponse(true, "Administrator retrieved successfully.", admin)
+        );
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
-    login
+    login,
+    getCurrentAdmin
 };

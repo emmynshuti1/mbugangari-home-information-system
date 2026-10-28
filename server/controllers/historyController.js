@@ -2,6 +2,7 @@ const historyModel = require("../models/historyModel");
 const houseModel = require("../models/houseModel");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+const logActivity = require("../utils/activity");
 
 // Get all history
 const getAllHistory = async (req, res, next) => {
@@ -100,6 +101,8 @@ const createHistory = async (req, res, next) => {
 
         const history = await historyModel.createHistory(req.body);
 
+        await logActivity(req, "create", "history", history.id, history.title);
+
         return res.status(201).json(
 
             new ApiResponse(
@@ -163,6 +166,8 @@ const updateHistory = async (req, res, next) => {
 
         }
 
+        await logActivity(req, "update", "history", history.id, history.title);
+
         return res.status(200).json(
 
             new ApiResponse(
@@ -205,6 +210,8 @@ const deleteHistory = async (req, res, next) => {
             );
 
         }
+
+        await logActivity(req, "delete", "history", history.id, history.title);
 
         return res.status(200).json(
 

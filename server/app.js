@@ -17,8 +17,11 @@ const roomRoutes = require("./routes/roomRoutes");
 const materialRoutes = require("./routes/materialRoutes");
 const historyRoutes = require("./routes/historyRoutes");
 const nearbyPlaceRoutes = require("./routes/nearbyPlaceRoutes");
+const activityRoutes = require("./routes/activityRoutes");
 
 const app = express();
+
+const clientDirectory = path.join(__dirname, "../client");
 
 const defaultOrigins = [
     "http://localhost:5000",
@@ -42,7 +45,16 @@ app.use(cors({
 app.set("trust proxy", 1);
 
 app.use(helmet({
-    crossOriginResourcePolicy: { policy: "cross-origin" }
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    contentSecurityPolicy: {
+        directives: {
+            // blob: is used for local previews of images before upload.
+            "img-src": ["'self'", "data:", "blob:"],
+            // The location section embeds an OpenStreetMap view.
+            "frame-src": ["https://www.openstreetmap.org"],
+            "connect-src": ["'self'", ...corsOrigins]
+        }
+    }
 }));
 
 app.use(express.json({ limit: "1mb" }));
@@ -63,11 +75,31 @@ app.use("/api/rooms", roomRoutes);
 app.use("/api/materials", materialRoutes);
 app.use("/api/history", historyRoutes);
 app.use("/api/nearby-places", nearbyPlaceRoutes);
+app.use("/api/activity", activityRoutes);
 
-app.use(express.static(path.join(__dirname, "../client")));
+app.use(express.static(clientDirectory, {
+    setHeaders(res, filePath) {
+        // Pages must always be revalidated so deployments show up immediately;
+        // assets can be cached briefly.
+        if (filePath.endsWith(".html")) {
+            res.setHeader("Cache-Control", "no-cache");
+        } else {
+            res.setHeader("Cache-Control", "public, max-age=3600");
+        }
+    }
+}));
 
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/index.html"));
+    res.sendFile(path.join(clientDirectory, "index.html"));
+});
+
+// Friendly page for unknown website URLs; API clients keep receiving JSON.
+app.use((req, res, next) => {
+    if (req.method === "GET" && !req.path.startsWith("/api/") && req.accepts("html")) {
+        return res.status(404).sendFile(path.join(clientDirectory, "404.html"));
+    }
+
+    next();
 });
 
 app.use(notFound);
@@ -103,4 +135,8 @@ async function startServer() {
     }
 }
 
-startServer();
+if (require.main === module) {
+    startServer();
+}
+
+module.exports = app;

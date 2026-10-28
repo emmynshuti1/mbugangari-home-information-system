@@ -2,6 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 
+const validateId = require("../middleware/validateId");
+
+router.param("id", validateId);
+
 const materialController = require("../controllers/materialController");
 const protect = require("../middleware/authMiddleware");
 const validateMaterial = require("../middleware/validateMaterial");

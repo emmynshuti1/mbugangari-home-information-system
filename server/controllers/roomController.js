@@ -1,13 +1,9 @@
 const roomModel = require("../models/roomModel");
 const houseModel = require("../models/houseModel");
+const logActivity = require("../utils/activity");
+const { withImageUrl, sendImage } = require("../utils/images");
 
-const serializeRoom = room => {
-    const { image_data, image_mime_type, has_image, ...data } = room;
-    return {
-        ...data,
-        image_url: (has_image || image_data) ? `/api/rooms/${data.id}/image` : data.image_url
-    };
-};
+const serializeRoom = room => withImageUrl(room, "/api/rooms");
 
 // GET all rooms
 const getAllRooms = async (req, res, next) => {
@@ -55,7 +51,7 @@ const createRoom = async (req, res, next) => {
 
         const roomData = {
             ...req.body,
-            image_url: req.file ? null : req.body.image_url,
+            image_url: req.file ? null : (req.body.image_url || null),
             image_data: req.file?.buffer || null,
             image_mime_type: req.file?.mimetype || null
         };
@@ -70,6 +66,8 @@ const createRoom = async (req, res, next) => {
         }
 
         const room = await roomModel.createRoom(roomData);
+
+        await logActivity(req, "create", "room", room.id, room.name);
 
         res.status(201).json({
             success: true,
@@ -94,7 +92,6 @@ const updateRoom = async (req, res, next) => {
 
         const roomData = {
             ...req.body,
-            image_url: req.file ? null : existingRoom.image_url,
             image_data: req.file?.buffer || null,
             image_mime_type: req.file?.mimetype || null
         };
@@ -117,6 +114,8 @@ const updateRoom = async (req, res, next) => {
             });
         }
 
+        await logActivity(req, "update", "room", room.id, `${room.name}${req.file ? " (image replaced)" : ""}`);
+
         res.status(200).json({
             success: true,
             message: "Room updated successfully.",
@@ -136,7 +135,7 @@ const getRoomImage = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Room image file not found." });
         }
 
-        res.type(room.image_mime_type || "image/jpeg").send(room.image_data);
+        sendImage(req, res, room);
     } catch (error) {
         next(error);
     }
@@ -154,6 +153,8 @@ const deleteRoom = async (req, res, next) => {
                 message: "Room not found."
             });
         }
+
+        await logActivity(req, "delete", "room", room.id, room.name);
 
         res.status(200).json({
             success: true,

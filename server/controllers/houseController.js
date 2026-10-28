@@ -1,6 +1,10 @@
 const houseModel = require("../models/houseModel");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+const logActivity = require("../utils/activity");
+const { withImageUrl, sendImage } = require("../utils/images");
+
+const serializeHouse = house => withImageUrl(house, "/api/houses");
 
 // GET /api/houses
 const getAllHouses = async (req, res, next) => {
@@ -14,7 +18,7 @@ const getAllHouses = async (req, res, next) => {
             ...new ApiResponse(
                 true,
                 "Houses retrieved successfully",
-                houses
+                houses.map(serializeHouse)
             ),
 
             count: houses.length
@@ -52,7 +56,7 @@ const getHouseById = async (req, res, next) => {
             new ApiResponse(
                 true,
                 "House retrieved successfully",
-                house
+                serializeHouse(house)
             )
 
         );
@@ -67,19 +71,36 @@ const getHouseById = async (req, res, next) => {
 
 };
 
+// GET /api/houses/:id/image
+const getHouseImage = async (req, res, next) => {
+    try {
+        const image = await houseModel.getHouseImageById(req.params.id);
+
+        if (!image || !image.image_data) {
+            throw new ApiError(404, "House image not found.");
+        }
+
+        sendImage(req, res, image);
+    } catch (error) {
+        next(error);
+    }
+};
+
 // POST /api/houses
 const createHouse = async (req, res, next) => {
 
     try {
 
-        const newHouse = await houseModel.createHouse(req.body);
+        const newHouse = await houseModel.createHouse(req.body, req.file || null);
+
+        await logActivity(req, "create", "house", newHouse.id, newHouse.name);
 
         return res.status(201).json(
 
             new ApiResponse(
                 true,
                 "House created successfully",
-                newHouse
+                serializeHouse(newHouse)
             )
 
         );
@@ -101,7 +122,8 @@ const updateHouse = async (req, res, next) => {
 
         const updatedHouse = await houseModel.updateHouse(
             req.params.id,
-            req.body
+            req.body,
+            req.file || null
         );
 
         if (!updatedHouse) {
@@ -113,12 +135,20 @@ const updateHouse = async (req, res, next) => {
 
         }
 
+        await logActivity(
+            req,
+            "update",
+            "house",
+            updatedHouse.id,
+            `${updatedHouse.name}${req.file ? " (cover image replaced)" : ""}`
+        );
+
         return res.status(200).json(
 
             new ApiResponse(
                 true,
                 "House updated successfully",
-                updatedHouse
+                serializeHouse(updatedHouse)
             )
 
         );
@@ -149,6 +179,8 @@ const deleteHouse = async (req, res, next) => {
 
         }
 
+        await logActivity(req, "delete", "house", deletedHouse.id, deletedHouse.name);
+
         return res.status(200).json(
 
             new ApiResponse(
@@ -171,6 +203,7 @@ const deleteHouse = async (req, res, next) => {
 module.exports = {
     getAllHouses,
     getHouseById,
+    getHouseImage,
     createHouse,
     updateHouse,
     deleteHouse

@@ -1,316 +1,162 @@
 # 🏡 Mbugangari Home Information System
 
-The **Mbugangari Home Information System** is a full-stack web application developed to digitally document and present information about a residential home located in Mbugangari Village, Rubavu District, Rwanda. The system provides visitors with detailed information about the house, including its rooms, construction materials, historical events, nearby places, and a photo gallery. It also includes an administrator dashboard for securely managing all application data.
+The **Mbugangari Home Information System** is a full-stack web application that documents and presents a residential home in Mbugangari Village, Rubavu District, Rwanda. Visitors can explore the house, its rooms, construction materials, history, nearby places and a photo gallery. Administrators manage all of this content from a secure admin portal.
 
-The project was developed using modern web technologies including HTML, CSS, JavaScript, Node.js, Express.js, PostgreSQL (Neon), and JWT authentication.
-
----
-
-# Features
-
-## Public Features
-
-- View information about the home
-- Browse rooms and their descriptions
-- Explore the construction materials used
-- View the home's historical timeline
-- Browse nearby places
-- View image gallery
-- Responsive design for desktop and mobile devices
-
-## Administrator Features
-
-- Secure administrator login using JWT
-- Manage house information
-- Add, edit and delete rooms
-- Manage gallery images
-- Manage construction materials
-- Manage history records
-- Manage nearby places
-- Upload room and gallery images with durable PostgreSQL-backed storage (10 MB per image)
+Built with HTML, CSS and vanilla JavaScript on the frontend, Node.js + Express on the backend, PostgreSQL (Neon) for storage, and JWT authentication.
 
 ---
 
-# Technologies Used
+## Features
 
-## Frontend
+### Public website
 
-- HTML5
-- CSS3
-- JavaScript (Vanilla)
+- Homepage with a hero photo, key facts (year built, rooms, floor area, nearest landmark), featured rooms, a photo mosaic, recent history and nearby places
+- **The House** page with full details, location and an OpenStreetMap map
+- **Rooms** with search, floor filter, sorting, dimensions/area and a full-screen viewer
+- **Gallery** with caption search and a keyboard/swipe-friendly lightbox
+- **Materials**, **History** timeline and **Nearby Places** (category filter, distances, walking time)
+- All content and images load from the API; loading skeletons, empty states and retryable error states everywhere
+- Responsive from 320 px phones to wide desktops, light and dark themes, reduced-motion support
+- Accessibility: semantic landmarks, skip link, keyboard navigation, focus styles, alt text from captions
+- SEO: per-page titles and descriptions, Open Graph tags, canonical URLs, `robots.txt`, `sitemap.xml`, friendly 404 page
 
-## Backend
+### Administration portal (`/admin/login.html`)
 
-- Node.js
-- Express.js
-
-## Database
-
-- PostgreSQL
-- Neon Database
-
-## Authentication
-
-- JSON Web Token (JWT)
-- bcrypt
-
-## Deployment
-
-- Render (Frontend)
-- Render (Backend)
-- Neon (Database)
+- Session verified against the API on every page; expired sessions redirect to sign-in with a message
+- **Dashboard** with live statistics, a content checklist (missing photos, captions, dates…), recent activity and latest uploads
+- **House**: edit details, coordinates and a homepage cover photo
+- **Rooms, Gallery, Materials, History, Nearby Places**: create, view, edit and delete, with search, filters and sortable columns
+- Image uploads: drag-and-drop or file picker, preview before upload, replace an existing image when editing, upload progress, type/size checks, automatic downscaling of very large photos and conversion of unsupported formats (e.g. AVIF) in the browser
+- Inline form validation, success/error toasts, confirmation dialogs for deletes and unsaved changes
 
 ---
 
-# Project Structure
+## Project structure
 
 ```
-Mbugangari Home Information System
-│
-├── client
-│   ├── admin
-│   ├── css
-│   ├── images
-│   ├── js
-│   ├── pages
-│   └── index.html
-│
-├── server
-│   ├── config
-│   ├── controllers
-│   ├── middleware
-│   ├── models
-│   ├── routes
-│   ├── uploads
-│   ├── utils
-│   ├── app.js
-│   └── package.json
-│
-├── database
-│   └── schema.sql
-│
-└── README.md
+client/                 Website and admin portal (static files served by Express)
+  admin/                Admin pages
+  css/style.css         Public website styles
+  css/admin.css         Admin portal styles
+  js/                   config, api client, shared site/admin modules, page scripts
+  images/               Original photos (used once to seed the database)
+server/
+  app.js                Express app (API + static website)
+  config/               Database pool, uploads (multer), startup migrations
+  controllers/ models/ routes/ middleware/ utils/
+  scripts/createAdmin.js
+  tests/                Unit tests (node:test)
+database/
+  schema.sql  seed.sql
+render.yaml             Render deployment blueprint
 ```
 
 ---
 
-# Database Schema
+## Running locally
 
-The application uses the following tables:
-
-- houses
-- rooms
-- gallery
-- materials
-- history
-- nearby_places
-- administrators
-
-Relationships are enforced using PostgreSQL foreign keys with cascade deletion.
-
-### Image persistence
-
-New room and gallery images are retained in PostgreSQL and served through public image endpoints. The server also keeps a local copy in `server/uploads` for local development. On startup, existing gallery and room records that reference files in `client/images` are migrated automatically when the original file is available.
-
----
-
-# Installation
-
-## 1. Clone the repository
-
-```bash
-git clone https://github.com/emmynshuti1/mbugangari-home-information-system.git
-
-cd mbugangari-home-information-system
-```
-
----
-
-## 2. Install backend dependencies
+Requirements: Node.js 18 or newer and a PostgreSQL database (Neon or local).
 
 ```bash
 cd server
-
 npm install
+cp .env.example .env        # then edit the values
 ```
 
----
-
-## 3. Configure Environment Variables
-
-Create a `.env` file inside the **server** directory.
-
-Example:
+`.env`:
 
 ```env
-DATABASE_URL=your_neon_database_connection_string
-JWT_SECRET=your_secret_key
+DATABASE_URL=postgresql://user:password@host/database
+JWT_SECRET=a-long-random-secret-of-at-least-16-characters
 PORT=5000
+NODE_ENV=development
+CORS_ORIGIN=http://localhost:5500
 ```
 
----
+> ⚠️ If `DATABASE_URL` points at the production Neon database, local changes edit live data. Use a separate Neon branch or a local PostgreSQL database for development.
 
-## 4. Create the database
+For a new database, run `database/schema.sql` (and optionally `database/seed.sql`). Existing databases are upgraded automatically on startup with additive, idempotent changes (new image columns and the `activity_log` table); no data is removed.
 
-Execute the SQL script:
-
-```
-database/schema.sql
-```
-
-using PostgreSQL or Neon SQL Editor.
-
----
-
-## 5. Start the backend
+Create or reset an administrator (the password is never stored in the repository):
 
 ```bash
-npm run dev
+ADMIN_NAME="Your Name" ADMIN_EMAIL=you@example.com ADMIN_PASSWORD="a long password" npm run create-admin
 ```
 
-or
+On Windows PowerShell:
+
+```powershell
+$env:ADMIN_NAME="Your Name"; $env:ADMIN_EMAIL="you@example.com"; $env:ADMIN_PASSWORD="a long password"; npm run create-admin
+```
+
+Start the server and open <http://localhost:5000>:
 
 ```bash
-npm start
+npm run dev     # with auto-reload
+npm start       # production mode
+npm test        # unit tests
 ```
+
+The website is served by the same Express server. If you prefer VS Code Live Server (port 5500), it automatically calls the API on port 5000.
 
 ---
 
-## 6. Run the frontend
+## Deployment (Render + Neon)
 
-Open the **client** folder using VS Code Live Server or any local web server.
+One Render **web service** serves both the website and the API.
 
----
+1. Push to GitHub. Either apply `render.yaml` as a Blueprint, or configure the existing service with:
+   - Root directory: `server`
+   - Build command: `npm ci --omit=dev`
+   - Start command: `npm start`
+   - Health check path: `/health`
+2. Set environment variables in Render: `DATABASE_URL` (Neon connection string), `JWT_SECRET` (long random value), `NODE_ENV=production`, and `CORS_ORIGIN` only if another site must call the API.
+3. Deploy. On startup the server applies the additive migrations and serves the site at the service URL.
 
-# API Endpoints
-
-## Authentication
-
-```
-POST /api/auth/login
-```
-
-## Houses
-
-```
-GET    /api/houses
-POST   /api/houses
-PUT    /api/houses/:id
-DELETE /api/houses/:id
-```
-
-## Rooms
-
-```
-GET    /api/rooms
-POST   /api/rooms
-PUT    /api/rooms/:id
-DELETE /api/rooms/:id
-```
-
-## Gallery
-
-```
-GET    /api/gallery
-POST   /api/gallery/upload
-GET    /api/gallery/:id/image
-DELETE /api/gallery/:id
-```
-
-## Materials
-
-```
-GET
-POST
-PUT
-DELETE
-```
-
-```
-/api/materials
-```
-
-## History
-
-```
-GET
-POST
-PUT
-DELETE
-```
-
-```
-/api/history
-```
-
-## Nearby Places
-
-```
-GET
-POST
-PUT
-DELETE
-```
-
-```
-/api/nearby-places
-```
+To host the frontend elsewhere, set `window.MBUGANGARI_API_ORIGIN = "https://your-api.onrender.com"` before `js/config.js` loads and add that site's origin to `CORS_ORIGIN`.
 
 ---
 
-# Security
+## API
 
-The application includes:
+All write endpoints require `Authorization: Bearer <token>`. Errors return `{ success: false, message }` with an appropriate status (400 validation, 401 auth, 404 not found).
 
-- Password hashing using bcrypt
-- JWT authentication
-- Helmet security middleware
-- CORS protection
-- Login rate limiting
-- Environment variables for sensitive credentials
+| Method | Endpoint | Notes |
+| --- | --- | --- |
+| POST | `/api/auth/login` | `{ email, password }` → token (rate-limited: 5 failed attempts / 15 min) |
+| GET | `/api/auth/me` | Current administrator |
+| GET | `/api/activity?limit=15` | Recent administrator changes (protected) |
+| GET/POST | `/api/houses` | POST accepts JSON or multipart with optional `image` (cover photo) |
+| GET/PUT/DELETE | `/api/houses/:id` | Deleting a house deletes all its content |
+| GET | `/api/houses/:id/image` | Cover photo |
+| GET/POST | `/api/rooms` | Multipart with `image` |
+| GET/PUT/DELETE | `/api/rooms/:id` | PUT replaces the image only when a new `image` is sent |
+| GET | `/api/rooms/:id/image` | |
+| GET/POST | `/api/gallery` (also `POST /api/gallery/upload`) | Multipart: `image`, `caption`, optional `house_id` |
+| GET/PUT/DELETE | `/api/gallery/:id` | PUT updates the caption and optionally replaces the image |
+| GET | `/api/gallery/:id/image` | |
+| GET/POST, GET/PUT/DELETE | `/api/materials`, `/api/history`, `/api/nearby-places` (+ `/:id`) | JSON |
+| GET | `/health` | Database health check |
 
----
-
-# Deployment
-
-Frontend:
-
-- Render
-
-Backend:
-
-- Render
-
-Database:
-
-- Neon PostgreSQL
+Images are stored in PostgreSQL and served with long-lived caching; their URLs include a version (`?v=`) that changes whenever an image is replaced. Uploads must be JPEG, PNG, GIF or WEBP (verified by file signature), up to 10 MB.
 
 ---
 
-# Future Improvements
+## Security
 
-- Password recovery
-- Administrator management
-- Search functionality
-- Image optimization
-- Activity logs
-- Unit and integration tests
-- Audit logging
-- Email notifications
-- Interactive maps
+- bcrypt password hashing, JWT (HS256, 24 h) with server-side session verification
+- Every create/update/delete route requires authentication
+- Server-side validation of all input (types, lengths, ranges, dates, ids) and image file signatures
+- Helmet security headers with a Content-Security-Policy, CORS allow-list, login rate limiting
+- All user content is rendered with `textContent` (no HTML injection)
+- Secrets live only in environment variables (`.env` is git-ignored)
 
 ---
 
-# Author
+## Author
 
-**Emmanuel Nshuti**
+**Emmanuel Nshuti**, Computer Science Student, Rwanda
 
-Computer Science Student
-
-Rwanda
-
----
-
-# License
+## License
 
 This project was developed for educational purposes as part of a web development learning project.

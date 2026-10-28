@@ -1,95 +1,49 @@
-document.addEventListener("DOMContentLoaded", loadHistory);
+// History page: chronological timeline of events.
+const { el } = Site;
+
+Site.ready(loadHistory);
 
 async function loadHistory() {
-
-    const loading = document.getElementById("loading");
-
-    try {
-
-        const response = await getHistory();
-
-        if (!response || !response.success) {
-
-            loading.textContent = "Unable to load home history.";
-
-            return;
-
-        }
-
-        const history = response.data;
-
-        // Sort by event date (oldest to newest)
-        history.sort((a, b) => new Date(a.event_date) - new Date(b.event_date));
-
-        loading.style.display = "none";
-
-        displayHistory(history);
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        loading.textContent = "Failed to connect to the server.";
-
-    }
-
-}
-
-function displayHistory(history) {
-
     const container = document.getElementById("historyContainer");
+    const summary = document.getElementById("historySummary");
+    Site.renderSkeletons(container, 3, "line");
 
-    container.innerHTML = "";
+    const response = await getHistory();
 
-    if (history.length === 0) {
-
-        const empty = document.createElement("div");
-        empty.className = "no-history";
-        empty.textContent = "No history events available.";
-
-        container.appendChild(empty);
-
+    if (!response || !response.success) {
+        Site.renderState(container, { type: "error", title: "Unable to load the history", message: response?.message, retry: loadHistory });
         return;
-
     }
 
-    history.forEach(event => {
+    // Oldest first; undated events go last.
+    const history = (response.data || []).slice().sort((a, b) =>
+        (a.event_date || "9999").localeCompare(b.event_date || "9999"));
 
-        const date = event.event_date
-            ? new Date(event.event_date).toLocaleDateString()
-            : "Unknown Date";
+    if (!history.length) {
+        summary.textContent = "";
+        Site.renderState(container, { title: "No history yet", message: "Historical events will appear here once they are added." });
+        return;
+    }
 
-        const item = document.createElement("div");
-        item.className = "timeline-item";
+    const years = history.map(event => Site.dateParts(event.event_date)?.year).filter(Boolean);
+    summary.replaceChildren(
+        el("span", {}, el("strong", { text: history.length }), ` event${history.length === 1 ? "" : "s"}`),
+        years.length > 1 && years[0] !== years[years.length - 1]
+            ? el("span", {}, "from ", el("strong", { text: years[0] }), " to ", el("strong", { text: years[years.length - 1] }))
+            : ""
+    );
 
-        const dot = document.createElement("div");
-        dot.className = "timeline-dot";
+    container.setAttribute("aria-busy", "false");
+    container.replaceChildren(...history.map(event => {
+        const parts = Site.dateParts(event.event_date);
+        return el("article", { className: "timeline-item reveal" },
+            el("div", { className: "timeline-year" },
+                el("strong", { text: parts ? parts.year : "—" }),
+                el("span", { text: parts ? Site.formatDate(event.event_date).replace(/ \d{4}$/, "") : "Date not recorded" })),
+            el("div", { className: "card timeline-card" },
+                el("h3", { text: event.title }),
+                el("p", { text: event.description || "No description available." })));
+    }));
 
-        const content = document.createElement("div");
-        content.className = "timeline-content";
-
-        const dateDiv = document.createElement("div");
-        dateDiv.className = "timeline-date";
-        dateDiv.textContent = date;
-
-        const title = document.createElement("h2");
-        title.textContent = event.title || "Untitled Event";
-
-        const description = document.createElement("p");
-        description.textContent =
-            event.description || "No description available.";
-
-        content.appendChild(dateDiv);
-        content.appendChild(title);
-        content.appendChild(description);
-
-        item.appendChild(dot);
-        item.appendChild(content);
-
-        container.appendChild(item);
-
-    });
-
+    Site.reveal(container);
 }

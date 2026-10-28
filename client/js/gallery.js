@@ -1,130 +1,63 @@
+// Gallery page: searchable photo grid with a full-screen viewer.
+const { el } = Site;
+
 let galleryImages = [];
 
-document.addEventListener("DOMContentLoaded", () => {
-
+Site.ready(() => {
+    document.getElementById("searchGallery").addEventListener("input", displayGallery);
     loadGallery();
-
-    const modal = document.getElementById("imageModal");
-    const closeBtn = document.querySelector(".close");
-
-    closeBtn.addEventListener("click", () => {
-        modal.style.display = "none";
-    });
-
-    modal.addEventListener("click", (e) => {
-
-        if (e.target === modal) {
-            modal.style.display = "none";
-        }
-
-    });
-
 });
 
 async function loadGallery() {
-
-    const loading = document.getElementById("loading");
+    const container = document.getElementById("galleryContainer");
+    container.classList.add("gallery-grid");
+    Site.renderSkeletons(container, 6, "photo");
 
     try {
-
-        const response = await getGallery();
-
-        if (!response || !response.success) {
-
-            loading.textContent = "Unable to load gallery.";
-
-            return;
-
-        }
-
-        galleryImages = response.data;
-
-        loading.style.display = "none";
-
-        displayGallery(galleryImages);
-
+        galleryImages = await Site.loadGallery();
+        displayGallery();
+    } catch (error) {
+        container.classList.remove("gallery-grid");
+        Site.renderState(container, { type: "error", title: "Unable to load the gallery", message: error.message, retry: loadGallery });
     }
-
-    catch (error) {
-
-        console.error(error);
-
-        loading.textContent = "Server connection failed.";
-
-    }
-
 }
 
-function displayGallery(images) {
-
+function displayGallery() {
     const container = document.getElementById("galleryContainer");
+    const query = document.getElementById("searchGallery").value.trim().toLowerCase();
+    const images = galleryImages.filter(image => (image.caption || "").toLowerCase().includes(query));
 
-    container.innerHTML = "";
+    document.getElementById("galleryCount").textContent =
+        `${images.length} photo${images.length === 1 ? "" : "s"}${query ? " found" : ""}`;
 
-    if (images.length === 0) {
-
-        const message = document.createElement("h2");
-        message.style.textAlign = "center";
-        message.textContent = "No gallery images available.";
-
-        container.appendChild(message);
-
+    if (!images.length) {
+        container.classList.remove("gallery-grid");
+        Site.renderState(container, galleryImages.length
+            ? { title: "No matching photos", message: "Try a different search." }
+            : { title: "No photos yet", message: "Photos will appear here once they are uploaded." });
         return;
-
     }
 
-    images.forEach(image => {
+    container.classList.add("gallery-grid");
+    container.setAttribute("aria-busy", "false");
 
-        const imagePath = normalizeImageUrl(image.image_url);
+    const items = images.map(image => ({
+        src: image.image_url,
+        title: image.caption || "Mbugangari Home",
+        text: image.uploaded_at ? `Added ${Site.formatDate(image.uploaded_at.slice(0, 10))}` : ""
+    }));
 
-        const uploadDate = image.uploaded_at
-            ? new Date(image.uploaded_at).toLocaleDateString()
-            : "Unknown";
+    container.replaceChildren(...images.map((image, index) =>
+        el("button", {
+            className: "photo reveal",
+            type: "button",
+            "aria-label": `View photo: ${image.caption || "Mbugangari Home"}`,
+            onclick: () => Site.openLightbox(items, index)
+        },
+        Site.image(image.image_url, image.caption || "Mbugangari Home"),
+        el("span", { className: "photo-caption" },
+            image.caption || "",
+            image.uploaded_at ? el("small", { text: Site.formatDate(image.uploaded_at.slice(0, 10), { short: true }) }) : null))));
 
-        const card = document.createElement("div");
-        card.className = "gallery-card";
-
-        const img = document.createElement("img");
-
-        img.src = imagePath;
-        img.alt = image.caption || "Gallery Image";
-
-        img.onerror = function () {
-            this.src = "../images/no-image.jpg";
-        };
-
-        img.addEventListener("click", () => {
-            openModal(imagePath, image.caption || "");
-        });
-
-        const body = document.createElement("div");
-        body.className = "gallery-body";
-
-        const title = document.createElement("h3");
-        title.textContent = image.caption || "Home Image";
-
-        const date = document.createElement("p");
-        date.className = "gallery-date";
-        date.textContent = `Uploaded: ${uploadDate}`;
-
-        body.appendChild(title);
-        body.appendChild(date);
-
-        card.appendChild(img);
-        card.appendChild(body);
-
-        container.appendChild(card);
-
-    });
-
-}
-
-function openModal(image, caption) {
-
-    document.getElementById("modalImage").src = image;
-
-    document.getElementById("modalCaption").textContent = caption;
-
-    document.getElementById("imageModal").style.display = "flex";
-
+    Site.reveal(container);
 }

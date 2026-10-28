@@ -1,53 +1,14 @@
-const ApiResponse = require("../utils/ApiResponse");
+const { createValidator, houseIdRule } = require("../utils/validation");
 
-const validateRoom = (req, res, next) => {
-  const {
-    house_id,
-    name,
-    floor,
-    length,
-    width,
-    description
-  } = req.body;
-
-  const errors = [];
-
-  // Required fields
-  if (!house_id) {
-    errors.push("House ID is required.");
-  }
-
-  if (!name || name.trim() === "") {
-    errors.push("Room name is required.");
-  }
-
-  // Optional validations
-  if (length !== undefined && isNaN(Number(length))) {
-    errors.push("Length must be a valid number.");
-  }
-
-  if (width !== undefined && isNaN(Number(width))) {
-    errors.push("Width must be a valid number.");
-  }
-
-  if (floor && floor.length > 50) {
-    errors.push("Floor cannot exceed 50 characters.");
-  }
-
-  if (description && description.length > 1000) {
-    errors.push("Description is too long.");
-  }
-
-  if (errors.length > 0) {
-   return res.status(400).json(
-    new ApiResponse(
-        false,
-        "Validation failed",
-        errors
-    ));
-  }
-
-  next();
-};
+const validateRoom = createValidator({
+    house_id: houseIdRule,
+    name: { label: "Room name", required: true, max: 100 },
+    floor: { label: "Floor", max: 50 },
+    length: { label: "Length", type: "number", exclusiveMin: 0, max: 999.99 },
+    width: { label: "Width", type: "number", exclusiveMin: 0, max: 999.99 },
+    description: { label: "Description", max: 2000 },
+    // Legacy: rooms may reference an external image URL instead of an upload.
+    image_url: { label: "Image URL", max: 255 }
+});
 
 module.exports = validateRoom;

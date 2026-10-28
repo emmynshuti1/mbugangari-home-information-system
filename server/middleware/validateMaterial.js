@@ -1,37 +1,10 @@
-const ApiResponse = require("../utils/ApiResponse");
+const { createValidator, houseIdRule } = require("../utils/validation");
 
-const validateMaterial = (req, res, next) => {
-
-    const {
-        house_id,
-        component,
-        material_name
-    } = req.body;
-
-    const errors = [];
-
-    if (!house_id) {
-        errors.push("House ID is required.");
-    }
-
-    if (!component || component.trim() === "") {
-        errors.push("Component is required.");
-    }
-
-    if (!material_name || material_name.trim() === "") {
-        errors.push("Material name is required.");
-    }
-
-    if (errors.length > 0) {
-       return res.status(400).json(
-      new ApiResponse(
-        false,
-        "Validation failed",
-        errors
-    ));
-    }
-
-    next();
-};
+const validateMaterial = createValidator({
+    house_id: houseIdRule,
+    component: { label: "Component", required: true, max: 100 },
+    material_name: { label: "Material name", required: true, max: 100 },
+    description: { label: "Description", max: 2000 }
+});
 
 module.exports = validateMaterial;

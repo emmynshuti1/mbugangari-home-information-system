@@ -1,101 +1,64 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Administrator Login | Mbugangari Home Information System</title>
-
-    <link rel="stylesheet" href="../css/login.css">
-
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Sign in · Mbugangari Home Admin</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&amp;family=Poppins:wght@400;500;600&amp;display=swap">
+    <link rel="stylesheet" href="../css/admin.css">
+    <script src="../js/theme.js"></script>
 </head>
-
 <body>
 
-    <div class="login-container">
-
-        <div class="login-card">
-
-            <div class="login-logo">
-
-                🏡
-
-            </div>
-
-            <h1>
-
-                Administrator Login
-
-            </h1>
-
-            <p>
-
-                Sign in to manage the Mbugangari Home Information System.
-
-            </p>
-
-            <form id="loginForm">
-
-                <label for="email">
-
-                    Email Address
-
-                </label>
-
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="Enter your email"
-                    autocomplete="email"
-                    required
-                >
-
-                <label for="password">
-
-                    Password
-
-                </label>
-
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Enter your password"
-                    autocomplete="current-password"
-                    required
-                >
-
-                <button
-                    type="submit"
-                    id="loginBtn"
-                >
-
-                    Login
-
-                </button>
-
-            </form>
-
-            <div id="message"></div>
-
-            <a href="../index.html" class="back-home">
-
-                ← Back to Home
-
-            </a>
-
-        </div>
-
+<div class="auth">
+    <div class="auth-art">
+        <img src="../images/front-view.jpg" alt="">
+        <h2>Keep the story of the home up to date.</h2>
+        <p>Manage the house details, rooms, photos, materials, history and nearby places shown on the public website.</p>
     </div>
 
-    <script src="../js/config.js"></script>
-    <script src="../js/login.js"></script>
-    <script src="../js/theme.js"></script>
+    <main class="auth-panel" id="main">
+        <div class="auth-top">
+            <a class="btn btn-ghost btn-sm" href="../index.html" data-icon="arrowLeft">Back to website</a>
+            <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"></button>
+        </div>
 
+        <div class="auth-card">
+            <img src="../favicon.svg" alt="" width="48" height="48">
+            <div>
+                <h1>Administrator sign in</h1>
+                <p>Sign in to manage the Mbugangari Home website.</p>
+            </div>
+
+            <p id="message" class="form-message" role="status" aria-live="polite"></p>
+
+            <form id="loginForm" style="display:grid;gap:16px" novalidate>
+                <div class="form-field">
+                    <label for="email">Email address</label>
+                    <input type="email" id="email" name="email" autocomplete="username" required autofocus>
+                </div>
+                <div class="form-field">
+                    <label for="password">Password</label>
+                    <div class="password-field">
+                        <input type="password" id="password" name="password" autocomplete="current-password" required>
+                        <button type="button" id="togglePassword" aria-label="Show password" aria-pressed="false" data-icon="eye"></button>
+                    </div>
+                </div>
+                <button class="btn btn-block" type="submit" style="min-height:46px">Sign in</button>
+            </form>
+        </div>
+    </main>
+</div>
+
+<script src="../js/config.js"></script>
+<script src="../js/api.js"></script>
+<script src="../js/icons.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin.js"></script>
+<script src="../js/login.js"></script>
 </body>
-
 </html>

@@ -27,6 +27,12 @@ CREATE TABLE houses (
 
     longitude DECIMAL(10,7) CHECK (longitude BETWEEN -180 AND 180),
 
+    image_data BYTEA,
+
+    image_mime_type VARCHAR(100),
+
+    image_updated_at TIMESTAMP,
+
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
 );
@@ -54,6 +60,8 @@ CREATE TABLE rooms (
     image_data BYTEA,
 
     image_mime_type VARCHAR(100),
+
+    image_updated_at TIMESTAMP,
 
     CONSTRAINT fk_room_house FOREIGN KEY(house_id) REFERENCES houses(id) ON DELETE CASCADE
 
@@ -91,6 +99,8 @@ CREATE TABLE gallery (
     image_data BYTEA,
 
     image_mime_type VARCHAR(100),
+
+    image_updated_at TIMESTAMP,
 
     caption VARCHAR(255),
 
@@ -154,7 +164,33 @@ CREATE TABLE administrators (
 
 );
 
+-- ACTIVITY LOG (administrator changes shown on the dashboard)
+
+CREATE TABLE activity_log (
+
+    id SERIAL PRIMARY KEY,
+
+    admin_id INTEGER,
+
+    admin_email VARCHAR(150),
+
+    action VARCHAR(20) NOT NULL,
+
+    entity VARCHAR(50) NOT NULL,
+
+    entity_id INTEGER,
+
+    label VARCHAR(255),
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+);
+
 -- INDEXES
+
+CREATE INDEX idx_activity_created
+ON activity_log(created_at DESC);
+
 
 CREATE INDEX idx_rooms_house
 ON rooms(house_id);

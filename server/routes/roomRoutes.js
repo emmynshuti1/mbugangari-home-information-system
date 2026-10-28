@@ -2,6 +2,10 @@ const express = require("express");
 
 const router = express.Router();
 
+const validateId = require("../middleware/validateId");
+
+router.param("id", validateId);
+
 const roomController = require("../controllers/roomController");
 const protect = require("../middleware/authMiddleware");
 const validateRoom = require("../middleware/validateRoom");

@@ -1,41 +1,11 @@
-const ApiResponse = require("../utils/ApiResponse");
+const { createValidator, houseIdRule } = require("../utils/validation");
 
-const validateNearbyPlace = (req, res, next) => {
-
-    const {
-        house_id,
-        name,
-        distance_meters
-    } = req.body;
-
-    const errors = [];
-
-    if (!house_id) {
-        errors.push("House ID is required.");
-    }
-
-    if (!name || name.trim() === "") {
-        errors.push("Place name is required.");
-    }
-
-    if (
-        distance_meters !== undefined &&
-        Number(distance_meters) < 0
-    ) {
-        errors.push("Distance must be zero or greater.");
-    }
-
-    if (errors.length > 0) {
-      return res.status(400).json(
-      new ApiResponse(
-        false,
-        "Validation failed",
-        errors
-    ));
-    }
-
-    next();
-
-};
+const validateNearbyPlace = createValidator({
+    house_id: houseIdRule,
+    name: { label: "Place name", required: true, max: 100 },
+    category: { label: "Category", max: 50 },
+    distance_meters: { label: "Distance", type: "integer", min: 0, max: 1000000 },
+    description: { label: "Description", max: 2000 }
+});
 
 module.exports = validateNearbyPlace;

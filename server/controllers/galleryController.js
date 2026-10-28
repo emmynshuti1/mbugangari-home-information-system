@@ -2,13 +2,36 @@ const galleryModel = require("../models/galleryModel");
 const houseModel = require("../models/houseModel");
 const ApiError = require("../utils/ApiError");
 const ApiResponse = require("../utils/ApiResponse");
+const logActivity = require("../utils/activity");
+const { withImageUrl, sendImage } = require("../utils/images");
 
-const serializeImage = image => {
-    const { image_data, image_mime_type, has_image, ...data } = image;
-    return {
-        ...data,
-        image_url: (has_image || image_data) ? `/api/gallery/${data.id}/image` : data.image_url
-    };
+const serializeImage = image => withImageUrl(image, "/api/gallery");
+
+// Resolve the house an image belongs to: the requested one, or the first house.
+const resolveHouseId = async requestedHouseId => {
+    if (requestedHouseId) {
+        const house = await houseModel.getHouseById(requestedHouseId);
+
+        if (!house) {
+            throw new ApiError(
+                400,
+                "The selected house ID does not exist. Please create house information first or select a valid house."
+            );
+        }
+
+        return requestedHouseId;
+    }
+
+    const houses = await houseModel.getAllHouses();
+
+    if (!houses.length) {
+        throw new ApiError(
+            400,
+            "No house records were found. Create a house before uploading gallery images."
+        );
+    }
+
+    return houses[0].id;
 };
 
 // GET all gallery images
@@ -44,6 +67,23 @@ const getAllImages = async (req, res, next) => {
 
 };
 
+// GET one gallery image record
+const getImageById = async (req, res, next) => {
+    try {
+        const image = await galleryModel.getImageById(req.params.id);
+
+        if (!image) {
+            throw new ApiError(404, "Gallery image not found.");
+        }
+
+        return res.status(200).json(
+            new ApiResponse(true, "Gallery image retrieved successfully.", serializeImage(image))
+        );
+    } catch (error) {
+        next(error);
+    }
+};
+
 // POST upload image
 const uploadImage = async (req, res, next) => {
 
@@ -61,51 +101,7 @@ const uploadImage = async (req, res, next) => {
 
         }
 
-        const requestedHouseId = req.body.house_id
-            ? Number(req.body.house_id)
-            : null;
-
-        let houseIdToUse = null;
-
-        if (requestedHouseId) {
-
-            const house = await houseModel.getHouseById(requestedHouseId);
-
-            if (!house) {
-
-                throw new ApiError(
-
-                    400,
-
-                    "The selected house ID does not exist. Please create house information first or select a valid house."
-
-                );
-
-            }
-
-            houseIdToUse = requestedHouseId;
-
-        }
-
-        else {
-
-            const houses = await houseModel.getAllHouses();
-
-            if (!houses.length) {
-
-                throw new ApiError(
-
-                    400,
-
-                    "No house records were found. Create a house before uploading gallery images."
-
-                );
-
-            }
-
-            houseIdToUse = houses[0].id;
-
-        }
+        const houseIdToUse = await resolveHouseId(req.body.house_id);
 
         const image = await galleryModel.createImage({
 
@@ -120,6 +116,8 @@ const uploadImage = async (req, res, next) => {
             image_mime_type: req.file.mimetype
 
         });
+
+        await logActivity(req, "create", "gallery", image.id, image.caption || "Gallery image");
 
         return res.status(201).json(
 
@@ -145,6 +143,39 @@ const uploadImage = async (req, res, next) => {
 
 };
 
+// PUT update caption and optionally replace the image file
+const updateImage = async (req, res, next) => {
+    try {
+        const existing = await galleryModel.getImageById(req.params.id);
+
+        if (!existing) {
+            throw new ApiError(404, "Gallery image not found.");
+        }
+
+        const houseId = await resolveHouseId(req.body.house_id || existing.house_id);
+
+        const image = await galleryModel.updateImage(
+            req.params.id,
+            { house_id: houseId, caption: req.body.caption },
+            req.file || null
+        );
+
+        await logActivity(
+            req,
+            "update",
+            "gallery",
+            image.id,
+            `${image.caption || "Gallery image"}${req.file ? " (image replaced)" : ""}`
+        );
+
+        return res.status(200).json(
+            new ApiResponse(true, "Gallery image updated successfully.", serializeImage(image))
+        );
+    } catch (error) {
+        next(error);
+    }
+};
+
 const getImageFile = async (req, res, next) => {
     try {
         const image = await galleryModel.getImageFileById(req.params.id);
@@ -153,7 +184,7 @@ const getImageFile = async (req, res, next) => {
             throw new ApiError(404, "Gallery image file not found.");
         }
 
-        res.type(image.image_mime_type || "image/jpeg").send(image.image_data);
+        sendImage(req, res, image);
     } catch (error) {
         next(error);
     }
@@ -177,6 +208,8 @@ const deleteImage = async (req, res, next) => {
             );
 
         }
+
+        await logActivity(req, "delete", "gallery", image.id, image.caption || "Gallery image");
 
         return res.status(200).json(
 
@@ -206,9 +239,13 @@ module.exports = {
 
     getAllImages,
 
+    getImageById,
+
     getImageFile,
 
     uploadImage,
+
+    updateImage,
 
     deleteImage
 

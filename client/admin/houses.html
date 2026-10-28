@@ -1,342 +1,102 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
-    <title>House Management</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <title>House · Mbugangari Home Admin</title>
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&amp;family=Poppins:wght@400;500;600&amp;display=swap">
     <link rel="stylesheet" href="../css/admin.css">
-
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-
+    <script src="../js/theme.js"></script>
 </head>
-
 <body>
 
-<div class="dashboard">
+<div class="boot" aria-live="polite"><div><span class="spinner" aria-hidden="true"></span> Checking your session…</div></div>
 
-   <aside class="sidebar">
+<div class="admin">
+    <aside class="sidebar" id="sidebar" aria-label="Administration">
+        <a class="sidebar-brand" href="dashboard.html">
+            <img src="../favicon.svg" alt="" width="36" height="36">
+            <div><strong>Mbugangari Home</strong><span>Administration</span></div>
+        </a>
 
-        <h2>🏡 Mbugangari Home </h2>
+        <p class="sidebar-label">Content</p>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" data-icon="dashboard">Dashboard</a>
+            <a href="houses.html" aria-current="page" data-icon="home">House</a>
+            <a href="rooms.html" data-icon="door">Rooms</a>
+            <a href="gallery.html" data-icon="image">Gallery</a>
+            <a href="materials.html" data-icon="brick">Materials</a>
+            <a href="history.html" data-icon="clock">History</a>
+            <a href="places.html" data-icon="pin">Nearby Places</a>
+        </nav>
 
-        <ul>
-            <li>
-                <a href="dashboard.html"><span>📊</span>Dashboard</a>
-            </li>
-
-            <li>
-                <a href="houses.html" class="active"><span>🏠</span>House</a>
-            </li>
-
-            <li>
-                <a href="rooms.html"><span>🚪</span>Rooms</a>
-            </li>
-
-            <li>
-                <a href="gallery.html"><span>🖼️</span>Gallery</a>
-            </li>
-
-            <li>
-                <a href="materials.html"><span>🧱</span>Materials</a>
-            </li>
-
-            <li>
-                <a href="history.html"><span>📜</span>History</a>
-            </li>
-
-            <li>
-                <a href="places.html"><span>📍</span>Nearby Places</a>
-            </li>
-
-        </ul>
-
+        <div class="sidebar-footer">
+            <nav class="sidebar-nav">
+                <a href="../index.html" target="_blank" rel="noopener" data-icon="globe">View website</a>
+                <button type="button" data-logout data-icon="logout">Log out</button>
+            </nav>
+            <div class="sidebar-user">
+                <span class="avatar" data-admin-initials>A</span>
+                <div><strong data-admin-name>Administrator</strong><span data-admin-email></span></div>
+            </div>
+        </div>
     </aside>
+    <div class="sidebar-backdrop"></div>
 
-    <main class="main-content">
-
+    <div class="main">
         <header class="topbar">
-
-            <h1>House Management</h1>
-
-            <button
-                id="themeToggle"
-                class="theme-toggle"
-                aria-label="Toggle theme">
-
-                🌙
-
-            </button>
-
-            <button id="logoutBtn">
-
-                Logout
-
-            </button>
-
+            <button class="icon-btn menu-toggle" type="button" aria-controls="sidebar" aria-expanded="false" aria-label="Open menu" data-icon="menu"></button>
+            <div>
+                <h1>House</h1>
+                <p>Details, location and cover photo of the home</p>
+            </div>
+            <div class="topbar-actions">
+                <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"></button>
+            </div>
         </header>
 
-        <div class="form-card">
-
-            <h2>
-
-                Edit House Information
-
-            </h2>
-
-            <form id="houseForm">
-
-                <div class="form-grid">
-
-                    <div class="form-group">
-
-                        <label for="name">
-
-                            House Name
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="name"
-                            required
-                        >
-
+        <main class="content" id="main">
+            <section class="panel">
+                <div class="panel-head">
+                    <div><h2 id="formTitle">House information</h2><p id="formSubtitle"></p></div>
+                    <div class="quick-actions">
+                        <label id="houseSelectWrap" hidden><span class="visually-hidden">Select house</span><select class="input" id="houseSelect" style="width:auto"></select></label>
+                        <button class="btn btn-secondary btn-sm" type="button" id="newHouseBtn" data-icon="plus" hidden>New house</button>
+                        <a class="btn btn-ghost btn-sm" href="../pages/about.html" target="_blank" rel="noopener" data-icon="external">View on website</a>
                     </div>
-
-                    <div class="form-group">
-
-                        <label for="owner">
-
-                            Owner
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="owner"
-                            required
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="year_built">
-
-                            Year Built
-
-                        </label>
-
-                        <input
-                            type="number"
-                            id="year_built"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="village">
-
-                            Village
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="village"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="sector">
-
-                            Sector
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="sector"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="district">
-
-                            District
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="district"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="province">
-
-                            Province
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="province"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="country">
-
-                            Country
-
-                        </label>
-
-                        <input
-                            type="text"
-                            id="country"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="latitude">
-
-                            Latitude
-
-                        </label>
-
-                        <input
-                            type="number"
-                            step="0.0000001"
-                            id="latitude"
-                        >
-
-                    </div>
-
-                    <div class="form-group">
-
-                        <label for="longitude">
-
-                            Longitude
-
-                        </label>
-
-                        <input
-                            type="number"
-                            step="0.0000001"
-                            id="longitude"
-                        >
-
-                    </div>
-
                 </div>
-
-                <div class="form-group">
-
-                    <label for="description">
-
-                        Description
-
-                    </label>
-
-                    <textarea
-                        id="description"
-                        rows="6"
-                        required
-                    ></textarea>
-
+                <div class="panel-body" style="display:grid;gap:18px">
+                    <p id="houseStatus" class="form-message" role="status"></p>
+                    <div id="houseFormAlert" class="form-alert" role="alert" hidden></div>
+                    <form id="houseForm" class="form-grid" novalidate>
+                        <div class="form-actions form-field full">
+                            <button class="btn btn-secondary" type="button" id="resetHouseBtn">Discard changes</button>
+                            <button class="btn" type="submit" id="saveHouseBtn">Save changes</button>
+                        </div>
+                    </form>
                 </div>
+            </section>
 
-                <div class="form-actions">
-
-                    <button
-                        type="submit"
-                        id="saveHouse"
-                        class="saveBtn">
-
-                        Save Changes
-
-                    </button>
-
+            <section class="panel" id="dangerZone" hidden>
+                <div class="panel-head">
+                    <div><h2>Danger zone</h2><p>Deleting the house also deletes all of its rooms, photos, materials, history and nearby places.</p></div>
+                    <button class="btn btn-danger btn-sm" type="button" id="deleteHouseBtn" data-icon="trash">Delete house</button>
                 </div>
-
-            </form>
-
-        </div>
-
-    </main>
-
-</div>
-
-<div id="confirmModal" class="modal hidden">
-
-    <div class="modal-content">
-
-        <h3 id="confirmTitle">
-
-            Confirm Action
-
-        </h3>
-
-        <p id="confirmMessage">
-
-            Are you sure?
-
-        </p>
-
-        <div class="modal-buttons">
-
-            <button
-                id="confirmCancel"
-                class="secondaryBtn">
-
-                Cancel
-
-            </button>
-
-            <button
-                id="confirmOk"
-                class="deleteBtn">
-
-                Delete
-
-            </button>
-
-        </div>
-
+            </section>
+        </main>
     </div>
-
 </div>
-
-<div id="toast" class="toast"></div>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
+<script src="../js/icons.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin.js"></script>
-<script src="../js/ui.js"></script>
+<script src="../js/adminCrud.js"></script>
 <script src="../js/adminHouse.js"></script>
-<script src="../js/theme.js"></script>
-
 </body>
-
 </html>

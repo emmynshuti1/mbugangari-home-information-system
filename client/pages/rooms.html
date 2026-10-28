@@ -1,209 +1,134 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en" class="no-js">
 <head>
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Rooms | Mbugangari Home Information System</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rooms | Mbugangari Home</title>
+    <meta name="description" content="Explore every room in the Mbugangari Home: its purpose, floor, dimensions and floor area.">
+    <meta name="theme-color" content="#1f6f43">
+    <link rel="canonical" href="https://mbugangari-home-api.onrender.com/pages/rooms.html">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Mbugangari Home">
+    <meta property="og:title" content="Rooms | Mbugangari Home">
+    <meta property="og:description" content="Explore every room in the Mbugangari Home: its purpose, floor, dimensions and floor area.">
+    <meta property="og:url" content="https://mbugangari-home-api.onrender.com/pages/rooms.html">
+    <meta property="og:image" content="https://mbugangari-home-api.onrender.com/images/front-view.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="../favicon.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&amp;family=Poppins:wght@400;500;600&amp;display=swap">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/rooms.css">
-    <link rel="stylesheet" href="../css/responsive.css">
-
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-
+    <script src="../js/theme.js"></script>
 </head>
-
 <body>
 
-<header>
+<a class="skip-link" href="#main">Skip to content</a>
 
-    <nav class="navbar">
+<header class="site-header">
+    <div class="container nav">
+        <a class="brand" href="../index.html">
+            <img src="../favicon.svg" alt="" width="34" height="34">
+            <span>Mbugangari Home</span>
+        </a>
 
-        <div class="logo">
-
-            <a href="../index.html">
-
-                Mbugangari Home
-
-            </a>
-
+        <div class="nav-actions">
+            <nav class="nav-menu" id="siteMenu" aria-label="Main">
+                <ul class="nav-links">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../pages/about.html">The House</a></li>
+                    <li><a href="../pages/rooms.html" aria-current="page">Rooms</a></li>
+                    <li><a href="../pages/gallery.html">Gallery</a></li>
+                    <li><a href="../pages/materials.html">Materials</a></li>
+                    <li><a href="../pages/history.html">History</a></li>
+                    <li><a href="../pages/location.html">Nearby Places</a></li>
+                </ul>
+                <a class="btn btn-ghost btn-sm nav-admin" href="../admin/login.html">Admin</a>
+            </nav>
+            <button class="icon-btn" type="button" data-theme-toggle aria-label="Toggle theme"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+            <button class="icon-btn nav-toggle" type="button" aria-controls="siteMenu" aria-expanded="false" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg></button>
         </div>
-
-        <ul class="nav-links">
-
-            <li><a href="../index.html">Home</a></li>
-
-            <li><a href="about.html">About</a></li>
-
-            <li><a href="rooms.html" class="active">Rooms</a></li>
-
-            <li><a href="gallery.html">Gallery</a></li>
-
-            <li><a href="materials.html">Materials</a></li>
-
-            <li><a href="history.html">History</a></li>
-
-            <li><a href="location.html">Nearby Places</a></li>
-
-            <li><a href="../admin/login.html">Admin</a></li>
-
-            <li>
-
-                <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
-                    🌙
-                </button>
-
-            </li>
-
-        </ul>
-
-    </nav>
-
+    </div>
 </header>
 
-<main>
-
-    <!-- Banner -->
-
-    <section class="page-banner">
-
-        <div class="banner-content">
-
-            <h1>
-
-                House Rooms
-
-            </h1>
-
-            <p>
-
-                Explore every room in the Mbugangari Home,
-                learn its purpose, dimensions, and discover
-                how each space contributes to the overall
-                design of the home.
-
-            </p>
-
+    <section class="page-hero">
+        <div class="container">
+            <nav class="breadcrumb" aria-label="Breadcrumb">
+                <a href="../index.html">Home</a><span aria-hidden="true">/</span><span aria-current="page">Rooms</span>
+            </nav>
+            <h1>House rooms</h1>
+            <p>Explore every room in the Mbugangari Home, learn its purpose and dimensions, and discover how each space contributes to the overall design of the home.</p>
         </div>
-
     </section>
 
-    <!-- Search -->
-
-    <section class="container">
-
-        <h2 class="section-title">
-
-            Explore Our Rooms
-
-        </h2>
-
-        <input type="text" id="searchRoom" placeholder="Search by room name...">
-
+<main id="main">
+    <section class="section">
+        <div class="container">
+            <div class="toolbar">
+                <label class="search">
+                    <span class="visually-hidden">Search rooms</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+                    <input type="search" id="searchRoom" placeholder="Search rooms by name or description…" autocomplete="off">
+                </label>
+                <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+                    <div class="chips" id="floorFilters" role="group" aria-label="Filter by floor"></div>
+                    <label><span class="visually-hidden">Sort rooms</span>
+                        <select class="select" id="sortRooms">
+                            <option value="default">Default order</option>
+                            <option value="name">Name (A–Z)</option>
+                            <option value="area-desc">Largest first</option>
+                            <option value="area-asc">Smallest first</option>
+                        </select>
+                    </label>
+                </div>
+            </div>
+            <p class="summary-bar" id="roomSummary" aria-live="polite"></p>
+            <div class="grid grid-3" id="roomContainer"></div>
+        </div>
     </section>
-
-    <!-- Rooms -->
-
-    <section class="container">
-
-        <div id="loading" class="loading-skeleton">
-
-    <div class="skeleton-card">
-
-        <div class="skeleton-image"></div>
-
-        <div class="skeleton-line medium"></div>
-
-        <div class="skeleton-line short"></div>
-
-    </div>
-
-    <div class="skeleton-card">
-
-        <div class="skeleton-image"></div>
-
-        <div class="skeleton-line medium"></div>
-
-        <div class="skeleton-line short"></div>
-
-    </div>
-
-    <div class="skeleton-card">
-
-        <div class="skeleton-image"></div>
-
-        <div class="skeleton-line medium"></div>
-
-        <div class="skeleton-line short"></div>
-
-    </div>
-
-    </div>
-        <div id="roomContainer" class="room-grid"></div>
-
-    </section>
-
 </main>
 
-<footer class="footer">
-
+<footer class="site-footer">
     <div class="container">
-
-        <div>
-
-            <h3>
-
-                Mbugangari Home
-
-            </h3>
-
-            <p>
-
-                A digital archive preserving the history,
-                architecture, rooms, construction materials,
-                gallery, and surrounding landmarks of our
-                family home.
-
-            </p>
-
+        <div class="footer-grid">
+            <div>
+                <a class="brand" href="../index.html">
+                    <img src="../favicon.svg" alt="" width="34" height="34">
+                    <span>Mbugangari Home</span>
+                </a>
+                <p>A digital documentation of our family home, preserving its architectural features, historical background, and surrounding environment.</p>
+            </div>
+            <div>
+                <h2>Explore</h2>
+                <ul class="footer-links">
+                    <li><a href="../pages/about.html">The House</a></li>
+                    <li><a href="../pages/rooms.html">Rooms</a></li>
+                    <li><a href="../pages/gallery.html">Gallery</a></li>
+                    <li><a href="../pages/materials.html">Materials</a></li>
+                    <li><a href="../pages/history.html">History</a></li>
+                    <li><a href="../pages/location.html">Nearby Places</a></li>
+                </ul>
+            </div>
+            <div>
+                <h2>Location</h2>
+                <p data-house-location>Mbugangari Village, Rubavu District, Rwanda</p>
+                <ul class="footer-links" style="margin-top:16px">
+                    <li><a href="../admin/login.html">Administrator login</a></li>
+                </ul>
+            </div>
         </div>
-
-        <div>
-
-            <h3>
-
-                Quick Links
-
-            </h3>
-
-            <p><a href="../index.html">Home</a></p>
-
-            <p><a href="about.html">About</a></p>
-
-            <p><a href="gallery.html">Gallery</a></p>
-
-            <p><a href="history.html">History</a></p>
-
+        <div class="footer-bottom">
+            <span>&copy; <span data-year>2026</span> Mbugangari Home Information System</span>
+            <span>Developed by NSHUTI Emmanuel</span>
         </div>
-
     </div>
-
-    <div class="footer-bottom">
-
-        © 2026 Mbugangari Home Information System •
-        Developed by NSHUTI Emmanuel
-
-    </div>
-
 </footer>
 
 <script src="../js/config.js"></script>
 <script src="../js/api.js"></script>
+<script src="../js/icons.js"></script>
+<script src="../js/site.js"></script>
 <script src="../js/rooms.js"></script>
-<script src="../js/theme.js"></script>
 
 </body>
-
 </html>
